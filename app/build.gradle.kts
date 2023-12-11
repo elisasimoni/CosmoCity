@@ -17,7 +17,7 @@ repositories {
 
 dependencies {
     // Use JUnit test framework.
-    testImplementation(libs.junit)
+    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
 
     // This dependency is used by the application.
     implementation(libs.guava)
@@ -34,3 +34,4 @@ application {
     // Define the main class for the application.
     mainClass.set("cosmocity.App")
 }
+
