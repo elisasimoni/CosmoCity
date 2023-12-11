@@ -4,7 +4,6 @@
  * This generated file contains a sample Java application project to get you started.
  * For more details on building Java & JVM projects, please refer to https://docs.gradle.org/8.5/userguide/building_java_projects.html in the Gradle documentation.
  */
-
 plugins {
     // Apply the application plugin to add support for building a CLI application in Java.
     application
@@ -16,13 +15,19 @@ repositories {
 }
 
 dependencies {
-    // Use JUnit test framework.
-    testImplementation("org.junit.jupiter:junit-jupiter-api:5.8.1")
-    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:5.8.1")
+    val junitVersion = "5.9.1"
+    testImplementation("org.junit.jupiter:junit-jupiter-api:$junitVersion")
+    testImplementation("org.junit.jupiter:junit-jupiter-params:$junitVersion")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junitVersion")
 
     // This dependency is used by the application.
     implementation(libs.guava)
 }
+
+tasks.test {
+    useJUnitPlatform()
+}
+
 
 // Apply a specific Java toolchain to ease working on different environments.
 java {
@@ -35,4 +40,6 @@ application {
     // Define the main class for the application.
     mainClass.set("cosmocity.App")
 }
+
+
 
