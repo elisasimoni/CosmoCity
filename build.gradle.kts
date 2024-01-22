@@ -5,7 +5,7 @@ plugins {
     // Apply the application plugin to add support for building a CLI application
     // You can run your app via task "run": ./gradlew run
     application
-
+    
     /*
      * Adds tasks to export a runnable jar.
      * In order to create it, launch the "shadowJar" task.
@@ -13,6 +13,9 @@ plugins {
      */
     id("com.github.johnrengelman.shadow") version "8.1.1"
     id("org.danilopianini.gradle-java-qa") version "1.33.0"
+
+    id("org.openjfx.javafxplugin") version "0.1.0"
+}
 
 repositories { // Where to search for dependencies
     mavenCentral()
@@ -25,6 +28,8 @@ dependencies {
     // Maven dependencies are composed by a group name, a name and a version, separated by colons
     implementation("com.omertron:API-OMDB:1.5")
     implementation("org.jooq:jool:0.9.15")
+    implementation("org.openjfx:javafx-controls:17.0.1")
+    implementation("org.openjfx:javafx-fxml:17.0.1")
 
     /*
      * Simple Logging Facade for Java (SLF4J) with Apache Log4j
@@ -40,11 +45,19 @@ dependencies {
     // when dependencies share the same version, grouping in a val helps to keep them in sync
     testImplementation("org.junit.jupiter:junit-jupiter-api:$jUnitVersion")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$jUnitVersion")
+
 }
 
 application {
     // Define the main class for the application.
-    mainClass.set("it.unibo.sampleapp.RateAMovie")
+    mainClass.set("it.unibo.cosmocity.Launcher")
+    
+   
+}
+
+javafx {
+    version = "16"
+    modules("javafx.controls", "javafx.fxml")
 }
 
 tasks.test {
