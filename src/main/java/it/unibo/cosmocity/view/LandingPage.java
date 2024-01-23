@@ -1,4 +1,4 @@
-package main.java.it.unibo.cosmocity.view;
+package it.unibo.cosmocity.view;
 
 public class LandingPage {
     

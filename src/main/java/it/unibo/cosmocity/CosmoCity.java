@@ -1,5 +1,7 @@
 package it.unibo.cosmocity;
 
+import it.unibo.cosmocity.model.settlers.FarmerFactory;
+import it.unibo.cosmocity.model.settlers.SettlerFactory;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -23,6 +25,8 @@ import javafx.beans.binding.Bindings;
 public class CosmoCity extends Application {
 
     public static void main(final String[] args) {
+        SettlerFactory factory = new FarmerFactory();
+        Character farmer = factory.createCharacter("John Doe", 30, 10);
         launch(args);
     }
 
@@ -32,7 +36,8 @@ public class CosmoCity extends Application {
 
         // Immagine di sfondo
         Pane backgroundPane = new Pane();
-        Image backgroundImage = new Image("C:\\Users\\Elisa\\Desktop\\ProjectsOOP\\CosmoCity\\src\\main\\java\\it\\unibo\\resources\\img\\menu_background_img.png");
+        Image backgroundImage = new Image(
+                "C:\\Users\\Elisa\\Desktop\\ProjectsOOP\\CosmoCity\\src\\main\\java\\it\\unibo\\resources\\img\\menu_background_img.png");
         ImageView backgroundImageView = new ImageView(backgroundImage);
         backgroundPane.getChildren().add(backgroundImageView);
         root.setCenter(backgroundPane);
@@ -68,7 +73,6 @@ public class CosmoCity extends Application {
         loadGameBtn.setFont(Font.font("Elephant", FontWeight.BOLD, 18));
         exitBtn.setFont(Font.font("Elephant", FontWeight.BOLD, 18));
 
-
         VBox menuBtnBox = new VBox(20);
         menuBtnBox.getChildren().addAll(newGameBtn, loadGameBtn, exitBtn);
         menuBtnBox.setPadding(new Insets(0, 50, 0, 0));
@@ -80,10 +84,11 @@ public class CosmoCity extends Application {
         Scene scene = new Scene(root, 900, 700);
 
         // Gestione del ridimensionamento
-        primaryStage.widthProperty().addListener((observable, oldValue, newValue) ->
-                backgroundImageView.setFitWidth(newValue.doubleValue()));
-        primaryStage.heightProperty().addListener((observable, oldValue, newValue) ->
-                backgroundImageView.setFitHeight(newValue.doubleValue()));
+
+        primaryStage.widthProperty().addListener(
+                (observable, oldValue, newValue) -> backgroundImageView.setFitWidth(newValue.doubleValue()));
+        primaryStage.heightProperty().addListener(
+                (observable, oldValue, newValue) -> backgroundImageView.setFitHeight(newValue.doubleValue()));
 
         menuBtnBox.maxHeightProperty().bind(scene.heightProperty());
         menuBtnBox.prefWidthProperty().bind(scene.widthProperty().divide(2.5)); // Regola secondo le tue esigenze
