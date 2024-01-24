@@ -2,7 +2,6 @@ package it.unibo.cosmocity.view;
 
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import javafx.beans.binding.Bindings;
 
 public abstract class View {
     protected final Stage stage;
@@ -38,7 +37,6 @@ public abstract class View {
 
     /**
      * Creates the layout for the view.
-     * This method must be implemented by derived classes.
      *
      * @return The view's layout as a javafx.scene.layout.Pane object.
      */

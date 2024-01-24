@@ -22,12 +22,12 @@ import javafx.stage.Stage;
 public class LandingPage extends View{
 
     public LandingPage(Stage stage, double width, double height) {
-        super(stage, 900, 700);
+        super(stage, width, height);
     }
 
     @Override
     protected void setupResizeListeners() {
-        // Aggiungi gli ascoltatori per il ridimensionamento specifico della LandingPage se necessario
+        
     }
 
     @Override
@@ -57,6 +57,14 @@ public class LandingPage extends View{
         menuBtnBox.getChildren().addAll(newGameBtn, loadGameBtn, exitBtn);
         menuBtnBox.setPadding(new Insets(0, 50, 0, 0));
         menuBtnBox.setAlignment(Pos.CENTER);
+
+        stage.widthProperty().addListener(
+                (observable, oldValue, newValue) -> backgroundImageView.setFitWidth(newValue.doubleValue()));
+        stage.heightProperty().addListener(
+                (observable, oldValue, newValue) -> backgroundImageView.setFitHeight(newValue.doubleValue()));
+
+        menuBtnBox.maxHeightProperty().bind(scene.heightProperty());
+        menuBtnBox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
 
         root.setRight(menuBtnBox);
 
