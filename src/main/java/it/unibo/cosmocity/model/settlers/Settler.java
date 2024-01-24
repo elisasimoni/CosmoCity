@@ -1,7 +1,6 @@
 package it.unibo.cosmocity.model.settlers;
 
 public class Settler {
-
     private String role;
     private double productionRate;
     private double consumtionRate;
@@ -46,5 +45,4 @@ public class Settler {
     public void setConsumtionRate(double consumtionRate) {
         this.consumtionRate = consumtionRate;
     }
-
 }

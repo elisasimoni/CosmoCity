@@ -57,7 +57,7 @@ application {
 
 javafx {
     version = "16"
-    modules("javafx.controls", "javafx.fxml")
+    modules("javafx.controls", "javafx.fxml","javafx.media")
 }
 
 tasks.test {

@@ -7,14 +7,14 @@ public interface ResourcesCounter {
      * 
      * @param resources the resources type
      */
-    void decrement(Resources resources);
+    void decrement(ResourcesType resources);
 
     /**
      * Resource value increment
      * 
      * @param resources the resources type
      */
-    void increment(Resources resources);
+    void increment(ResourcesType resources);
     
     /**
      * Refresh resources counter

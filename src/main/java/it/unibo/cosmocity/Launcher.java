@@ -1,7 +1,5 @@
 package it.unibo.cosmocity;
 
-import it.unibo.cosmocity.CosmoCity;
-
 public final class Launcher {
 
   private Launcher() {}
