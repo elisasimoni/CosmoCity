@@ -12,9 +12,8 @@ public class CosmoCity extends Application {
 
     @Override
     public void start(Stage primaryStage) {
-       LandingPage landingPage = new LandingPage(primaryStage,900,700);
+        LandingPage landingPage = new LandingPage(primaryStage, 900, 700);
         landingPage.show();
-        
 
     }
 }
