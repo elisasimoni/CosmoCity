@@ -8,7 +8,7 @@ import java.util.Set;
 
 public class ResourceHandlerImpl implements ResourceHandler {
 
-    private Set<StackedResource> resources = new HashSet<StackedResource>();
+    private Set<StackedResource> resources = new HashSet<>();
 
     @Override
     public void incrementResource(BaseResource resource, int valueToAdd) {
