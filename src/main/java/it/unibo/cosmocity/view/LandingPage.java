@@ -19,7 +19,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+
 public class LandingPage extends ViewImpl {
+
 
      public LandingPage(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -74,6 +76,10 @@ public class LandingPage extends ViewImpl {
         return root;
     }
 
+    /**
+     * @param text
+     * @return a button with text
+     */
     private Button createButton(String text) {
         Button button = new Button(text);
         button.setPrefWidth(300);
