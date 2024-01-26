@@ -1,7 +1,7 @@
 package it.unibo.cosmocity.view;
 
 import it.unibo.cosmocity.model.utility.AudioManager;
-import it.unibo.cosmocity.model.utility.ImageManager;
+import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,21 +19,21 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-public class LandingPage extends View{
+public class LandingPage extends ViewImpl {
 
-    public LandingPage(Stage stage, double width, double height) {
+     public LandingPage(Stage stage, double width, double height) {
         super(stage, width, height);
     }
 
     @Override
-    protected void setupResizeListeners() {
-        
+    public void setupResizeListeners() {
+      // TODO document why this method is empty
     }
 
     @Override
-    protected Pane createLayout() {
+    public Pane createLayout() {
         BorderPane root = new BorderPane();
-        ImageManager imageManager = new ImageManager();
+        ImageManagerImpl imageManager = new ImageManagerImpl();
         Pane backgroundPane = new Pane();
         Image backgroundImage = imageManager.loadImage("img/menu_background_img.png");
         ImageView backgroundImageView = new ImageView(backgroundImage);
@@ -82,5 +82,6 @@ public class LandingPage extends View{
         button.setFont(Font.font("Elephant", FontWeight.BOLD, 18));
         return button;
     }
-    
+
 }
+

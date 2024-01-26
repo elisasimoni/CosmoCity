@@ -3,6 +3,7 @@ package it.unibo.cosmocity;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import it.unibo.cosmocity.view.LandingPage;
+import it.unibo.cosmocity.view.CreateColonyPage;
 
 public class CosmoCity extends Application {
 
@@ -10,11 +11,12 @@ public class CosmoCity extends Application {
         launch(args);
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-       LandingPage landingPage = new LandingPage(primaryStage,900,700);
+
+    public void start(Stage stage) {
+        LandingPage landingPage = new LandingPage(stage, 900, 700);
+        CreateColonyPage colony = new CreateColonyPage(stage, 700, 900);
         landingPage.show();
-        
+        colony.show();
 
     }
 }
