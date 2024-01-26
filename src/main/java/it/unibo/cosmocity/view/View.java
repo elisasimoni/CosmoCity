@@ -26,7 +26,7 @@ public abstract class View {
      * @param height height of the scene.
      */
     private void initScene(double width, double height) {
-        scene = new Scene(createLayout(), width, height);
+        this.scene = new Scene(createLayout(), width, height);
     }
 
     /**
@@ -46,7 +46,7 @@ public abstract class View {
      * Set the scene in the stage and shows it.
      */
     public void show() {
-        stage.setScene(scene);
+        stage.setScene(this.scene);
         stage.show();
     }
 

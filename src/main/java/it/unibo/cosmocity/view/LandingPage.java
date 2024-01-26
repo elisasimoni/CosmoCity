@@ -19,7 +19,7 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-public class LandingPage extends View{
+public class LandingPage extends View {
 
     public LandingPage(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -27,7 +27,7 @@ public class LandingPage extends View{
 
     @Override
     protected void setupResizeListeners() {
-        
+
     }
 
     @Override
@@ -74,6 +74,10 @@ public class LandingPage extends View{
         return root;
     }
 
+    /**
+     * @param text
+     * @return a button with text
+     */
     private Button createButton(String text) {
         Button button = new Button(text);
         button.setPrefWidth(300);
@@ -82,5 +86,5 @@ public class LandingPage extends View{
         button.setFont(Font.font("Elephant", FontWeight.BOLD, 18));
         return button;
     }
-    
+
 }

@@ -1,6 +1,6 @@
 package it.unibo.cosmocity.model;
 
-public enum Difficulties {
+public enum DifficultiesType {
 
     EASY("EASY"),
     MEDIUM("MEDIUM"),
@@ -11,7 +11,7 @@ public enum Difficulties {
     /**
      * @param difficulty
      */
-    private Difficulties(String difficulty) {
+    private DifficultiesType(String difficulty) {
         this.difficulty = difficulty;
     }
 
