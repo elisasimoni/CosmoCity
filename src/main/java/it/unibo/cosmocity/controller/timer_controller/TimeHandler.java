@@ -6,47 +6,15 @@ import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.Semaphore;
 import java.util.concurrent.TimeUnit;
 
-public class TimeHandler {
-    private static final int STEP = 1; // intervallo di aggiornamento del tempo in secondi
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private final Semaphore pauseSemaphore = new Semaphore(1);
-    
-    private int time = 0;
+public interface TimeHandler {
 
-    public TimeHandler() {
-        this.time = 0;
-    }
+    public Optional<Integer> getCurrentTime();
 
-    public Optional<Integer> getCurrentTime() {
-        if (executorService.isShutdown()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(time);
-        }
-    }
+    public void startInfiniteTimer();
 
-    public void startInfiniteTimer() {
-        this.executorService.scheduleAtFixedRate(() -> {
-            this.time += STEP;
-        }, 0, STEP, TimeUnit.SECONDS);
+    public void stopTimer();
 
-    }
+    public void pauseTimer();
 
-    public void stopTimer() {
-        this.executorService.shutdown();
-    }
-
-    public void pauseTimer() {
-        try {
-            pauseSemaphore.acquire();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Timer interrupted", e);
-        }
-    }
-
-    public void resumeTimer() {
-        pauseSemaphore.release();
-    }
-
+    public void resumeTimer();
 }
