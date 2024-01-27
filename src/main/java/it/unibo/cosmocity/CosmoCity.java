@@ -11,7 +11,6 @@ public class CosmoCity extends Application {
         launch(args);
     }
 
-
     public void start(Stage stage) {
         LandingPage landingPage = new LandingPage(stage, 900, 700);
         CreateColonyPage colony = new CreateColonyPage(stage, 700, 900);
