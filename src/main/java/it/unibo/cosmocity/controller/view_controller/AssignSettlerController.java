@@ -19,13 +19,18 @@ public class AssignSettlerController {
     private void assignSettler() {
         settlersMap.clear();
         for (BaseSettler settler : settlers) {
-            long number = settlers.stream().filter(s -> s.getClass().equals(settler.getClass())).count();
+            long number = settlers.stream()
+                                  .filter(s -> s.getClass()
+                                                .equals(settler.getClass()))
+                                  .count();
             settlersMap.put(settler.getClass().getSimpleName(), number);
         }
     }
 
     public List<String> getSettlersNames() {
-        return settlersMap.keySet().stream().sorted().collect(Collectors.toList());
+        return settlersMap.keySet().stream()
+                                   .sorted()
+                                   .collect(Collectors.toList());
     }
 
     public long getSettlerQuantity(String settlerName) {

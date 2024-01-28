@@ -1,8 +1,8 @@
 package it.unibo.cosmocity.model.resources;
 
-public class WeaponStacked extends StackedResource {
+public class WeaponsStacked extends StackedResource {
     
-        public WeaponStacked(int qta) {
+        public WeaponsStacked(int qta) {
             super(qta);
         }
     

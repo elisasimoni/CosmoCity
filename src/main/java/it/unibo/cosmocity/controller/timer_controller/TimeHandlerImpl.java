@@ -2,9 +2,11 @@ package it.unibo.cosmocity.controller.timer_controller;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Timer; 
 
 public class TimeHandlerImpl implements TimeHandler, TimerObservable {
     private List<Observer> observers = new ArrayList<>();
+    Timer timer = new Timer();
     
     /**
      * @param observer
@@ -28,7 +30,7 @@ public class TimeHandlerImpl implements TimeHandler, TimerObservable {
     public void run() {
         notifyObservers("Nuovo evento generato");
     }
-/**
+    /**
      * {@inheritDoc}
      */
     @Override

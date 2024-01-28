@@ -10,7 +10,7 @@ import java.util.List;
 
 import it.unibo.cosmocity.controller.timer_controller.TimeHandlerImpl;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
-import it.unibo.cosmocity.model.settlers.BaseSettlerImpl;
+import it.unibo.cosmocity.model.settlers.SimpleSettler;
 import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.settlers.Gunsmith;
 import it.unibo.cosmocity.model.settlers.Military;

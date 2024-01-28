@@ -3,7 +3,7 @@ package it.unibo.cosmocity.model.settlers;
 import it.unibo.cosmocity.model.resources.BaseResource;
 import it.unibo.cosmocity.model.resources.Weapons;
 
-public class Gunsmith extends BaseSettlerImpl{
+public class Gunsmith extends SimpleSettler{
 
     @Override
     public BaseResource getProductedResource() {

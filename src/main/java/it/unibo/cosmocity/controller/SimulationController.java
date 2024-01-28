@@ -1,44 +1,55 @@
 package it.unibo.cosmocity.controller;
 
+import it.unibo.cosmocity.model.Difficulty;
+import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.SimulationManager;
 import it.unibo.cosmocity.model.SimulationManagerImpl;
-import it.unibo.cosmocity.controller.timer_controller.TimeHandlerImpl;
 import it.unibo.cosmocity.controller.timer_controller.TimeHandler;
+import it.unibo.cosmocity.controller.timer_controller.TimeHandlerImpl;
+
+import java.util.List;
+import java.util.Map;
+
+
 
 public class SimulationController {
-    private SimulationManager simulationManager = new SimulationManagerImpl();
+    private Simulation simulation;
+    private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+    private TimeHandler timerHandler = new TimeHandlerImpl(); /*è un metodo del timer che richiama un metodo del controllo  */
+    private SimulationManager simulationManager = new SimulationManagerImpl(); // Provide the parametrized type for the generic
+    SerializationSimulation serializationSimulation = new SerializationSimulation();
 
-    private TimeHandler timerHandler = new TimeHandlerImpl();
-
-    public void startSimulation(SimulationManager simulationManager, TimeHandler timerHandler) {
-        simulationManager.startSimulation(null, null, null);
-        timerHandler.run(); // Fix the method call
-
+    public void startSimulation(List<String> settlers, Map<String,Integer> resources) {
+        timerHandler.run();
+        this.simulation = new Simulation(translator.translateSettler(settlers), translator.translateResource(resources),0);
+        serializationSimulation.serializeSimulation(simulation);
+        
+        
     }
 
     public void exitSimulation() {
-        simulationManager.exitSimulation();
+        this.simulationManager.exitSimulation();
     }
 
-    public void loadSimulation() {
-        simulationManager.loadSimulation();
+    public void loadSimulation(){
+        //this.simulation = new Simulation(translator.translateSettler(settlers), translator.translateResource(resources));
+        timerHandler.run();
     }
 
     public void pauseSimulation() {
-        simulationManager.pauseSimulation();
-        timerHandler.run(); // Fix the method call
+        this.simulationManager.pauseSimulation();
+        timerHandler.run();
 
     }
 
     public void resumeSimulation() {
-        simulationManager.resumeSimulation();
-
-        timerHandler.run(); // Fix the method call
+        this.simulationManager.resumeSimulation();
+        timerHandler.run();
 
     }
 
     public void saveSimulation() {
-        simulationManager.saveSimulation();
+        this.simulationManager.saveSimulation();
     }
-    
+
 }

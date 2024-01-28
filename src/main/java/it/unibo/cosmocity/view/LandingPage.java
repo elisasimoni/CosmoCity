@@ -3,6 +3,7 @@ package it.unibo.cosmocity.view;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.utility.AudioManager;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
+import it.unibo.cosmocity.view.dialog.NewSettlerDialog;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;

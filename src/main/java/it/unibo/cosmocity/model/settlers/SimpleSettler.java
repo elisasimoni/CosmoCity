@@ -2,7 +2,7 @@ package it.unibo.cosmocity.model.settlers;
 
 import it.unibo.cosmocity.model.resources.BaseResource;
 
-public abstract class BaseSettlerImpl implements BaseSettler {
+public abstract class SimpleSettler implements BaseSettler {
 
     /**
      * Appetite of the settler

@@ -16,7 +16,7 @@ public class SimulationManagerImpl implements SimulationManager{
 
     @Override
     public void exitSimulation() {
-        System.exit(0);
+        // TODO Auto-generated method stub
     }
 
     @Override

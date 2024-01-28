@@ -1,26 +1,29 @@
 package it.unibo.cosmocity.model;
 
-import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
+
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 import it.unibo.cosmocity.model.resources.StackedResource;
-import it.unibo.cosmocity.model.resources.Weapons;
+import it.unibo.cosmocity.model.settlers.BaseSettler;
 
-public class Simulation<T> {
-
-    private List<T> settlers;
-    private Set<StackedResource> resources;
+@JsonInclude(JsonInclude.Include.NON_NULL)
+public class Simulation {
+    @JsonProperty("settlers")
+    private List<BaseSettler> settlers;
+    @JsonProperty("resources")
+    private List<StackedResource> resources;
+    @JsonProperty("difficulty")
     private Difficulty difficulty;
+    @JsonProperty("startTime")
+    private long startTime;
     private ResourceHandler resourceHandler = new ResourceHandlerImpl();
-    
 
-    public Simulation(List<T> settlers, Set<StackedResource> resources, Difficulty difficulty) {
+    public Simulation(List<BaseSettler> settlers, List<StackedResource> resources,long startTime) {
         this.settlers = settlers;
         this.resources = resources;
-        this.difficulty = new Difficulty(difficulty.getName());
-        resourceHandler.incrementResource(new Weapons(5), 1);
+        this.startTime = startTime;
     }
 
 }

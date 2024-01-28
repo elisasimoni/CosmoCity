@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
+import it.unibo.cosmocity.controller.view_controller.DashBoardController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.Doctor;
@@ -14,6 +15,7 @@ import it.unibo.cosmocity.model.settlers.Military;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
@@ -26,6 +28,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
 public class Dashboard extends ViewImpl {
+    
 
     public Dashboard(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -33,8 +36,7 @@ public class Dashboard extends ViewImpl {
 
     @Override
     public void refresh() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'refresh'");
+       createGUI();
     }
 
     @Override
@@ -46,6 +48,7 @@ public class Dashboard extends ViewImpl {
     @Override
     public Pane createGUI() {
         SceneController sceneController = new SceneController();
+        DashBoardController dashBoardController = new DashBoardController();
         stage.setTitle("CosmoCity - Colony Dashboard");
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: darkBlue;");
@@ -66,7 +69,7 @@ public class Dashboard extends ViewImpl {
         vboxLeft.setAlignment(Pos.CENTER);
         vboxLeft.setSpacing(30);
 
-       
+        Label timeLabel = new Label("Time: "+ dashBoardController.updateTime());
         VBox vboxRight = new VBox();
         vboxRight.setAlignment(Pos.CENTER);
         vboxRight.setSpacing(30);

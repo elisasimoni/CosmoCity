@@ -20,7 +20,9 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
+import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
@@ -40,9 +42,8 @@ public class AssignSettler extends ViewImpl {
 
     }
 
-    @Override
     public void refresh() {
-        // TODO: Implement refresh logic if needed
+       createGUI();
     }
 
     @Override
@@ -85,8 +86,9 @@ public class AssignSettler extends ViewImpl {
         vbox.maxHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
         SceneController sceneController = new SceneController();
+        SimulationController simulatorController = new SimulationController();
         startColonyButton.setOnAction(e -> {
-
+            simulatorController.startSimulation(List.of("Gunsmith", "Doctor"), Map.of("Medicine", 5, "Food", 5));
             sceneController.nextSceneNavigator(new Dashboard(stage, screenWidth * 0.7, screenHeight * 0.8));
 
         });
