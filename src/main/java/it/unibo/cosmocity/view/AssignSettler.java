@@ -46,10 +46,7 @@ public class AssignSettler extends ViewImpl {
        createGUI();
     }
 
-    @Override
-    public void initLogic() {
-        // TODO: Implement initialization logic if needed
-    }
+
 
     @Override
     public Pane createGUI() {

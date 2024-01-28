@@ -5,9 +5,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.unibo.cosmocity.controller.SimulationSerialization;
 import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
 import it.unibo.cosmocity.controller.view_controller.DashBoardController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
+import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.settlers.Gunsmith;
@@ -39,11 +41,6 @@ public class Dashboard extends ViewImpl {
        createGUI();
     }
 
-    @Override
-    public void initLogic() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initLogic'");
-    }
 
     @Override
     public Pane createGUI() {

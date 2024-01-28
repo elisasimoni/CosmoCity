@@ -37,8 +37,8 @@ public class TranslatorStringToClassHelper {
         return settlers.stream().map(settler -> switch (settler) {
             case "Doctor" -> new Doctor();
             case "Farmer" -> new Farmer();
-            case "Mechanic" -> new Technician();
-            case "Soldier" -> new Military();
+            case "Technician" -> new Technician();
+            case "Military" -> new Military();
             case "Cook" -> new Cook();
             case "Gunsmith" -> new Gunsmith();
             case "Pharmacist" -> new Pharmacist();
@@ -63,11 +63,65 @@ public class TranslatorStringToClassHelper {
                 case "Screw":
                     return new ScrewStacked(resourceValue);
                 case "Weapons":
-                    return new WeaponsStacked(resourceValue); 
+                    return new WeaponsStacked(resourceValue);
                 default:
                     throw new IllegalArgumentException("Invalid resource name");
             }
         }).collect(Collectors.toList());
+
+    }
+
+    /**
+     * @param difficulty
+     * @return
+     */
+    public String translateDifficultyToString(DifficultiesType difficulty) {
+        return switch (difficulty) {
+            case EASY -> "EASY";
+            case MEDIUM -> "MEDIUM";
+            case HARD -> "HARD";
+        };
+    }
+
+    /**
+     * @param settlers
+     * @return a list of settlers
+     */
+    public List<String> translateSettlerToString(List<BaseSettler> settlers) {
+        return settlers.stream().map(settler -> switch (settler.getClass().getSimpleName()) {
+            case "Doctor" -> "Doctor";
+            case "Farmer" -> "Farmer";
+            case "Technician" -> "Technician";
+            case "Military" -> "Military";
+            case "Cook" -> "Cook";
+            case "Gunsmith" -> "Gunsmith";
+            case "Pharmacist" -> "Pharmacist";
+            case "Blacksmith" -> "Blacksmith";
+            default -> throw new IllegalArgumentException("Invalid settler name");
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * @param resources
+     * @return a list of stacked resources
+     */
+    public Map<String, Integer> translateResourceToMap(List<StackedResource> resources) {
+        return resources.stream().map(resource -> {
+            String resourceName = resource.getClass().getSimpleName();
+            int resourceValue = resource.getQta();
+            switch (resourceName) {
+                case "FoodStacked":
+                    return Map.entry("Food", resourceValue);
+                case "MedicineStacked":
+                    return Map.entry("Medicine", resourceValue);
+                case "ScrewStacked":
+                    return Map.entry("Screw", resourceValue);
+                case "WeaponsStacked":
+                    return Map.entry("Weapons", resourceValue);
+                default:
+                    throw new IllegalArgumentException("Invalid resource name");
+            }
+        }).collect(Collectors.toMap(Map.Entry::getKey, Map.Entry::getValue));
 
     }
 

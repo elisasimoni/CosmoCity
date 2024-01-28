@@ -20,25 +20,18 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
-import javax.swing.GroupLayout.Alignment;
-
 import it.unibo.cosmocity.controller.view_controller.SceneController;
-import it.unibo.cosmocity.model.utility.AudioManager;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 
 public class CreateColonyPage extends ViewImpl {
 
+    private static final String FONT = "Elephant";
     private final Screen screen = Screen.getPrimary();
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
 
     public CreateColonyPage(Stage stage, double width, double height) {
         super(stage, width, height);
-    }
-
-    @Override
-    public void initLogic() {
-        // Implement resize listeners if needed
     }
 
     @Override
@@ -51,14 +44,14 @@ public class CreateColonyPage extends ViewImpl {
         vbox.setSpacing(30);
 
         Text newGameText = new Text("NEW GAME");
-        newGameText.setFont(Font.font("Elephant", FontWeight.BOLD, 150));
+        newGameText.setFont(Font.font(FONT, FontWeight.BOLD, 150));
         newGameText.setTextAlignment(TextAlignment.CENTER);
         newGameText.setFill(Color.WHITE);
         newGameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(12)));
         vbox.getChildren().add(newGameText);
 
         Text colonyNameText = new Text("Colony name");
-        colonyNameText.setFont(Font.font("Elephant", FontWeight.NORMAL, 20));
+        colonyNameText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
         colonyNameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(20)));
         colonyNameText.setFill(Color.WHITE);
         colonyNameText.setTextAlignment(TextAlignment.CENTER);
@@ -72,7 +65,7 @@ public class CreateColonyPage extends ViewImpl {
         vbox.getChildren().add(colonyNameField);
 
         Text chooseSettlersText = new Text("Choose the settlers (max 10)");
-        chooseSettlersText.setFont(Font.font("Elephant", FontWeight.NORMAL, 25));
+        chooseSettlersText.setFont(Font.font(FONT, FontWeight.NORMAL, 25));
 
         chooseSettlersText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
         chooseSettlersText.setFill(Color.WHITE);
@@ -80,7 +73,7 @@ public class CreateColonyPage extends ViewImpl {
         vbox.getChildren().add(chooseSettlersText);
 
         Text mandatorySettlerlText = new Text("Mandatory:");
-        mandatorySettlerlText.setFont(Font.font("Elephant", FontWeight.NORMAL, 20));
+        mandatorySettlerlText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
         mandatorySettlerlText.styleProperty()
                 .bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
         mandatorySettlerlText.setFill(Color.WHITE);
@@ -99,7 +92,7 @@ public class CreateColonyPage extends ViewImpl {
         vbox.getChildren().add(hboxMandatorySettler);
 
         Text optionalText = new Text("Optional:");
-        optionalText.setFont(Font.font("Elephant", FontWeight.NORMAL, 20));
+        optionalText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
         optionalText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
         optionalText.setFill(Color.WHITE);
         optionalText.setTextAlignment(TextAlignment.CENTER);
@@ -123,7 +116,7 @@ public class CreateColonyPage extends ViewImpl {
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
         SceneController sceneController = new SceneController();
         nextButton.setOnAction(e -> {
-            sceneController.nextSceneNavigator(new AssignSettler(stage, screenWidth*0.8, screenHeight*0.8));
+            sceneController.nextSceneNavigator(new AssignSettler(stage, screenWidth * 0.8, screenHeight * 0.8));
         });
         root.setCenter(vbox);
 
@@ -135,12 +128,11 @@ public class CreateColonyPage extends ViewImpl {
      * @return a button with text
      */
     private Button createButton(String text) {
-        stage.setTitle("CosmoCity - Create Colony");
         Button button = new Button(text);
         button.setPrefWidth(300);
         button.setPrefHeight(50);
         button.setStyle("-fx-background-color: #ffffff");
-        button.setFont(Font.font("Elephant", FontWeight.BOLD, 18));
+        button.setFont(Font.font(FONT, FontWeight.BOLD, 18));
         return button;
     }
 
@@ -150,7 +142,7 @@ public class CreateColonyPage extends ViewImpl {
         ImageManagerImpl imageManager = new ImageManagerImpl();
         Image settlerImage = imageManager.loadImage(imageURL);
         ImageView imageView = new ImageView(settlerImage);
-        imageView.setFitWidth(100); 
+        imageView.setFitWidth(100);
         imageView.setFitHeight(100);
         Label nameSettlerText = new Label(nameSettler);
         nameSettlerText.setTextFill(Color.WHITE);
