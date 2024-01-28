@@ -1,20 +1,17 @@
 package it.unibo.cosmocity.controller.timer_controller;
 
-import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+interface Observer {
+    long update();
+}
+
+interface TimerObservable {
+    void notifyObservers(String event);
+}
 
 public interface TimeHandler {
+    void addObserver(Observer observer);
 
-    public Optional<Integer> getCurrentTime();
+    void removeObserver(Observer observer);
 
-    public void startInfiniteTimer();
-
-    public void stopTimer();
-
-    public void pauseTimer();
-
-    public void resumeTimer();
+    void run();
 }

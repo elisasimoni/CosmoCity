@@ -1,52 +1,46 @@
 package it.unibo.cosmocity.controller.timer_controller;
 
-import java.util.Optional;
-import java.util.concurrent.Executors;
-import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.Semaphore;
-import java.util.concurrent.TimeUnit;
+import java.util.ArrayList;
+import java.util.List;
 
-public class TimeHandlerImpl implements TimeHandler{
-    private static final int STEP = 1; 
-    private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
-    private final Semaphore pauseSemaphore = new Semaphore(1);
-    
-    private int time = 0;
+public class TimeHandlerImpl implements TimeHandler, TimerObservable {
+    private List<Observer> observers = new ArrayList<>();
 
-    public TimeHandlerImpl() {
-        this.time = 0;
+    public void addObserver(Observer observer) {
+        observers.add(observer);
     }
 
-    public Optional<Integer> getCurrentTime() {
-        if (executorService.isShutdown()) {
-            return Optional.empty();
-        } else {
-            return Optional.of(time);
+    public void removeObserver(Observer observer) {
+        observers.remove(observer);
+    }
+
+    @Override
+    public void run() {
+        // Ogni 5 secondi, notifica gli osservatori
+        notifyObservers("Nuovo evento generato");
+    }
+
+    @Override
+    public void notifyObservers(String event) {
+        for (Observer observer : observers) {
+            observer.update();
         }
     }
 
-    public void startInfiniteTimer() {
-        this.executorService.scheduleAtFixedRate(() -> {
-            this.time += STEP;
-        }, 0, STEP, TimeUnit.SECONDS);
+    public static class EventoObserver implements Observer {
+        private long startTime; // Memorizza il tempo di inizio
 
-    }
+        public EventoObserver() {
+            startTime = System.currentTimeMillis();
+        }
 
-    public void stopTimer() {
-        this.executorService.shutdown();
-    }
-
-    public void pauseTimer() {
-        try {
-            pauseSemaphore.acquire();
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
-            throw new RuntimeException("Timer interrupted", e);
+        @Override
+        public long update() {
+            // Calcola il tempo trascorso in secondi
+            long currentTime = System.currentTimeMillis();
+            long elapsedTimeInSeconds = ((currentTime - startTime) / 1000) + 1;
+            // Stampa il tempo trascorso insieme all'evento
+            return elapsedTimeInSeconds;
         }
     }
-
-    public void resumeTimer() {
-        pauseSemaphore.release();
-    }
-
 }
