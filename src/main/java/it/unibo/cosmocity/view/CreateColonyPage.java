@@ -16,15 +16,21 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
 import javax.swing.GroupLayout.Alignment;
 
+import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.utility.AudioManager;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 
 public class CreateColonyPage extends ViewImpl {
+
+    private final Screen screen = Screen.getPrimary();
+    private final double screenWidth = screen.getBounds().getWidth();
+    private final double screenHeight = screen.getBounds().getHeight();
 
     public CreateColonyPage(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -109,13 +115,16 @@ public class CreateColonyPage extends ViewImpl {
 
         vbox.getChildren().add(hboxOptionalSettler);
 
-        Button startButton = createButton("Start");
-        startButton.maxHeightProperty().bind(scene.heightProperty());
-        startButton.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
-        vbox.getChildren().add(startButton);
+        Button nextButton = createButton("Next");
+        nextButton.maxHeightProperty().bind(scene.heightProperty());
+        nextButton.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
+        vbox.getChildren().add(nextButton);
         vbox.maxHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
-
+        SceneController sceneController = new SceneController();
+        nextButton.setOnAction(e -> {
+            sceneController.nextSceneNavigator(new AssignSettler(stage, screenWidth*0.8, screenHeight*0.8));
+        });
         root.setCenter(vbox);
 
         return root;
@@ -141,7 +150,7 @@ public class CreateColonyPage extends ViewImpl {
         ImageManagerImpl imageManager = new ImageManagerImpl();
         Image settlerImage = imageManager.loadImage(imageURL);
         ImageView imageView = new ImageView(settlerImage);
-        imageView.setFitWidth(100); // Imposta la larghezza dell'immagine a 50 pixel
+        imageView.setFitWidth(100); 
         imageView.setFitHeight(100);
         Label nameSettlerText = new Label(nameSettler);
         nameSettlerText.setTextFill(Color.WHITE);

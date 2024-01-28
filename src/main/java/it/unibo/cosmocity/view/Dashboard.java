@@ -98,10 +98,6 @@ public class Dashboard extends ViewImpl {
         vboxCenter.getChildren().add(startColonyButton);
         vboxCenter.maxHeightProperty().bind(scene.heightProperty());
         vboxCenter.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
-        startColonyButton.setOnAction(e -> {
-            sceneController.nextSceneNavigator(new Dashboard(stage, 900, 900));
-        });
-        
         root.setLeft(vboxLeft);
         root.setCenter(vboxCenter);
         root.setRight(vboxRight);

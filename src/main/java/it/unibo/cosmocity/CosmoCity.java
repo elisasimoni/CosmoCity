@@ -27,10 +27,7 @@ public class CosmoCity extends Application {
 
 
     public void start(Stage stage) {
-        TimeHandlerImpl timer = new TimeHandlerImpl();
         LandingPage landingPage = new LandingPage(stage, 900, 700);
-        AssignSettler assignSettler = new AssignSettler(stage, 900, 700);
-
         landingPage.show();
     }
 }

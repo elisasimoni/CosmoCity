@@ -15,12 +15,14 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.Screen;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
+import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.settlers.Gunsmith;
@@ -28,8 +30,10 @@ import it.unibo.cosmocity.model.settlers.Military;
 
 public class AssignSettler extends ViewImpl {
 
-        AssignSettlerController assignSettlerController;
-    
+    AssignSettlerController assignSettlerController;
+    private final Screen screen = Screen.getPrimary();
+    private final double screenWidth = screen.getBounds().getWidth();
+    private final double screenHeight = screen.getBounds().getHeight();
 
     public AssignSettler(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -48,7 +52,7 @@ public class AssignSettler extends ViewImpl {
 
     @Override
     public Pane createGUI() {
-         List<BaseSettler> settlers = new ArrayList<>();
+        List<BaseSettler> settlers = new ArrayList<>();
         settlers.add(new Military());
         settlers.add(new Doctor());
         settlers.add(new Gunsmith());
@@ -70,7 +74,8 @@ public class AssignSettler extends ViewImpl {
         vbox.getChildren().add(newGameText);
 
         for (String settlerName : assignSettlerController.getSettlersNames()) {
-            vbox.getChildren().add(createSettlerAssignBox(settlerName, assignSettlerController.getSettlerQuantity(settlerName)));
+            vbox.getChildren()
+                    .add(createSettlerAssignBox(settlerName, assignSettlerController.getSettlerQuantity(settlerName)));
         }
 
         Button startColonyButton = createButton("Start Colony");
@@ -79,8 +84,11 @@ public class AssignSettler extends ViewImpl {
         vbox.getChildren().add(startColonyButton);
         vbox.maxHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
+        SceneController sceneController = new SceneController();
         startColonyButton.setOnAction(e -> {
-            
+
+            sceneController.nextSceneNavigator(new Dashboard(stage, screenWidth * 0.7, screenHeight * 0.8));
+
         });
         root.setCenter(vbox);
 
@@ -107,9 +115,9 @@ public class AssignSettler extends ViewImpl {
         settlerText.setTextAlignment(TextAlignment.CENTER);
         hbox.getChildren().add(settlerText);
 
-        ObservableList<String> sectorsOption = FXCollections.observableArrayList(assignSettlerController.getSectorOptions());
+        ObservableList<String> sectorsOption = FXCollections
+                .observableArrayList(assignSettlerController.getSectorOptions());
 
-         
         ComboBox<String> sectorDropdownMenu = new ComboBox<>(sectorsOption);
         sectorDropdownMenu.setPromptText("Select a sector");
         sectorDropdownMenu.setStyle("-fx-background-color: #ffffff");

@@ -19,10 +19,13 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.Screen;
 
 public class LandingPage extends ViewImpl {
 
-
+    private final Screen screen = Screen.getPrimary();
+    private final double screenWidth = screen.getBounds().getWidth();
+    private final double screenHeight = screen.getBounds().getHeight();
 
      public LandingPage(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -77,7 +80,7 @@ public class LandingPage extends ViewImpl {
         SceneController sceneController = new SceneController();
         newGameBtn.setOnAction(e -> {
             audioManager.stop();
-            sceneController.nextSceneNavigator(new CreateColonyPage(stage, 700, 900));
+            sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth*0.5, screenHeight*0.9));
         });
         return root;
     }
