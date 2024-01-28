@@ -5,6 +5,15 @@ import javafx.stage.Stage;
 import it.unibo.cosmocity.view.LandingPage;
 import it.unibo.cosmocity.view.Dashboard;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import it.unibo.cosmocity.controller.timer_controller.TimeHandlerImpl;
+import it.unibo.cosmocity.model.settlers.BaseSettler;
+import it.unibo.cosmocity.model.settlers.BaseSettlerImpl;
+import it.unibo.cosmocity.model.settlers.Doctor;
+import it.unibo.cosmocity.model.settlers.Gunsmith;
+import it.unibo.cosmocity.model.settlers.Military;
 import it.unibo.cosmocity.view.AssignSettler;
 
 
@@ -16,9 +25,12 @@ public class CosmoCity extends Application {
         launch(args);
     }
 
-    @Override
-    public void start(Stage primaryStage) {
-        LandingPage landingPage = new LandingPage(primaryStage, 900, 700);
+
+    public void start(Stage stage) {
+        TimeHandlerImpl timer = new TimeHandlerImpl();
+        LandingPage landingPage = new LandingPage(stage, 900, 700);
+        AssignSettler assignSettler = new AssignSettler(stage, 900, 700);
+
         landingPage.show();
     }
 }
