@@ -9,13 +9,7 @@ public abstract class ViewImpl implements View {
     protected final Stage stage;
     protected Scene scene;
 
-    /**
-     * Constructor for the View class.
-     *
-     * @param stage  The JavaFX stage associated with this view.
-     * @param width  width of the scene.
-     * @param height height of the scene.
-     */
+    /** {@inheritDoc} */
     public ViewImpl(Stage stage, double width, double height) {
         this.stage = stage;
         initScene(width, height);

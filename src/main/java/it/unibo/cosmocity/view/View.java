@@ -8,6 +8,7 @@ public interface View {
 
     void setupResizeListeners();
 
+    void refresh();
 
     void show();
 }
