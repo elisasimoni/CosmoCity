@@ -7,11 +7,11 @@ import it.unibo.cosmocity.controller.timer_controller.TimeHandlerImpl;
 
 public class SimulationController {
     private SimulationManager simulationManager = new SimulationManagerImpl();
-    private TimerHandler timerHandler = new TimerHandlerImpl(); // Fix the TimerHandler type
+    //private TimerHandler timerHandler = new TimerHandlerImpl(); // Fix the TimerHandler type
 
-    public void startSimulation(SimulationManager simulationManager, TimerHandler timerHandler) {
+    public void startSimulation(SimulationManager simulationManager){ //TimerHandler timerHandler) {
         simulationManager.startSimulation(null, null, null);
-        timerHandler.startInfiniteTimer();
+    
     }
 
     public void exitSimulation() {
@@ -24,12 +24,12 @@ public class SimulationController {
 
     public void pauseSimulation() {
         simulationManager.pauseSimulation();
-        timerHandler.pauseTimer();
+  
     }
 
     public void resumeSimulation() {
         simulationManager.resumeSimulation();
-        timerHandler.resumeTimer();
+        
     }
 
     public void saveSimulation() {

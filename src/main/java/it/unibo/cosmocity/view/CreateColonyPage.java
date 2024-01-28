@@ -31,12 +31,12 @@ public class CreateColonyPage extends ViewImpl {
     }
 
     @Override
-    public void setupResizeListeners() {
+    public void initLogic() {
         // Implement resize listeners if needed
     }
 
     @Override
-    public Pane createLayout() {
+    public Pane createGUI() {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: darkBlue;");
 
@@ -126,6 +126,7 @@ public class CreateColonyPage extends ViewImpl {
      * @return a button with text
      */
     private Button createButton(String text) {
+        stage.setTitle("CosmoCity - Create Colony");
         Button button = new Button(text);
         button.setPrefWidth(300);
         button.setPrefHeight(50);
@@ -177,6 +178,12 @@ public class CreateColonyPage extends ViewImpl {
         vbox.setAlignment(Pos.CENTER);
 
         return vbox;
+    }
+
+    @Override
+    public void refresh() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'refresh'");
     }
 
 }

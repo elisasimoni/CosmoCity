@@ -11,10 +11,10 @@ public class TimeHandlerImpl implements TimeHandler{
     private final ScheduledExecutorService executorService = Executors.newSingleThreadScheduledExecutor();
     private final Semaphore pauseSemaphore = new Semaphore(1);
     
-    private int time = 0;
+    private int time;
 
-    public TimeHandlerImpl() {
-        this.time = 0;
+    public TimeHandlerImpl(int time) {
+        this.time = time;
     }
 
     public Optional<Integer> getCurrentTime() {

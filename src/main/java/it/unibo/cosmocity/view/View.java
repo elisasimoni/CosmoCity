@@ -4,9 +4,9 @@ import javafx.scene.layout.Pane;
 
 public interface View {
 
-    Pane createLayout();
+    Pane createGUI();
 
-    void setupResizeListeners();
+    void initLogic();
 
     void refresh();
 

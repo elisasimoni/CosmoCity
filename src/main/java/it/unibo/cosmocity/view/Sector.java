@@ -1,15 +1,18 @@
-package it.unibo.cosmocity.model;
+package it.unibo.cosmocity.view;
 
-public class Difficulty {
+public class Sector {
 
     private String name;
 
-    public Difficulty(String name) {
+    public Sector(String name) {
         this.name = name;
     }
 
     public String getName() {
         return name;
     }
+
     
+
+
 }
