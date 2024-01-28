@@ -7,6 +7,7 @@ import it.unibo.cosmocity.view.LandingPage;
 import java.util.ArrayList;
 import java.util.List;
 
+import it.unibo.cosmocity.controller.timer_controller.TimeHandlerImpl;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.BaseSettlerImpl;
 import it.unibo.cosmocity.model.settlers.Doctor;
@@ -24,7 +25,7 @@ public class CosmoCity extends Application {
     }
 
     public void start(Stage stage) {
-        
+        TimeHandlerImpl timer = new TimeHandlerImpl();
         LandingPage landingPage = new LandingPage(stage, 900, 700);
         AssignSettler assignSettler = new AssignSettler(stage, 900, 700);
         CreateColonyPage createColonyPage = new CreateColonyPage(stage, 900, 700);
