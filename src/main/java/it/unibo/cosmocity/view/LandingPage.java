@@ -1,5 +1,6 @@
 package it.unibo.cosmocity.view;
 
+import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.utility.AudioManager;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import javafx.beans.binding.Bindings;
@@ -22,18 +23,19 @@ import javafx.stage.Stage;
 
 public class LandingPage extends ViewImpl {
 
-
      public LandingPage(Stage stage, double width, double height) {
         super(stage, width, height);
+        
     }
 
     @Override
-    public void setupResizeListeners() {
+    public void initLogic() {
       // TODO document why this method is empty
     }
 
     @Override
-    public Pane createLayout() {
+    public Pane createGUI() {
+        stage.setTitle("CosmoCity - Home Page");
         BorderPane root = new BorderPane();
         ImageManagerImpl imageManager = new ImageManagerImpl();
         Pane backgroundPane = new Pane();
@@ -59,7 +61,7 @@ public class LandingPage extends ViewImpl {
         menuBtnBox.getChildren().addAll(newGameBtn, loadGameBtn, exitBtn);
         menuBtnBox.setPadding(new Insets(0, 50, 0, 0));
         menuBtnBox.setAlignment(Pos.CENTER);
-
+        
         stage.widthProperty().addListener(
                 (observable, oldValue, newValue) -> backgroundImageView.setFitWidth(newValue.doubleValue()));
         stage.heightProperty().addListener(
@@ -72,7 +74,11 @@ public class LandingPage extends ViewImpl {
 
         AudioManager audioManager = new AudioManager();
         audioManager.play("audio/menu_music.mp3");
-
+        SceneController sceneController = new SceneController();
+        newGameBtn.setOnAction(e -> {
+            audioManager.stop();
+            sceneController.nextSceneNavigator(new CreateColonyPage(stage, 700, 900));
+        });
         return root;
     }
 
@@ -87,6 +93,12 @@ public class LandingPage extends ViewImpl {
         button.setStyle("-fx-background-color: #ffffff");
         button.setFont(Font.font("Elephant", FontWeight.BOLD, 18));
         return button;
+    }
+
+    @Override
+    public void refresh() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'refresh'");
     }
 
 }

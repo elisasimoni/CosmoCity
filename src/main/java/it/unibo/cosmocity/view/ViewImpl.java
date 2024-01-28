@@ -24,21 +24,21 @@ public abstract class ViewImpl implements View {
      */
     private void initScene(double width, double height) {
         this.scene = new Scene(new Pane(), width, height);
-        this.scene.setRoot(this.createLayout());
+        this.scene.setRoot(this.createGUI());
     }
 
     /**
      * Configures listeners for the view's resizing.
      * This method must be implemented by derived classes.
      */
-    public abstract void setupResizeListeners();
+    public abstract void initLogic();
 
     /**
      * Creates the layout for the view.
      *
      * @return The view's layout as a javafx.scene.layout.Pane object.
      */
-    public abstract javafx.scene.layout.Pane createLayout();
+    public abstract Pane createGUI();
 
     /**
      * Set the scene in the stage and shows it.

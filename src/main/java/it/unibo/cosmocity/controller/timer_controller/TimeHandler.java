@@ -2,7 +2,7 @@ package it.unibo.cosmocity.controller.timer_controller;
 
 interface Observer {
     long update();
-}
+
 
 interface TimerObservable {
     void notifyObservers(String event);

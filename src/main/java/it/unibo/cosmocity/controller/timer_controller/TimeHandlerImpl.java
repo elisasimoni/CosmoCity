@@ -3,6 +3,7 @@ package it.unibo.cosmocity.controller.timer_controller;
 import java.util.ArrayList;
 import java.util.List;
 
+
 public class TimeHandlerImpl implements TimeHandler, TimerObservable {
     private List<Observer> observers = new ArrayList<>();
 
