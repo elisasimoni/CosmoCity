@@ -2,7 +2,9 @@ package it.unibo.cosmocity.model;
 
 import it.unibo.cosmocity.model.resources.BaseResource;
 import it.unibo.cosmocity.model.resources.Screw;
+import it.unibo.cosmocity.model.resources.ScrewStacked;
 import it.unibo.cosmocity.model.resources.StackedResource;
+import it.unibo.cosmocity.model.resources.WeaponStacked;
 import it.unibo.cosmocity.model.resources.Weapons;
 
 import java.util.HashSet;
@@ -13,10 +15,10 @@ public class ResourceHandlerImpl implements ResourceHandler {
 
     private Set<StackedResource> resources = new HashSet<>();
 
-    BaseResource weapon = new Weapons(1);
-    BaseResource screaw = new Screw(1);
+    StackedResource weapon = new WeaponStacked(1);
+    StackedResource screaw = new ScrewStacked(1);
 
-    List<BaseResource> resourcesList = List.of(weapon, screaw);
+    List<StackedResource> resourcesList = List.of(weapon, screaw);
 
     @Override
     public void incrementResource(BaseResource resource, int valueToAdd) {

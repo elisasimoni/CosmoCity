@@ -20,8 +20,9 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-
 public class LandingPage extends ViewImpl {
+
+
 
      public LandingPage(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -30,12 +31,11 @@ public class LandingPage extends ViewImpl {
 
     @Override
     public void initLogic() {
-      // TODO document why this method is empty
+
     }
 
     @Override
     public Pane createGUI() {
-        stage.setTitle("CosmoCity - Home Page");
         BorderPane root = new BorderPane();
         ImageManagerImpl imageManager = new ImageManagerImpl();
         Pane backgroundPane = new Pane();
@@ -101,5 +101,6 @@ public class LandingPage extends ViewImpl {
         throw new UnsupportedOperationException("Unimplemented method 'refresh'");
     }
 
-}
 
+
+}

@@ -46,7 +46,6 @@ public class Dashboard extends ViewImpl {
     @Override
     public Pane createGUI() {
         SceneController sceneController = new SceneController();
-        AssignSettlerController assignSettlerController = new AssignSettlerController();
         stage.setTitle("CosmoCity - Colony Dashboard");
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: darkBlue;");
@@ -62,7 +61,7 @@ public class Dashboard extends ViewImpl {
         newGameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(20)));
         vboxCenter.getChildren().add(newGameText);
 
-        
+    
         VBox vboxLeft = new VBox();
         vboxLeft.setAlignment(Pos.CENTER);
         vboxLeft.setSpacing(30);

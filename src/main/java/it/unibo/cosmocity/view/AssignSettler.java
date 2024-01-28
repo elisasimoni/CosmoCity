@@ -1,17 +1,5 @@
 package it.unibo.cosmocity.view;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.stream.Collectors;
-
-import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
-import it.unibo.cosmocity.controller.view_controller.SceneController;
-import it.unibo.cosmocity.model.settlers.BaseSettler;
-import it.unibo.cosmocity.model.settlers.Doctor;
-import it.unibo.cosmocity.model.settlers.Gunsmith;
-import it.unibo.cosmocity.model.settlers.Military;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -29,9 +17,19 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
+import it.unibo.cosmocity.model.settlers.BaseSettler;
+import it.unibo.cosmocity.model.settlers.Doctor;
+import it.unibo.cosmocity.model.settlers.Gunsmith;
+import it.unibo.cosmocity.model.settlers.Military;
+
 public class AssignSettler extends ViewImpl {
 
-
+        AssignSettlerController assignSettlerController;
+    
 
     public AssignSettler(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -40,20 +38,22 @@ public class AssignSettler extends ViewImpl {
 
     @Override
     public void refresh() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'refresh'");
+        // TODO: Implement refresh logic if needed
     }
 
     @Override
     public void initLogic() {
-        
-
+        // TODO: Implement initialization logic if needed
     }
 
     @Override
     public Pane createGUI() {
-        SceneController sceneController = new SceneController();
-        AssignSettlerController assignSettlerController = new AssignSettlerController();
+         List<BaseSettler> settlers = new ArrayList<>();
+        settlers.add(new Military());
+        settlers.add(new Doctor());
+        settlers.add(new Gunsmith());
+        settlers.add(new Gunsmith());
+        assignSettlerController = new AssignSettlerController(settlers);
         stage.setTitle("CosmoCity - Assign Settler");
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: darkBlue;");
@@ -62,37 +62,16 @@ public class AssignSettler extends ViewImpl {
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(30);
 
-        Text newGameText = new Text("Assign optional settlers\n to the sector");
+        Text newGameText = new Text("Assign optional settlers to the sector");
         newGameText.setFont(Font.font("Elephant", FontWeight.BOLD, 150));
         newGameText.setTextAlignment(TextAlignment.CENTER);
         newGameText.setFill(Color.WHITE);
         newGameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(20)));
         vbox.getChildren().add(newGameText);
-        List<BaseSettler> settlers = new ArrayList<>();
-        settlers.add(new Military());
-        settlers.add(new Doctor());
-        settlers.add(new Gunsmith());
-        settlers.add(new Gunsmith());
-        System.out.println(new Gunsmith().getProductedResource().getClass());
-        List<Sector> sectors = new ArrayList<>();
-        sectors.add(new Sector("Farm"));
-        sectors.add(new Sector("Hospital"));
-        sectors.add(new Sector("Military Base"));
-        sectors.add(new Sector("Officina"));
 
-        Map<String, Long> settlersMap = new HashMap<>();
-
-        for (BaseSettler settler : settlers) {
-            long number = settlers.stream().filter(s -> s.getClass().equals(settler.getClass())).count();
-            settlersMap.put(settler.getClass().getName().replaceAll("it.unibo.cosmocity.model.settlers.", ""), number);
+        for (String settlerName : assignSettlerController.getSettlersNames()) {
+            vbox.getChildren().add(createSettlerAssignBox(settlerName, assignSettlerController.getSettlerQuantity(settlerName)));
         }
-        settlersMap.entrySet().stream()
-            .distinct()
-            .map(entry -> Map.entry(entry.getKey(), entry.getValue()))
-            .forEach(entry -> {
-                vbox.getChildren().add(createSettlerAssignBox(entry.getKey(), entry.getValue(), sectors));
-            });
-
 
         Button startColonyButton = createButton("Start Colony");
         startColonyButton.maxHeightProperty().bind(scene.heightProperty());
@@ -101,17 +80,13 @@ public class AssignSettler extends ViewImpl {
         vbox.maxHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
         startColonyButton.setOnAction(e -> {
-            sceneController.nextSceneNavigator(new Dashboard(stage, 1024, 1080));
+            
         });
         root.setCenter(vbox);
 
         return root;
     }
 
-    /**
-     * @param text
-     * @return a button with text
-     */
     private Button createButton(String text) {
         Button button = new Button(text);
         button.setPrefWidth(300);
@@ -121,7 +96,7 @@ public class AssignSettler extends ViewImpl {
         return button;
     }
 
-    private HBox createSettlerAssignBox(String settlerName, long settlerQta, List<Sector> sectors) {
+    private HBox createSettlerAssignBox(String settlerName, long settlerQta) {
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(10);
@@ -131,16 +106,17 @@ public class AssignSettler extends ViewImpl {
         settlerText.setFill(Color.WHITE);
         settlerText.setTextAlignment(TextAlignment.CENTER);
         hbox.getChildren().add(settlerText);
-        ObservableList<String> sectorsOption = sectors.stream().map((Sector s) -> s.getName())
-                .collect(Collectors.toList()).stream()
-                .collect(Collectors.toCollection(FXCollections::observableArrayList));
+
+        ObservableList<String> sectorsOption = FXCollections.observableArrayList(assignSettlerController.getSectorOptions());
+
+         
         ComboBox<String> sectorDropdownMenu = new ComboBox<>(sectorsOption);
         sectorDropdownMenu.setPromptText("Select a sector");
         sectorDropdownMenu.setStyle("-fx-background-color: #ffffff");
         sectorDropdownMenu.setPrefWidth(200);
         sectorDropdownMenu.setPrefHeight(50);
 
-        ComboBox<String> qtaSettlerDropdownMenu = new ComboBox<String>();
+        ComboBox<String> qtaSettlerDropdownMenu = new ComboBox<>();
         for (int i = 0; i < settlerQta; i++) {
             qtaSettlerDropdownMenu.getItems().add(String.valueOf(i + 1));
         }
@@ -153,5 +129,4 @@ public class AssignSettler extends ViewImpl {
 
         return hbox;
     }
-
 }
