@@ -1,55 +1,68 @@
 package it.unibo.cosmocity.controller;
 
-import it.unibo.cosmocity.model.Difficulty;
+import it.unibo.cosmocity.model.ResourceHandler;
+import it.unibo.cosmocity.model.ResourceHandlerImpl;
 import it.unibo.cosmocity.model.Simulation;
-import it.unibo.cosmocity.model.SimulationManager;
-import it.unibo.cosmocity.model.SimulationManagerImpl;
-import it.unibo.cosmocity.controller.timer_controller.TimeHandler;
-import it.unibo.cosmocity.controller.timer_controller.TimeHandlerImpl;
+import it.unibo.cosmocity.view.Dashboard;
+import javafx.stage.Stage;
+import it.unibo.cosmocity.controller.serialization.SimulationSerialization;
+import it.unibo.cosmocity.controller.timer_controller.TimerObservable;
+import it.unibo.cosmocity.controller.view_controller.DashBoardController;
+import it.unibo.cosmocity.controller.view_controller.SceneController;
+import it.unibo.cosmocity.controller.timer_controller.EventObserver;
 
+import java.io.IOException;
 import java.util.List;
 import java.util.Map;
-
-
+import java.util.Timer;
 
 public class SimulationController {
     private Simulation simulation;
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
-    private TimeHandler timerHandler = new TimeHandlerImpl(); /*è un metodo del timer che richiama un metodo del controllo  */
-    private SimulationManager simulationManager = new SimulationManagerImpl(); // Provide the parametrized type for the generic
-    SerializationSimulation serializationSimulation = new SerializationSimulation();
+    private TimerObservable timerObservable = new TimerObservable();
+    private DashBoardController dashBoardController;
+    private EventObserver eventObserver;
+    private SimulationSerialization serializationSimulation = new SimulationSerialization();
+    private ResourceHandler resourceHandler;
+    private SceneController sceneController = new SceneController();
 
-    public void startSimulation(List<String> settlers, Map<String,Integer> resources) {
-        timerHandler.run();
-        this.simulation = new Simulation(translator.translateSettler(settlers), translator.translateResource(resources),0);
-        serializationSimulation.serializeSimulation(simulation);
-        
+    public void startSimulation(List<String> settlers, Map<String, Integer> resources) {
+        Dashboard dashboard = new Dashboard(new Stage(), 900, 700);
+        sceneController.nextSceneNavigator(dashboard);
+        this.simulation = new Simulation(translator.translateSettler(settlers), translator.translateResource(resources), 0);
+        this.dashBoardController = new DashBoardController(dashboard,simulation);
         
     }
 
     public void exitSimulation() {
-        this.simulationManager.exitSimulation();
+        System.exit(0);
+        System.out.println("Simulation exited");
     }
 
-    public void loadSimulation(){
-        //this.simulation = new Simulation(translator.translateSettler(settlers), translator.translateResource(resources));
-        timerHandler.run();
+    public void loadSimulation() throws IOException {
+        var objectDesirialize = serializationSimulation.deserialize();
+        if (objectDesirialize instanceof Simulation) {
+            this.simulation = (Simulation) objectDesirialize;
+        } else {
+            throw new IOException();
+        }
+        System.out.println("Simulation loaded!");
     }
 
     public void pauseSimulation() {
-        this.simulationManager.pauseSimulation();
-        timerHandler.run();
-
+        // Implementazione della pausa della simulazione
     }
 
     public void resumeSimulation() {
-        this.simulationManager.resumeSimulation();
-        timerHandler.run();
-
+        System.out.println("Simulation resumed");
     }
 
     public void saveSimulation() {
-        this.simulationManager.saveSimulation();
+        serializationSimulation.serialize(simulation);
+        System.out.println("Simulation saved!");
     }
 
+    public boolean gameOverSimulation() {
+        return resourceHandler.checkQtaResource();
+    }
 }

@@ -15,4 +15,17 @@ public class Event {
         this.eventsResources = eventsResources;
     }
 
+    public String getName() {
+        return name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public List<BaseResource> getEventsResources() {
+        return eventsResources;
+    }
+    
+
 }

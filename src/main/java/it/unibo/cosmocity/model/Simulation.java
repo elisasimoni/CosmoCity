@@ -26,4 +26,12 @@ public class Simulation {
         this.startTime = startTime;
     }
 
+    public List<BaseSettler> getSettlers() {
+        return settlers;
+    }
+
+    public List<StackedResource> getResources() {
+        return resources;
+    }
+
 }

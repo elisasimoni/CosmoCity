@@ -13,12 +13,11 @@ import java.util.Set;
 
 public class ResourceHandlerImpl implements ResourceHandler {
 
-    private Set<StackedResource> resources = new HashSet<>();
+    private List<StackedResource> resourcesList;
 
-    StackedResource weapon = new WeaponsStacked(1);
-    StackedResource screw = new ScrewStacked(1);
-
-    List<StackedResource> resourcesList = List.of(weapon, screw);
+    public ResourceHandlerImpl(Simulation simulation) {
+        this.resourcesList = simulation.getResources();
+    }
 
     @Override
     public void incrementResource(BaseResource resource, int valueToAdd) {
@@ -33,8 +32,13 @@ public class ResourceHandlerImpl implements ResourceHandler {
                 .forEach(r -> r.setQta(r.getQta() - valueToSubtract));
     }
 
-    public Set<StackedResource> getResources() {
-        return resources;
+    public List<StackedResource> getResources() {
+        return resourcesList;
+    }
+
+    @Override
+    public boolean checkQtaResource() {
+        return resourcesList.stream().allMatch(resource -> resource.getQta() > 0);
     }
 
 }

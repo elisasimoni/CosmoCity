@@ -26,6 +26,7 @@ public class DashBoardController {
     public DashBoardController(Dashboard dashboard, Simulation simulation) {
         this.dashboard = dashboard;
         this.simulation = simulation;
+        this.resourceHandler = new ResourceHandlerImpl(simulation);
         timer = new Timer();
         timerObservable.addObserver(eventObserver);
         timer.scheduleAtFixedRate(timerObservable, 0, 1000);
@@ -36,6 +37,7 @@ public class DashBoardController {
             
             timerObservable.pause(3000);
             
+            resourceHandler.incrementResource(new FoodStacked(2), 5);
         }
    
 
@@ -49,6 +51,7 @@ public class DashBoardController {
     public void updateResourceLabel() {
         
 
+        dashboard.updateResourceLabel(translator.translateResourceToMap(this.simulation.getResources()));
     }
 
 }

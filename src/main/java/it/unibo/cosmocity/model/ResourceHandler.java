@@ -16,4 +16,6 @@ public interface ResourceHandler {
      */
     public void decrementResource(BaseResource resource, int valueToSubtract);
 
+    public boolean checkQtaResource();
+
 }
