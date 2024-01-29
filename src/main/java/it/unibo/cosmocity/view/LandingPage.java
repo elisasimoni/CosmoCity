@@ -1,9 +1,7 @@
 package it.unibo.cosmocity.view;
 
-
 import java.util.List;
 
-import it.unibo.cosmocity.controller.SimulationController;
 
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.event.Event;
@@ -11,14 +9,18 @@ import it.unibo.cosmocity.model.resources.Weapons;
 import it.unibo.cosmocity.model.utility.AudioManager;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 
+import it.unibo.cosmocity.view.dialog.NewEventDialog;
+
 import it.unibo.cosmocity.view.dialog.GameOverDialog;
 import it.unibo.cosmocity.view.dialog.LoadGameDialog;
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
 
 import it.unibo.cosmocity.view.dialog.NewSettlerDialog;
+import it.unibo.cosmocity.view.dialog.PauseDialog;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -41,13 +43,8 @@ public class LandingPage extends ViewImpl {
     private final double screenHeight = screen.getBounds().getHeight();
     private SimulationController simulatorController = new SimulationController();
 
-     public LandingPage(Stage stage, double width, double height) {
+    public LandingPage(Stage stage, double width, double height) {
         super(stage, width, height);
-        
-    }
-
-    @Override
-    public void initLogic() {
 
     }
 
@@ -78,7 +75,7 @@ public class LandingPage extends ViewImpl {
         menuBtnBox.getChildren().addAll(newGameBtn, loadGameBtn, exitBtn);
         menuBtnBox.setPadding(new Insets(0, 50, 0, 0));
         menuBtnBox.setAlignment(Pos.CENTER);
-        
+
         stage.widthProperty().addListener(
                 (observable, oldValue, newValue) -> backgroundImageView.setFitWidth(newValue.doubleValue()));
         stage.heightProperty().addListener(
@@ -92,6 +89,7 @@ public class LandingPage extends ViewImpl {
         AudioManager audioManager = new AudioManager();
         audioManager.play("audio/menu_music.mp3");
         SceneController sceneController = new SceneController();
+        SimulationController simulatorController = new SimulationController();
         newGameBtn.setOnAction(e -> {
             sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
         });
@@ -108,13 +106,16 @@ public class LandingPage extends ViewImpl {
         });
         exitBtn.setOnAction(e -> {
             audioManager.stop();
-            new NewEventDialog(new Event("audio","audio",List.of(new Weapons(1)))).show();
+
+            sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
+        });
+    
+        exitBtn.setOnAction(e -> {
+
+            audioManager.stop();
             stage.close();
             simulatorController.exitSimulation();
             
-            
-
-
         });
         return root;
     }
@@ -129,15 +130,18 @@ public class LandingPage extends ViewImpl {
         button.setPrefHeight(50);
         button.setStyle("-fx-background-color: #ffffff");
         button.setFont(Font.font("Elephant", FontWeight.BOLD, 18));
+        button.setOnMouseEntered(e -> {
+            button.setStyle("-fx-border-color: #000000");
+        });
+        button.setOnMouseExited(e -> {
+            button.setStyle("-fx-border-color: #ffffff");
+        });
         return button;
     }
 
     @Override
     public void refresh() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'refresh'");
+        createGUI();
     }
-
-
 
 }

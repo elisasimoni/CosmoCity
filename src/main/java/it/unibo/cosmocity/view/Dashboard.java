@@ -1,5 +1,8 @@
 package it.unibo.cosmocity.view;
 
+
+import it.unibo.cosmocity.controller.view_controller.DashBoardController;
+
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
@@ -45,13 +48,6 @@ public class Dashboard extends ViewImpl {
         createGUI();
     }
 
-    public void showAlert(String message) {
-        Alert alert = new Alert(Alert.AlertType.INFORMATION);
-        alert.setTitle("CosmoCity");
-        alert.setHeaderText("Simulation");
-        alert.setContentText(message);
-        alert.showAndWait();
-    }
 
     @Override
     public Pane createGUI() {

@@ -14,11 +14,11 @@ public class Simulation {
     private List<BaseSettler> settlers;
     @JsonProperty("resources")
     private List<StackedResource> resources;
-    @JsonProperty("difficulty")
-    private Difficulty difficulty;
+    //@JsonProperty("difficulty")
+    //private Difficulty difficulty;
     @JsonProperty("startTime")
     private long startTime;
-    
+
     public Simulation(List<BaseSettler> settlers, List<StackedResource> resources,long startTime) {
         this.settlers = settlers;
         this.resources = resources;

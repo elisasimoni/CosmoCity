@@ -1,5 +1,10 @@
 package it.unibo.cosmocity.controller;
 
+
+import it.unibo.cosmocity.model.Simulation;
+import it.unibo.cosmocity.controller.timer_controller.TimeHandler;
+import it.unibo.cosmocity.controller.timer_controller.TimeHandlerImpl;
+
 import it.unibo.cosmocity.model.ResourceHandler;
 import it.unibo.cosmocity.model.ResourceHandlerImpl;
 import it.unibo.cosmocity.model.Simulation;
@@ -11,6 +16,7 @@ import it.unibo.cosmocity.controller.view_controller.DashBoardController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.controller.timer_controller.EventObserver;
 
+
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -19,6 +25,7 @@ import java.util.Timer;
 public class SimulationController {
     private Simulation simulation;
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+
     private TimerObservable timerObservable = new TimerObservable();
     private DashBoardController dashBoardController;
     private EventObserver eventObserver;
@@ -51,16 +58,21 @@ public class SimulationController {
 
     public void pauseSimulation() {
         // Implementazione della pausa della simulazione
+
     }
 
     public void resumeSimulation() {
         System.out.println("Simulation resumed");
+
+
     }
 
     public void saveSimulation() {
-        serializationSimulation.serialize(simulation);
+        serializationSimulation.serializeSimulation(simulation);
         System.out.println("Simulation saved!");
+
     }
+
 
     public boolean gameOverSimulation() {
         return resourceHandler.checkQtaResource();
