@@ -137,9 +137,4 @@ public class AssignSettler extends ViewImpl {
         return hbox;
     }
 
-    @Override
-    public void initLogic() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initLogic'");
-    }
 }

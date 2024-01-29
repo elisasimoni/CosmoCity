@@ -2,7 +2,7 @@ package it.unibo.cosmocity.view;
 
 import java.util.List;
 
-
+import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.event.Event;
 import it.unibo.cosmocity.model.resources.Weapons;

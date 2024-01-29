@@ -240,11 +240,4 @@ public class Dashboard extends ViewImpl {
     }
 
 
-    @Override
-    public void initLogic() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'initLogic'");
-    }
-
-
 }
