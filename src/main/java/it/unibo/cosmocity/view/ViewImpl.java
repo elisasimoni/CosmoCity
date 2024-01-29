@@ -1,6 +1,8 @@
 package it.unibo.cosmocity.view;
 
+import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -16,7 +18,7 @@ public abstract class ViewImpl implements View {
     }
 
     /**
-     * Initializes the scene with the specified dimensions.
+     * Initializes the scene with dimensions.
      * Create the first layout
      *
      * @param width  width of the scene.
@@ -28,17 +30,11 @@ public abstract class ViewImpl implements View {
     }
 
     /**
-     * Creates the layout for the view.
-     *
-     * @return The view's layout as a javafx.scene.layout.Pane object.
-     */
-    public abstract Pane createGUI();
-
-    /**
      * Set the scene in the stage and shows it.
      */
     public void show() {
         stage.setScene(this.scene);
+        stage.getIcons().add(new ImageManagerImpl().loadImage("img/cosmocity_icon.png"));
         stage.show();
     }
 }
