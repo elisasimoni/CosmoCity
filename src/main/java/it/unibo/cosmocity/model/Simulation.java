@@ -18,8 +18,7 @@ public class Simulation {
     private Difficulty difficulty;
     @JsonProperty("startTime")
     private long startTime;
-    private ResourceHandler resourceHandler = new ResourceHandlerImpl();
-
+    
     public Simulation(List<BaseSettler> settlers, List<StackedResource> resources,long startTime) {
         this.settlers = settlers;
         this.resources = resources;
