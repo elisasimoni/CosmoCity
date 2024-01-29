@@ -1,11 +1,13 @@
 package it.unibo.cosmocity.view;
 
-import it.unibo.cosmocity.controller.view_controller.DashBoardController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
+
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -23,12 +25,19 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import java.util.Map;
 
 public class Dashboard extends ViewImpl {
     private GridPane gridPane;
+    private Label foodVal;
+    private Label timeLabel;
+    private Label medicineVal;
+    private Label weaponVal;
+    private Label screwVal;
 
     public Dashboard(Stage stage, double width, double height) {
         super(stage, width, height);
+
     }
 
     @Override
@@ -36,12 +45,19 @@ public class Dashboard extends ViewImpl {
         createGUI();
     }
 
+    public void showAlert(String message) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle("CosmoCity");
+        alert.setHeaderText("Simulation");
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
     @Override
     public Pane createGUI() {
 
         SceneController sceneController = new SceneController();
 
-        DashBoardController dashBoardController = new DashBoardController();
         stage.setTitle("CosmoCity - Colony Dashboard");
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: darkBlue;");
@@ -74,11 +90,18 @@ public class Dashboard extends ViewImpl {
         String weaponsText = "Weapons: ";
         String screwText = "Screw: ";
 
+        Text timerLabel = new Text("Tempo:");
+        timerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        timerLabel.setFill(Color.WHITE);
+        this.timeLabel = new Label("Valore Dinamico");
+        timeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        timeLabel.setTextFill(Color.YELLOW);
+
         Text foodLabel = new Text(foodText);
         foodLabel.setFont(Font.font("Arial", 20));
         foodLabel.setFill(Color.WHITE);
 
-        Label foodVal = new Label("Valore Dinamico");
+        this.foodVal = new Label("Valore Dinamico");
         foodVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         foodVal.setTextFill(Color.YELLOW);
 
@@ -86,7 +109,7 @@ public class Dashboard extends ViewImpl {
         medicineLabel.setFont(Font.font("Arial", 20));
         medicineLabel.setFill(Color.WHITE);
 
-        Label medicineVal = new Label("Valore Dinamico");
+        this.medicineVal = new Label("Valore Dinamico");
         medicineVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         medicineVal.setTextFill(Color.YELLOW);
 
@@ -94,7 +117,7 @@ public class Dashboard extends ViewImpl {
         weaponLabel.setFont(Font.font("Arial", 20));
         weaponLabel.setFill(Color.WHITE);
 
-        Label weaponVal = new Label("Valore Dinamico");
+        this.weaponVal = new Label("Valore Dinamico");
         weaponVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         weaponVal.setTextFill(Color.YELLOW);
 
@@ -102,9 +125,12 @@ public class Dashboard extends ViewImpl {
         screwLabel.setFont(Font.font("Arial", 20));
         screwLabel.setFill(Color.WHITE);
 
-        Label screwVal = new Label("Valore Dinamico");
+        this.screwVal = new Label("Valore Dinamico");
         screwVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         screwVal.setTextFill(Color.YELLOW);
+
+        HBox timerBox = new HBox(10);
+        timerBox.getChildren().addAll(timerLabel, timeLabel);
 
         HBox foodInfoBox = new HBox(10);
         foodInfoBox.getChildren().addAll(foodLabel, foodVal);
@@ -119,7 +145,7 @@ public class Dashboard extends ViewImpl {
         screwInfoBox.getChildren().addAll(screwLabel, screwVal);
 
         VBox infoVBox = new VBox(10);
-        infoVBox.getChildren().addAll(foodInfoBox, medicineInfoBox, weaponInfoBox, screwInfoBox);
+        infoVBox.getChildren().addAll(foodInfoBox, medicineInfoBox, weaponInfoBox, screwInfoBox, timerBox);
         infoVBox.setAlignment(Pos.CENTER_RIGHT);
 
         StackPane.setAlignment(infoVBox, Pos.CENTER_RIGHT);
@@ -144,6 +170,23 @@ public class Dashboard extends ViewImpl {
         root.setCenter(gridPane);
 
         return root;
+    }
+
+    public void updateTimeLabel(long time) {
+        System.out.println("Time View: " + time);
+        Platform.runLater(() -> {
+            timeLabel.setText(String.valueOf(time));
+        });
+    }
+
+    public void updateResourceLabel(Map<String, Integer> resources) {
+
+        Platform.runLater(() -> {
+            foodVal.setText(String.valueOf(resources.get("Food")));
+            medicineVal.setText(String.valueOf(resources.get("Medicine")));
+            weaponVal.setText(String.valueOf(resources.get("Weapons")));
+            screwVal.setText(String.valueOf(resources.get("Screw")));
+        });
     }
 
     private void createSector(String backgroundImagePath, GridPane gridPane, int colIndex, int rowIndex) {
