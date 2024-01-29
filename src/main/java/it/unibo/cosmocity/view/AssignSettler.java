@@ -46,10 +46,7 @@ public class AssignSettler extends ViewImpl {
        createGUI();
     }
 
-    @Override
-    public void initLogic() {
-        // TODO: Implement initialization logic if needed
-    }
+
 
     @Override
     public Pane createGUI() {
@@ -89,7 +86,7 @@ public class AssignSettler extends ViewImpl {
         SimulationController simulatorController = new SimulationController();
         startColonyButton.setOnAction(e -> {
             simulatorController.startSimulation(List.of("Gunsmith", "Doctor"), Map.of("Medicine", 5, "Food", 5));
-            sceneController.nextSceneNavigator(new Dashboard(stage, screenWidth * 0.7, screenHeight * 0.8));
+            this.stage.close();
 
         });
         root.setCenter(vbox);
@@ -138,5 +135,11 @@ public class AssignSettler extends ViewImpl {
         hbox.getChildren().add(qtaSettlerDropdownMenu);
 
         return hbox;
+    }
+
+    @Override
+    public void initLogic() {
+        // TODO Auto-generated method stub
+        throw new UnsupportedOperationException("Unimplemented method 'initLogic'");
     }
 }

@@ -4,5 +4,5 @@ interface Observer {
     /**
      * @return the time elapsed since the start of the simulation
      */
-    long update();
+    public long update(long time);
 }

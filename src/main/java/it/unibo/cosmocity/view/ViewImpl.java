@@ -28,12 +28,6 @@ public abstract class ViewImpl implements View {
     }
 
     /**
-     * Configures listeners for the view's resizing.
-     * This method must be implemented by derived classes.
-     */
-    public abstract void initLogic();
-
-    /**
      * Creates the layout for the view.
      *
      * @return The view's layout as a javafx.scene.layout.Pane object.
