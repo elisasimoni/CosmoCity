@@ -1,10 +1,20 @@
 package it.unibo.cosmocity.view;
 
-import it.unibo.cosmocity.controller.SimulationController;
+import java.util.List;
+
+
 import it.unibo.cosmocity.controller.view_controller.SceneController;
+import it.unibo.cosmocity.model.event.Event;
+import it.unibo.cosmocity.model.resources.Weapons;
 import it.unibo.cosmocity.model.utility.AudioManager;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
+
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
+
+import it.unibo.cosmocity.view.dialog.GameOverDialog;
+import it.unibo.cosmocity.view.dialog.LoadGameDialog;
+import it.unibo.cosmocity.view.dialog.NewEventDialog;
+
 import it.unibo.cosmocity.view.dialog.NewSettlerDialog;
 import it.unibo.cosmocity.view.dialog.PauseDialog;
 import javafx.beans.binding.Bindings;
@@ -31,6 +41,7 @@ public class LandingPage extends ViewImpl {
     private final Screen screen = Screen.getPrimary();
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
+    private SimulationController simulatorController = new SimulationController();
 
     public LandingPage(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -80,30 +91,31 @@ public class LandingPage extends ViewImpl {
         SceneController sceneController = new SceneController();
         SimulationController simulatorController = new SimulationController();
         newGameBtn.setOnAction(e -> {
-            audioManager.stop();
             sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
         });
         loadGameBtn.setOnAction(e -> {
             audioManager.stop();
             try {
                 simulatorController.loadSimulation();
+                
             } catch (Exception e1) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Error");
-                alert.setHeaderText("Error loading the game");
-                alert.setContentText("There is no saved game");
+                new LoadGameDialog().show();
             }
-            sceneController.nextSceneNavigator(new Dashboard(stage, screenWidth * 0.5, screenHeight * 0.9));
+           
+            
         });
+        exitBtn.setOnAction(e -> {
+            audioManager.stop();
+
+            sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
+        });
+    
         exitBtn.setOnAction(e -> {
 
             audioManager.stop();
-            //stage.close();
-            //simulatorController.exitSimulation();
-            NewEventDialog newEventDialog = new NewEventDialog();
-            newEventDialog.show();
+            stage.close();
+            simulatorController.exitSimulation();
             
-
         });
         return root;
     }

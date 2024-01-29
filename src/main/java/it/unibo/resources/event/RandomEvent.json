@@ -1,0 +1,92 @@
+{
+    "randomEvents": [
+        {
+            "name": "Alien Invasion",
+            "description": "Aliens are invading the colony. You have to stop them. \n Fix it with 5 Weapons an 10 People to kill the aliens. \n Lose 10 Weapons and 15 People to ignore the attack.",
+            "fixDamage": [
+                {
+                    "name": "Weapons",
+                    "qta": 5
+                },
+                {
+                    "name": "People",
+                    "qta": 10
+                }
+            ],
+            "damage": [
+                {
+                    "name": "Weapons",
+                    "qta": 10
+                },
+                {
+                    "name": "People",
+                    "qta": 10
+                }
+            ]
+            
+        },
+        {
+            "name": "Crazy Scientist",
+            "description": "A crazy scientist is trying to create a new life form. \n Fix it with 10 medicine an 20 People to stop the creation. \n Lose 20 medicine to ignore the creation.",
+            "fixDamage": [
+                {
+                    "name": "Medicine",
+                    "qta": 10
+                },
+                {
+                    "name": "People",
+                    "qta": 20
+                }
+            ],
+            "damage": [
+                {
+                    "name": "Medicine",
+                    "qta": 25
+                }
+            ]
+        },
+        {
+            
+                "name": "Famine in the colony",
+                "description": "There is a famine in the colony. \n Fix it with 10 Food and 10 People to stop the famine. \n Lose 20 Food to ignore the famine.",
+                "fixDamage": [
+                    {
+                        "name": "Food",
+                        "qta": 10
+                    },
+                    {
+                        "name": "People",
+                        "qta": 10
+                    }
+                ],
+                "damage": [
+                    {
+                        "name": "Food",
+                        "qta": 20
+                    }
+                ]
+            
+        },
+        {
+            "name": "Loss of pressure",
+                "description": "There is a loss of pressure in the colony. \n Fix it with 20 Screw and 10 People to stop the loss of pressure. \n Lose 25 Screw to ignore the loss of pressure.",
+                "fixDamage": [
+                    {
+                        "name": "Food",
+                        "qta": 10
+                    },
+                    {
+                        "name": "People",
+                        "qta": 10
+                    }
+                ],
+                "damage": [
+                    {
+                        "name": "Food",
+                        "qta": 20
+                    }
+                ]
+
+        }
+    ]
+}
