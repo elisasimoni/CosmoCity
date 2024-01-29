@@ -1,8 +1,5 @@
 package it.unibo.cosmocity.view;
 
-
-import it.unibo.cosmocity.controller.view_controller.DashBoardController;
-
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
@@ -26,8 +23,9 @@ import javafx.scene.shape.Circle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+
+import java.util.List;
 import java.util.Map;
 
 public class Dashboard extends ViewImpl {
@@ -37,6 +35,7 @@ public class Dashboard extends ViewImpl {
     private Label medicineVal;
     private Label weaponVal;
     private Label screwVal;
+    private Text nameColony;
 
     public Dashboard(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -47,7 +46,6 @@ public class Dashboard extends ViewImpl {
     public void refresh() {
         createGUI();
     }
-
 
     @Override
     public Pane createGUI() {
@@ -74,10 +72,10 @@ public class Dashboard extends ViewImpl {
         root.setLeft(leftBox);
 
         StackPane titlePane = new StackPane();
-        Text titleColony = new Text("Colony Name");
-        titleColony.setFont(Font.font("Elephant", FontWeight.BOLD, 30));
-        titleColony.setFill(Color.WHITE);
-        titlePane.getChildren().add(titleColony);
+        nameColony = new Text("");
+        nameColony.setFont(Font.font("Elephant", FontWeight.BOLD, 30));
+        nameColony.setFill(Color.WHITE);
+        titlePane.getChildren().add(nameColony);
 
         root.setTop(titlePane);
 
@@ -86,10 +84,10 @@ public class Dashboard extends ViewImpl {
         String weaponsText = "Weapons: ";
         String screwText = "Screw: ";
 
-        Text timerLabel = new Text("Tempo:");
+        Text timerLabel = new Text("Time:");
         timerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         timerLabel.setFill(Color.WHITE);
-        this.timeLabel = new Label("Valore Dinamico");
+        this.timeLabel = new Label("");
         timeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         timeLabel.setTextFill(Color.YELLOW);
 
@@ -97,7 +95,7 @@ public class Dashboard extends ViewImpl {
         foodLabel.setFont(Font.font("Arial", 20));
         foodLabel.setFill(Color.WHITE);
 
-        this.foodVal = new Label("Valore Dinamico");
+        this.foodVal = new Label("");
         foodVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         foodVal.setTextFill(Color.YELLOW);
 
@@ -105,7 +103,7 @@ public class Dashboard extends ViewImpl {
         medicineLabel.setFont(Font.font("Arial", 20));
         medicineLabel.setFill(Color.WHITE);
 
-        this.medicineVal = new Label("Valore Dinamico");
+        this.medicineVal = new Label("");
         medicineVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         medicineVal.setTextFill(Color.YELLOW);
 
@@ -113,7 +111,7 @@ public class Dashboard extends ViewImpl {
         weaponLabel.setFont(Font.font("Arial", 20));
         weaponLabel.setFill(Color.WHITE);
 
-        this.weaponVal = new Label("Valore Dinamico");
+        this.weaponVal = new Label("");
         weaponVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         weaponVal.setTextFill(Color.YELLOW);
 
@@ -121,7 +119,7 @@ public class Dashboard extends ViewImpl {
         screwLabel.setFont(Font.font("Arial", 20));
         screwLabel.setFill(Color.WHITE);
 
-        this.screwVal = new Label("Valore Dinamico");
+        this.screwVal = new Label("");
         screwVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         screwVal.setTextFill(Color.YELLOW);
 
@@ -141,7 +139,7 @@ public class Dashboard extends ViewImpl {
         screwInfoBox.getChildren().addAll(screwLabel, screwVal);
 
         VBox infoVBox = new VBox(10);
-        infoVBox.getChildren().addAll(foodInfoBox, medicineInfoBox, weaponInfoBox, screwInfoBox, timerBox);
+        infoVBox.getChildren().addAll(timerBox, foodInfoBox, medicineInfoBox, weaponInfoBox, screwInfoBox);
         infoVBox.setAlignment(Pos.CENTER_RIGHT);
 
         StackPane.setAlignment(infoVBox, Pos.CENTER_RIGHT);
@@ -156,9 +154,8 @@ public class Dashboard extends ViewImpl {
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
-        // Aggiungi i settori alla griglia
         createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0);
-
+        
         createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0);
         createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1);
         createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1);
@@ -220,24 +217,8 @@ public class Dashboard extends ViewImpl {
         return button;
     }
 
-    private HBox createResourceLine(String resourceName, long resourceQta) {
-        HBox hbox = new HBox();
-        hbox.setAlignment(Pos.CENTER);
-        hbox.setSpacing(10);
-        Text resourceText = new Text(resourceName);
-        resourceText.setFont(Font.font("Elephant", FontWeight.NORMAL, 20));
-        resourceText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
-        resourceText.setFill(Color.WHITE);
-        resourceText.setTextAlignment(TextAlignment.CENTER);
-        hbox.getChildren().add(resourceText);
-        Text resourceQtaText = new Text(String.valueOf(resourceQta));
-        resourceQtaText.setFont(Font.font("Elephant", FontWeight.NORMAL, 20));
-        resourceQtaText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
-        resourceQtaText.setFill(Color.WHITE);
-        resourceQtaText.setTextAlignment(TextAlignment.CENTER);
-        hbox.getChildren().add(resourceQtaText);
-        return hbox;
+    public void updateColonyInformation(String colonyName) {
+        this.nameColony.setText(colonyName);       
     }
-
 
 }

@@ -1,8 +1,11 @@
 package it.unibo.cosmocity.view;
 
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
@@ -107,6 +110,15 @@ public class CreateColonyPage extends ViewImpl {
         hboxOptionalSettler.getChildren().add(createImageControl("img/settler_icon/Military_Icon.png", "Military"));
 
         vbox.getChildren().add(hboxOptionalSettler);
+        Text difficultyText = new Text("Choose difficulty:");
+        difficultyText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
+        difficultyText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
+        difficultyText.setFill(Color.WHITE);
+        difficultyText.setTextAlignment(TextAlignment.CENTER);
+        vbox.getChildren().add(difficultyText);
+
+        ComboBox<String> difficultyComboBox = difficultyChooser();
+        vbox.getChildren().add(difficultyComboBox);
 
         Button nextButton = createButton("Next");
         nextButton.maxHeightProperty().bind(scene.heightProperty());
@@ -134,6 +146,21 @@ public class CreateColonyPage extends ViewImpl {
         button.setStyle("-fx-background-color: #ffffff");
         button.setFont(Font.font(FONT, FontWeight.BOLD, 18));
         return button;
+    }
+    private ComboBox<String> difficultyChooser() {
+        ObservableList<String> difficultyOptions = FXCollections.observableArrayList(
+                "Easy",
+                "Medium",
+                "Hard"
+    );
+
+        ComboBox<String> comboBox = new ComboBox<>(difficultyOptions);
+        comboBox.setValue("Medium"); // Imposta un valore predefinito
+        comboBox.setStyle("-fx-background-color: #ffffff");
+        comboBox.setPrefWidth(200);
+        comboBox.setPrefHeight(30);
+
+        return comboBox;
     }
 
     private VBox createImageControl(String imageURL, String nameSettler) {

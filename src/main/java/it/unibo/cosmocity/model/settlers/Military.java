@@ -1,16 +1,17 @@
 package it.unibo.cosmocity.model.settlers;
 
-public class Military extends PassiveSettler{
+import it.unibo.cosmocity.model.resources.BaseResource;
 
-    /**
-     * The amount of food consumed by a military settler
-     */
-    private static final int CONSUMPTION = 2;
+public class Military extends SimpleSettler {
 
     @Override
-    public int getConsumptionResource() {
-        return CONSUMPTION;
+    public BaseResource getProductedResource() {
+        return setProductedResource(10, 10, 2, 2);
+    };
+
+    @Override
+    public String getSectorAssigned() {
+        return "Military Base";
     }
 
-    
 }

@@ -2,13 +2,10 @@ package it.unibo.cosmocity.controller;
 
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
-import org.apache.commons.lang3.builder.Diff;
 
 import it.unibo.cosmocity.model.DifficultiesType;
-import it.unibo.cosmocity.model.Difficulty;
 import it.unibo.cosmocity.model.resources.FoodStacked;
 import it.unibo.cosmocity.model.resources.MedicineStacked;
 import it.unibo.cosmocity.model.resources.ScrewStacked;
@@ -16,15 +13,20 @@ import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.resources.WeaponsStacked;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.Blacksmith;
+import it.unibo.cosmocity.model.settlers.Chemist;
 import it.unibo.cosmocity.model.settlers.Cook;
 import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.settlers.Farmer;
 import it.unibo.cosmocity.model.settlers.Gunsmith;
 import it.unibo.cosmocity.model.settlers.Military;
-import it.unibo.cosmocity.model.settlers.Pharmacist;
+
 import it.unibo.cosmocity.model.settlers.Technician;
 
 public class TranslatorStringToClassHelper {
+
+    private static Enum SettlerType;
+
+
     public TranslatorStringToClassHelper() {
 
     }
@@ -41,7 +43,7 @@ public class TranslatorStringToClassHelper {
             case "Military" -> new Military();
             case "Cook" -> new Cook();
             case "Gunsmith" -> new Gunsmith();
-            case "Pharmacist" -> new Pharmacist();
+            case "Chemist" -> new Chemist();
             case "Blacksmith" -> new Blacksmith();
             default -> throw new IllegalArgumentException("Invalid settler name");
         }).collect(Collectors.toList());
@@ -51,7 +53,7 @@ public class TranslatorStringToClassHelper {
      * @param resources
      * @return a list of stacked resources
      */
-    public List<StackedResource> translateResource(Map<String, Integer> resources) {
+    public List<StackedResource> translateResources(Map<String, Integer> resources) {
         return resources.entrySet().stream().map(entry -> {
             String resourceName = entry.getKey();
             int resourceValue = entry.getValue();
@@ -89,7 +91,7 @@ public class TranslatorStringToClassHelper {
      */
     public List<String> translateSettlerToString(List<BaseSettler> settlers) {
         return settlers.stream().map(settler -> switch (settler.getClass().getSimpleName()) {
-            case "Doctor" -> "Doctor";
+            case "Doctor"-> "Doctor";
             case "Farmer" -> "Farmer";
             case "Technician" -> "Technician";
             case "Military" -> "Military";

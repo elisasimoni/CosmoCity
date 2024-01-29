@@ -25,7 +25,6 @@ public class Event {
         this.demageResources = demageResources;
     }
 
-
     public String getName() {
         return this.name;
     }
@@ -41,8 +40,5 @@ public class Event {
     public List<BaseResource> getDemageResources() {
         return this.demageResources;
     }
-
-
-    
 
 }

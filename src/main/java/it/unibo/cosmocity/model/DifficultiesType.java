@@ -2,17 +2,24 @@ package it.unibo.cosmocity.model;
 
 public enum DifficultiesType {
 
-    EASY("EASY"),
-    MEDIUM("MEDIUM"),
-    HARD("HARD");
+    EASY(300),
+    MEDIUM(200),
+    HARD(100);
 
-    private final String difficulty;
+    private final int difficulty;
 
     /**
      * @param difficulty
      */
-    private DifficultiesType(String difficulty) {
+    private DifficultiesType(int difficulty) {
         this.difficulty = difficulty;
+    }
+
+    /**
+     * @return the difficulty
+     */
+    public int getDifficulty() {
+        return difficulty;
     }
 
     

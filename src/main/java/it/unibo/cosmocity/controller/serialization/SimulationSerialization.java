@@ -18,7 +18,7 @@ public class SimulationSerialization implements Serialization{
     public void serialize(Object object) {
         try {
             if(!filePath.toFile().exists()){
-                File file = new File(filePath.toFile().getParent());
+                new File(filePath.toFile().getParent());
             }
             Files.writeString(filePath, mapper.writeValueAsString(object));
         } catch (IOException e) {
