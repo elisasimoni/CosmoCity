@@ -41,8 +41,6 @@ public class Event {
     public List<BaseResource> getDemageResources() {
         return this.demageResources;
     }
-
-
     
 
 }

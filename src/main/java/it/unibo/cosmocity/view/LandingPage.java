@@ -91,7 +91,9 @@ public class LandingPage extends ViewImpl {
         SceneController sceneController = new SceneController();
         SimulationController simulatorController = new SimulationController();
         newGameBtn.setOnAction(e -> {
+            
             sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
+
         });
         loadGameBtn.setOnAction(e -> {
             audioManager.stop();
@@ -106,8 +108,7 @@ public class LandingPage extends ViewImpl {
         });
         exitBtn.setOnAction(e -> {
             audioManager.stop();
-
-            sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
+           sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
         });
     
         exitBtn.setOnAction(e -> {

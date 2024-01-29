@@ -3,14 +3,11 @@ package it.unibo.cosmocity.view;
 
 import it.unibo.cosmocity.controller.view_controller.DashBoardController;
 
-import it.unibo.cosmocity.controller.view_controller.SceneController;
-
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -40,7 +37,6 @@ public class Dashboard extends ViewImpl {
 
     public Dashboard(Stage stage, double width, double height) {
         super(stage, width, height);
-
     }
 
     @Override
@@ -52,7 +48,6 @@ public class Dashboard extends ViewImpl {
     @Override
     public Pane createGUI() {
 
-        SceneController sceneController = new SceneController();
 
         stage.setTitle("CosmoCity - Colony Dashboard");
         BorderPane root = new BorderPane();
@@ -158,7 +153,6 @@ public class Dashboard extends ViewImpl {
 
         // Aggiungi i settori alla griglia
         createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0);
-
         createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0);
         createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1);
         createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1);
@@ -219,25 +213,5 @@ public class Dashboard extends ViewImpl {
         button.setFont(Font.font("Elephant", FontWeight.BOLD, 18));
         return button;
     }
-
-    private HBox createResourceLine(String resourceName, long resourceQta) {
-        HBox hbox = new HBox();
-        hbox.setAlignment(Pos.CENTER);
-        hbox.setSpacing(10);
-        Text resourceText = new Text(resourceName);
-        resourceText.setFont(Font.font("Elephant", FontWeight.NORMAL, 20));
-        resourceText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
-        resourceText.setFill(Color.WHITE);
-        resourceText.setTextAlignment(TextAlignment.CENTER);
-        hbox.getChildren().add(resourceText);
-        Text resourceQtaText = new Text(String.valueOf(resourceQta));
-        resourceQtaText.setFont(Font.font("Elephant", FontWeight.NORMAL, 20));
-        resourceQtaText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
-        resourceQtaText.setFill(Color.WHITE);
-        resourceQtaText.setTextAlignment(TextAlignment.CENTER);
-        hbox.getChildren().add(resourceQtaText);
-        return hbox;
-    }
-
 
 }
