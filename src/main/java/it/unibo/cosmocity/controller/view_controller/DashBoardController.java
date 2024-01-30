@@ -17,6 +17,7 @@ import it.unibo.cosmocity.model.resources.ScrewStacked;
 import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.resources.WeaponsStacked;
 import it.unibo.cosmocity.view.Dashboard;
+import it.unibo.cosmocity.view.DashboardView;
 import javafx.application.Platform;
 
 import java.util.List;
@@ -25,18 +26,17 @@ import java.util.Timer;
 public class DashBoardController {
     private static final int TIME_APPETITE = 11;
     private static final int TIME_RANDOM_EVENT = 7;
-    private Dashboard dashboard;
+    private DashboardView dashboardView;;
     private Simulation simulation;
     private ResourceHandler resourceHandler;
     private Timer timer;
     private TimerObservable timerObservable = new TimerObservable();
     private EventObserver eventObserver = new EventObserver(this);
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
-    private CreateColonyController createColonyController = new CreateColonyController();
     private EventManager eventManager = new EventManager();
 
-    public DashBoardController(Dashboard dashboard, Simulation simulation) {
-        this.dashboard = dashboard;
+    public DashBoardController(DashboardView dashboardView, Simulation simulation) {
+        this.dashboardView = dashboardView;
         this.simulation = simulation;
         this.resourceHandler = new ResourceHandlerImpl(simulation);
         updateSimulationInfo();
@@ -54,25 +54,25 @@ public class DashBoardController {
         }
 
         Platform.runLater(() -> {
-            dashboard.updateTimeLabel(time);
+            dashboardView.updateTimeLabel(time);
             updateResourceLabel();
         });
 
     }
 
     public void updateResourceLabel() {
-        dashboard.updateResourceLabel(translator.translateResourceToMap(this.simulation.getResources()));
+        dashboardView.updateResourceLabel(translator.translateResourceToMap(this.simulation.getResources()));
     }
 
     public void updateSimulationInfo() {
-        dashboard.updateSimulationInfo(simulation.getColonyName());
+        dashboardView.updateSimulationInfo(simulation.getColonyName());
     }
 
     public void createEvent(long time) {
         Platform.runLater(() -> {
             if (time % TIME_RANDOM_EVENT == 0) {
                 RandomEvent event = eventManager.generateRandomEvent();
-                dashboard.createRandomEvent(event);
+                dashboardView.createRandomEvent(event);
                 getDamage(event);
 
             }
@@ -100,7 +100,7 @@ public class DashBoardController {
     public void changeStatus() {
         SectorManager sectorManager = new SectorManager(this.simulation.getResources());
         List<Status> status = sectorManager.checkStatus();
-        dashboard.updateCirle(status);
+        dashboardView.updateCirle(status);
     }
 
 }

@@ -36,7 +36,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class Dashboard extends ViewImpl {
+public class Dashboard extends ViewImpl implements DashboardView{
     private GridPane gridPane;
     private Label foodVal;
     private Label timeLabel;

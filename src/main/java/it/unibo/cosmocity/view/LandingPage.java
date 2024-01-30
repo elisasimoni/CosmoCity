@@ -1,11 +1,11 @@
 package it.unibo.cosmocity.view;
 
-
 import java.util.List;
 
 import it.unibo.cosmocity.controller.SimulationController;
 
 import it.unibo.cosmocity.controller.view_controller.SceneController;
+import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.event.Event;
 import it.unibo.cosmocity.model.resources.Weapons;
 import it.unibo.cosmocity.model.utility.AudioManager;
@@ -33,16 +33,16 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.Screen;
 
-public class LandingPage extends ViewImpl {
+public class LandingPage extends ViewImpl implements LandingPageView {
 
     private final Screen screen = Screen.getPrimary();
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
-    private SimulationController simulatorController = new SimulationController();
+    private SimulationController simulationController = new SimulationController();
 
-     public LandingPage(Stage stage, double width, double height) {
+    public LandingPage(Stage stage, double width, double height) {
         super(stage, width, height);
-        
+
     }
 
     @Override
@@ -72,7 +72,7 @@ public class LandingPage extends ViewImpl {
         menuBtnBox.getChildren().addAll(newGameBtn, loadGameBtn, exitBtn);
         menuBtnBox.setPadding(new Insets(0, 50, 0, 0));
         menuBtnBox.setAlignment(Pos.CENTER);
-        
+
         stage.widthProperty().addListener(
                 (observable, oldValue, newValue) -> backgroundImageView.setFitWidth(newValue.doubleValue()));
         stage.heightProperty().addListener(
@@ -88,34 +88,16 @@ public class LandingPage extends ViewImpl {
         audioManager.stop();
         SceneController sceneController = new SceneController();
         newGameBtn.setOnAction(e -> {
-            sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
+            startSimulation();
+
         });
         loadGameBtn.setOnAction(e -> {
-            audioManager.stop();
-            try {
-                simulatorController.loadSimulation();
-                
-            } catch (Exception e1) {
-                new LoadGameDialog().show();
-            }
-           
-            
+            loadSimulation();
+
         });
+
         exitBtn.setOnAction(e -> {
-            audioManager.stop();
-
-            sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.3, screenHeight * 0.8));
-        });
-    
-        exitBtn.setOnAction(e -> {
-
-            audioManager.stop();
-            stage.close();
-            simulatorController.exitSimulation();
-            
-            
-
-
+            exitSimulation();
         });
         return root;
     }
@@ -139,6 +121,30 @@ public class LandingPage extends ViewImpl {
         throw new UnsupportedOperationException("Unimplemented method 'refresh'");
     }
 
+    @Override
+    public void startSimulation() {
+        SceneController sceneController = new SceneController();
+        sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
+    }
 
+    @Override
+    public void loadSimulation() {
+        AudioManager audioManager = new AudioManager();
+        audioManager.stop();
+
+        try {
+            simulationController.loadSimulation();
+        } catch (Exception e) {
+            new LoadGameDialog().show();
+        }
+    }
+
+    @Override
+    public void exitSimulation() {
+        AudioManager audioManager = new AudioManager();
+        audioManager.stop();
+        stage.close();
+        simulationController.exitSimulation();
+    }
 
 }

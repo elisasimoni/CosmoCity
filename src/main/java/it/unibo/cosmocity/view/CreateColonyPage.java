@@ -25,20 +25,22 @@ import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import it.unibo.cosmocity.controller.view_controller.CreateColonyController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
+import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 
-public class CreateColonyPage extends ViewImpl {
+public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
 
     private static final String FONT = "Elephant";
     private final Screen screen = Screen.getPrimary();
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
     private final SceneController sceneController = new SceneController();
-    private final CreateColonyController createColonyController = new CreateColonyController();
+    private final CreateColonyController createColonyController;
     private Map<String, Integer> selectedSettlers = new HashMap<>();
     private Button nextButton;
     private Text colonyNameText;
@@ -47,6 +49,7 @@ public class CreateColonyPage extends ViewImpl {
 
     public CreateColonyPage(Stage stage, double width, double height) {
         super(stage, width, height);
+        this.createColonyController = new CreateColonyController(this);
     }
 
     @Override
@@ -185,12 +188,14 @@ public class CreateColonyPage extends ViewImpl {
         if (colonyNameText.getText().isEmpty() || selectedSettlers.isEmpty()
                 || difficultyComboBox.getValue().isEmpty() || selectedSettlers.size() == 10) {
             if (selectedSettlers.size() >= 10) {
-                warningText.setText("You can choose max 10 settlers");
+                displayWarning("You can choose max 10 settlers");
                 return false;
             }
+            displayWarning("Please fill all fields");
             
             return false;
         } else {
+            displayWarning("");
             return true;
         }
 
@@ -250,7 +255,7 @@ public class CreateColonyPage extends ViewImpl {
                 "HARD");
 
         ComboBox<String> comboBox = new ComboBox<>(difficultyOptions);
-        comboBox.setValue("Medium"); // Imposta un valore predefinito
+        comboBox.setValue("MEDIUM");
         comboBox.setStyle("-fx-background-color: #ffffff");
         comboBox.setPrefWidth(200);
         comboBox.setPrefHeight(30);
@@ -262,6 +267,11 @@ public class CreateColonyPage extends ViewImpl {
     public void refresh() {
         // TODO Auto-generated method stub
         throw new UnsupportedOperationException("Unimplemented method 'refresh'");
+    }
+
+    @Override
+    public void displayWarning(String warningMessage) {
+        warningText.setText(warningMessage);
     }
 
 }

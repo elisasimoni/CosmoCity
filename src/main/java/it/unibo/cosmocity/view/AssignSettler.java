@@ -50,11 +50,7 @@ public class AssignSettler extends ViewImpl {
 
     @Override
     public Pane createGUI() {
-        List<BaseSettler> settlers = new ArrayList<>();
-        settlers.add(new Military());
-        settlers.add(new Doctor());
-        settlers.add(new Gunsmith());
-        settlers.add(new Gunsmith());
+SimulationController simulatorController = new SimulationController();
         assignSettlerController = new AssignSettlerController(settlers);
         stage.setTitle("CosmoCity - Assign Settler");
         BorderPane root = new BorderPane();
@@ -65,7 +61,7 @@ public class AssignSettler extends ViewImpl {
         vbox.setSpacing(30);
 
         Text newGameText = new Text("Assign optional settlers to the sector");
-        newGameText.setFont(Font.font("Elephant", FontWeight.BOLD, 150));
+        newGameText.setFont(Font.font("Elephant", FontWeight.BOLD, 100));
         newGameText.setTextAlignment(TextAlignment.CENTER);
         newGameText.setFill(Color.WHITE);
         newGameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(20)));
@@ -83,9 +79,9 @@ public class AssignSettler extends ViewImpl {
         vbox.maxHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
         SceneController sceneController = new SceneController();
-        SimulationController simulatorController = new SimulationController();
+        
         startColonyButton.setOnAction(e -> {
-            simulatorController.startSimulation(List.of("Farmer", "Chemist","Military","Gunsmith", "Doctor","Military","Gunsmith", "Doctor","Military"), Map.of("Population",10, "Food", 5, "Screw",10, "Weapons", 0, "Medicine", 10));
+            simulatorController.updateSimulation();
             this.stage.close();
 
         });

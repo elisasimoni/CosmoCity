@@ -23,6 +23,7 @@ import it.unibo.cosmocity.model.settlers.MandatorySettler;
 import it.unibo.cosmocity.model.settlers.Military;
 import it.unibo.cosmocity.model.settlers.SimpleSettler;
 import it.unibo.cosmocity.model.settlers.Technician;
+import java.util.ArrayList;
 
 public class TranslatorStringToClassHelper {
 
@@ -91,6 +92,50 @@ public class TranslatorStringToClassHelper {
 
     }
 
+    public List<BaseSettler> translateSettlerToListFromMapMO(List<MandatorySettler> settlersM, List<SimpleSettler> settlersS) {
+        List<BaseSettler> settlerNew = new ArrayList();
+        settlersM.stream().forEach(settlerNew::add);
+        settlersS.stream().forEach(settlerNew::add);
+        return settlerNew;
+
+    }
+    public List<MandatorySettler> translateSettlerToMapMandatory(Map<String, String> settlerAndSector) {
+        return settlerAndSector.entrySet().stream().map(entry -> {
+            String settlerName = entry.getKey();
+            String settlerSector = entry.getValue();
+            switch (settlerName) {
+                case "Doctor":
+                    return new Doctor();
+                case "Farmer":
+                    return new Farmer();
+                case "Gunsmith":
+                    return new Gunsmith();
+                case "Military":
+                    return new Military();
+                default:
+                    throw new IllegalArgumentException("Invalid settler name");
+            }
+        }).collect(Collectors.toList());
+
+    }
+    public List<SimpleSettler> translateSettlerToMapOptional(Map<String, String> settlerAndSector) {
+        return settlerAndSector.entrySet().stream().map(entry -> {
+            String settlerName = entry.getKey();
+            String settlerSector = entry.getValue();
+            switch (settlerName) {
+                case "Cook":
+                    return new Cook();
+                case "Technician":
+                    return new Technician();
+                case "Chemist":
+                    return new Chemist();
+                default:
+                    throw new IllegalArgumentException("Invalid settler name");
+            }
+        }).collect(Collectors.toList());
+
+    }
+
     public List<MandatorySettler> translateMandatorySettler(List<String> settlers) {
         return settlers.stream().map(settler -> switch (settler) {
             case "Doctor" -> new Doctor();
@@ -140,6 +185,35 @@ public class TranslatorStringToClassHelper {
         }).collect(Collectors.toList());
     }
 
+    public List<String> translateSettlerToListFromMap(Map<String, Integer> settlers) {
+
+        return settlers.entrySet().stream().map(entry -> {
+            String settlerName = entry.getKey();
+            int settlerValue = entry.getValue();
+            switch (settlerName) {
+                case "Doctor":
+                    return "Doctor";
+                case "Farmer":
+                    return "Farmer";
+                case "Technician":
+                    return "Technician";
+                case "Military":
+                    return "Military";
+                case "Cook":
+                    return "Cook";
+                case "Gunsmith":
+                    return "Gunsmith";
+                case "Pharmacist":
+                    return "Pharmacist";
+                case "Blacksmith":
+                    return "Blacksmith";
+                default:
+                    throw new IllegalArgumentException("Invalid settler name");
+            }
+        }).collect(Collectors.toList());
+
+    }
+
     /**
      * @param resources
      * @return a list of stacked resources
@@ -180,8 +254,8 @@ public class TranslatorStringToClassHelper {
         };
     }
 
-    public String fromResourceToSector(List<StackedResource> stackedResources){
-        return stackedResources.stream().map(resource -> switch(resource.getClass().getSimpleName()){
+    public String fromResourceToSector(List<StackedResource> stackedResources) {
+        return stackedResources.stream().map(resource -> switch (resource.getClass().getSimpleName()) {
             case "MedicineStacked" -> "Hospital";
             case "FoodStacked" -> "Farm";
             case "WeaponsStacked" -> "Military base";

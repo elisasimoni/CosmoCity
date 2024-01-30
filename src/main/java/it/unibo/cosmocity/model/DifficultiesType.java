@@ -22,6 +22,19 @@ public enum DifficultiesType {
         return difficulty;
     }
 
+    public DifficultiesType setDifficulty(String difficulty) {
+        switch (difficulty) {
+            case "EASY":
+                return DifficultiesType.EASY;
+            case "MEDIUM":
+                return DifficultiesType.MEDIUM;
+            case "HARD":
+                return DifficultiesType.HARD;
+            default:
+                return null;
+        }
+    }
+
     
     
 }
