@@ -14,7 +14,7 @@ public class EventManager {
     private EventSerialization serialization = new EventSerialization();
 
     public EventManager() {
-        //this.randomEvents = serialization.deserialize();
+        this.randomEvents = serialization.deserialize();
     }
 
     public RandomEvent generateRandomEvent(){

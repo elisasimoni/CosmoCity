@@ -174,4 +174,14 @@ public class TranslatorStringToClassHelper {
             default -> throw new IllegalArgumentException("Invalid difficulty name");
         };
     }
+
+    public String fromResourceToSector(List<StackedResource> stackedResources){
+        return stackedResources.stream().map(resource -> switch(resource.getClass().getSimpleName()){
+            case "MedicineStacked" -> "Hospital";
+            case "FoodStacked" -> "Farm";
+            case "WeaponsStacked" -> "Military base";
+            case "ScrewStacked" -> "Workshop";
+            default -> throw new IllegalArgumentException("Invalid resource name");
+        }).toString();
+    }
 }

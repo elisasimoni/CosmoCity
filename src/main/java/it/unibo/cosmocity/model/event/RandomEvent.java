@@ -9,3 +9,4 @@ public class RandomEvent extends Event {
         super(name, description, eventsResources,demageResources);
     }
 }
+  
