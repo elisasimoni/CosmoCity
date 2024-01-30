@@ -11,12 +11,8 @@ import it.unibo.cosmocity.model.Sector.Status;
 import it.unibo.cosmocity.model.event.Event;
 import it.unibo.cosmocity.model.event.EventManager;
 import it.unibo.cosmocity.model.event.RandomEvent;
-import it.unibo.cosmocity.model.resources.Food;
 import it.unibo.cosmocity.model.resources.FoodStacked;
-import it.unibo.cosmocity.model.resources.ScrewStacked;
 import it.unibo.cosmocity.model.resources.StackedResource;
-import it.unibo.cosmocity.model.resources.WeaponsStacked;
-import it.unibo.cosmocity.view.Dashboard;
 import it.unibo.cosmocity.view.DashboardView;
 import javafx.application.Platform;
 
@@ -25,7 +21,7 @@ import java.util.Timer;
 
 public class DashBoardController {
     private static final int TIME_APPETITE = 11;
-    private static final int TIME_RANDOM_EVENT = 7;
+    private static final int TIME_RANDOM_EVENT = 120;
     private DashboardView dashboardView;;
     private Simulation simulation;
     private ResourceHandler resourceHandler;
@@ -48,7 +44,7 @@ public class DashBoardController {
     public void updateTimeLabel(long time) {
         if (time % TIME_APPETITE == 0) {
 
-            timerObservable.pause(3000);
+            //timerObservable.pause(3000);
 
             resourceHandler.incrementResource(new FoodStacked(2), 5);
         }
@@ -85,14 +81,6 @@ public class DashBoardController {
             resourceHandler.decrementResource(resource,resource.getQta());
         });
         
-    }
-
-
-
-    private void productioN(List<StackedResource> resources) {
-        resourceHandler.incrementResource(new FoodStacked(2), 5);
-        resourceHandler.incrementResource(new FoodStacked(2), 5);
-        resourceHandler.incrementResource(new FoodStacked(2), 5);
     }
 
     public void changeStatus() {
