@@ -36,7 +36,7 @@ public class MoveResource {
         settlers.add(new Doctor());
         settlers.add(new Gunsmith());
         settlers.add(new Gunsmith());
-        assignSettlerController = new AssignSettlerController(settlers);
+        //assignSettlerController = new AssignSettlerController(settlers);
         doing();
     }
 

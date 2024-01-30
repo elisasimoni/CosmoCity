@@ -1,7 +1,8 @@
 package it.unibo.cosmocity.controller;
 
 import it.unibo.cosmocity.model.Simulation;
-
+import it.unibo.cosmocity.model.settlers.BaseSettler;
+import it.unibo.cosmocity.model.settlers.SimpleSettler;
 import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.ResourceHandler;
 import it.unibo.cosmocity.model.ResourceHandlerImpl;
@@ -75,6 +76,24 @@ public class SimulationController {
 
     }
 
+    public void modifyOptionalSettler(Map<String,String> settlers ) {
+        List<BaseSettler> settlerListTotal = this.simulation.getSettlers();
+        for (var settler : settlerListTotal) {
+            if (settler instanceof SimpleSettler) {
+                SimpleSettler simpleSettler = (SimpleSettler) settler;
+                if (simpleSettler.getClass().getSimpleName().equals(settlers.get("name"))) {
+                    simpleSettler.setSectorAssigned(settlers.get("sector"));
+                }
+            }
+        }
+        startSimulation(this.simulation.getColonyName(),
+                translator.translateSettlerToString(this.simulation.getSettlers()),
+                translator.translateResourceToMap(this.simulation.getResources()), this.simulation.getDifficulty());
+        
+
+
+    }
+
 
     public void exitSimulation() {
 
@@ -108,5 +127,9 @@ public class SimulationController {
 
     public boolean gameOverSimulation() {
         return resourceHandler.checkQtaResource();
+    }
+
+    public List<String> getSettlers() {
+        return this.simulation.getSettlers().stream().map(s -> s.getClass().getSimpleName()).toList();
     }
 }

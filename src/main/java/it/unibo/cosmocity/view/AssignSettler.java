@@ -37,10 +37,13 @@ public class AssignSettler extends ViewImpl {
     private final Screen screen = Screen.getPrimary();
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
-    List<BaseSettler> settlers;
+    private Map<String,String> settlerAssigned;
+    private ComboBox<String> sectorDropdownMenu;
+    SimulationController simulatorController = new SimulationController();
 
     public AssignSettler(Stage stage, double width, double height) {
         super(stage, width, height);
+        
 
     }
 
@@ -50,7 +53,9 @@ public class AssignSettler extends ViewImpl {
 
     @Override
     public Pane createGUI() {
-        SimulationController simulatorController = new SimulationController();
+        System.out.println(simulatorController.getSettlers());
+        List<String> settlers = simulatorController.getSettlers();
+        System.out.println(settlers);
         assignSettlerController = new AssignSettlerController(settlers);
         stage.setTitle("CosmoCity - Assign Settler");
         BorderPane root = new BorderPane();
@@ -69,7 +74,7 @@ public class AssignSettler extends ViewImpl {
 
         for (String settlerName : assignSettlerController.getSettlersNames()) {
             vbox.getChildren()
-                    .add(createSettlerAssignBox(settlerName, assignSettlerController.getSettlerQuantity(settlerName)));
+                    .add(createSettlerAssignBox(settlerName));
         }
 
         Button startColonyButton = createButton("Start Colony");
@@ -82,23 +87,10 @@ public class AssignSettler extends ViewImpl {
         
         startColonyButton.setOnAction(e -> {
 
-            String colonyName = "Pino";
-            List<BaseSettler> settlers = new ArrayList<>();
-            settlers.add(new Military());
-            settlers.add(new Doctor());
-            settlers.add(new Gunsmith());
-            settlers.add(new Gunsmith());
-            settlers.add(new Military());
-            settlers.add(new Military());
-            settlers.add(new Doctor());
-            settlers.add(new Gunsmith());
-            settlers.add(new Gunsmith());
-            settlers.add(new Military());
             
-            Map<String, Integer> resources = Map.of("Population", 5, "Food", 10, "Medicine", 4,"Weapons",4, "Screw", 12);;
             DifficultiesType difficulty = DifficultiesType.EASY;
             System.out.println("Difficulty: " +difficulty);
-           // simulatorController.updateSimulation(colonyName, settlers, resources, difficulty );
+            simulatorController.modifyOptionalSettler(settlerAssigned);
             this.stage.close();
 
         });
@@ -116,7 +108,7 @@ public class AssignSettler extends ViewImpl {
         return button;
     }
 
-    private HBox createSettlerAssignBox(String settlerName, long settlerQta) {
+    private HBox createSettlerAssignBox(String settlerName) {
         HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(10);
@@ -130,25 +122,21 @@ public class AssignSettler extends ViewImpl {
         ObservableList<String> sectorsOption = FXCollections
                 .observableArrayList(assignSettlerController.getSectorOptions());
 
-        ComboBox<String> sectorDropdownMenu = new ComboBox<>(sectorsOption);
+        sectorDropdownMenu = new ComboBox<>(sectorsOption);
         sectorDropdownMenu.setPromptText("Select a sector");
         sectorDropdownMenu.setStyle("-fx-background-color: #ffffff");
         sectorDropdownMenu.setPrefWidth(200);
         sectorDropdownMenu.setPrefHeight(50);
 
-        ComboBox<String> qtaSettlerDropdownMenu = new ComboBox<>();
-        for (int i = 0; i < settlerQta; i++) {
-            qtaSettlerDropdownMenu.getItems().add(String.valueOf(i + 1));
-        }
+        sectorDropdownMenu.setOnAction(e -> {
+            settlerAssigned.put(settlerName, sectorDropdownMenu.getValue());
+        });
 
-        qtaSettlerDropdownMenu.setPromptText("Number of settlers");
-        qtaSettlerDropdownMenu.setStyle("-fx-background-color: #ffffff");
-        qtaSettlerDropdownMenu.setPrefWidth(200);
-        qtaSettlerDropdownMenu.setPrefHeight(50);
         hbox.getChildren().add(sectorDropdownMenu);
-        hbox.getChildren().add(qtaSettlerDropdownMenu);
+
 
         return hbox;
     }
+
 
 }

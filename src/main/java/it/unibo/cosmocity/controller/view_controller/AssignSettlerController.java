@@ -9,24 +9,18 @@ import java.util.stream.Collectors;
 
 public class AssignSettlerController {
     private final Map<String, Long> settlersMap = new HashMap<>();
-    private final List<BaseSettler> settlers;
+    private final List<String> settlers;
 
-    public AssignSettlerController(List<BaseSettler> settlers) {
+    public AssignSettlerController(List<String> settlers) {
         this.settlers = settlers;
-        this.assignSettler();
+
     }
 
-    private void assignSettler() {
-        settlersMap.clear();
-        for (BaseSettler settler : settlers) {
-            long number = settlers.stream()
-                                  .filter(s -> s.getClass()
-                                                .equals(settler.getClass()))
-                                  .count();
-            settlersMap.put(settler.getClass().getSimpleName(), number);
-        }
-    }
 
+    /**
+     * @return a list of settlers names
+     * @implNote the list is sorted
+     */
     public List<String> getSettlersNames() {
         return settlersMap.keySet().stream()
                                    .sorted()
