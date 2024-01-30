@@ -83,12 +83,16 @@ public class AssignSettler extends ViewImpl {
         startColonyButton.setOnAction(e -> {
 
             String colonyName = "Pino";
-            List<String> settlers = new ArrayList<>();
+            List<BaseSettler> settlers = new ArrayList<>();
+            settlers.add(new Military());
+            settlers.add(new Doctor());
+            settlers.add(new Gunsmith());
+            settlers.add(new Gunsmith());
             
             Map<String, Integer> resources = Map.of("Population", 5, "Food", 10, "Medicine", 4,"Weapons",4, "Screw", 12);;
             DifficultiesType difficulty = DifficultiesType.EASY;
             System.out.println("Difficulty: " +difficulty);
-            simulatorController.updateSimulation(colonyName, settlers, resources, difficulty );
+           // simulatorController.updateSimulation(colonyName, settlers, resources, difficulty );
             this.stage.close();
 
         });
