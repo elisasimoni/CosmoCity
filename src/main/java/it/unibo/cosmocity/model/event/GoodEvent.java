@@ -9,4 +9,8 @@ public class GoodEvent extends Event {
         super(name, description);
         this.settler = settler;
     }
+
+    public BaseSettler getSettler() {
+        return settler;
+    }
 }

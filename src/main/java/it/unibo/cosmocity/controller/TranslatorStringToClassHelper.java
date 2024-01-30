@@ -292,16 +292,18 @@ public class TranslatorStringToClassHelper {
      * @param quantity
      * @return
      */
-    public BaseResource createResourceFromNameAndQta(String resourceName, int quantity) {
+    public StackedResource createResourceFromNameAndQta(String resourceName, int quantity) {
         switch (resourceName) {
-            case "Screw":
-                return new Screw(quantity);
-            case "Weapons":
-                return new Weapons(quantity);
-            case "Medicine":
-                return new Medicine(quantity);
-            case "Food":
-                return new Food(quantity);
+            case "ScrewStacked":
+                return new ScrewStacked(quantity);
+            case "WeaponsStacked":
+                return new WeaponsStacked(quantity);
+            case "MedicineStacked":
+                return new MedicineStacked(quantity);
+            case "FoodStacked":
+                return new FoodStacked(quantity);
+            case "Population":
+                return new Population(quantity);
             default:
                 return null;
         }

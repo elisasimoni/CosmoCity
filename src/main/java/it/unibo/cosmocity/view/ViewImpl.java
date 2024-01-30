@@ -2,7 +2,6 @@ package it.unibo.cosmocity.view;
 
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
 
@@ -34,7 +33,7 @@ public abstract class ViewImpl implements View {
      */
     public void show() {
         stage.setScene(this.scene);
-        stage.getIcons().add(new ImageManagerImpl().loadImage("img/cosmocity_icon.png"));
+        stage.getIcons().add(new ImageManagerImpl().loadImage("cosmocity_icon.png"));
         stage.show();
     }
 }

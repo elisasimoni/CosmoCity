@@ -4,6 +4,9 @@ import java.io.FileNotFoundException;
 import java.net.URL;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import java.io.InputStream;
+import java.net.URI;
+import java.nio.file.Paths;
 
 /*
  * This class is used to play audio files
@@ -22,13 +25,13 @@ public class AudioManager {
   public void play(final String path) {
 
     try {
-      final URL resourceUrl = getClass()
-          .getClassLoader()
-          .getResource("it/unibo/resources/" + path);
-      if (resourceUrl == null) {
+      InputStream inputStream = AudioManager.class
+          .getResourceAsStream("/it/unibo/asset/audio/" + path);
+        System.out.println("Input stream: " + inputStream);
+      if (inputStream == null) {
         throw new FileNotFoundException("Can't find audio file");
       }
-      final Media sound = new Media(resourceUrl.toString());
+      final Media sound = new Media(inputStream.toString());
       mediaPlayer = new MediaPlayer(sound);
       mediaPlayer.setVolume(25);
       mediaPlayer.play();

@@ -67,7 +67,7 @@ public class SimulationSerialization implements Serialization {
       jsonMap.put("difficulty", simulation.getDifficulty());
       jsonMap.put("startTime", simulation.getStartTime());
 
-      String filePathInJar = "path/nel/tuo/progetto/Colony.json";
+      String filePathInJar = "/it/unibo/asset/saves/Colony.json";
 
       // Creazione delle directory se non esistono
       Files.createDirectories(Paths.get(filePathInJar).getParent());
@@ -89,8 +89,8 @@ public class SimulationSerialization implements Serialization {
   @Override
   public Object deserialize() {
     try (
-      InputStream inputStream = getClass()
-        .getResourceAsStream("/path/nel/tuo/progetto/Colony.json")
+      InputStream inputStream = SimulationSerialization.class
+        .getResourceAsStream("/it/unibo/asset/saves/Colony.json")
     ) {
       if (inputStream != null) {
         String jsonContent = new String(inputStream.readAllBytes());

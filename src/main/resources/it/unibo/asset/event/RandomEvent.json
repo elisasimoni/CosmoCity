@@ -1,0 +1,280 @@
+{
+    "randomEvents": [
+        {
+            "name": "Alien Invasion",
+            "description": "Aliens are invading the colony. You have to stop them. \n Fix it with 5 Weapons an 10 Population to kill the aliens. \n Lose 10 Weapons and 15 Population to ignore the attack.",
+            "fixDamage": [
+                {
+                    "name": "WeaponsStacked",
+                    "qta": 5
+                },
+                {
+                    "name": "PopulationStacked",
+                    "qta": 10
+                }
+            ],
+            "damage": [
+                {
+                    "name": "WeaponsStacked",
+                    "qta": 10
+                },
+                {
+                    "name": "PopulationStacked",
+                    "qta": 10
+                }
+            ]
+        },
+        {
+            "name": "Crazy Scientist",
+            "description": "A crazy scientist is trying to create a new life form. \n Fix it with 10 medicine an 20 Population to stop the creation. \n Lose 20 medicine to ignore the creation.",
+            "fixDamage": [
+                {
+                    "name": "MedicineStacked",
+                    "qta": 10
+                },
+                {
+                    "name": "PopulationStacked",
+                    "qta": 20
+                }
+            ],
+            "damage": [
+                {
+                    "name": "MedicineStacked",
+                    "qta": 25
+                }
+            ]
+        },
+        {
+            "name": "Famine in the colony",
+            "description": "There is a famine in the colony. \n Fix it with 10 Food and 10 Population to stop the famine. \n Lose 20 Food to ignore the famine.",
+            "fixDamage": [
+                {
+                    "name": "FoodStacked",
+                    "qta": 10
+                },
+                {
+                    "name": "Population",
+                    "qta": 10
+                }
+            ],
+            "damage": [
+                {
+                    "name": "FoodStacked",
+                    "qta": 20
+                }
+            ]
+        },
+        {
+            "name": "Loss of pressure",
+            "description": "There is a loss of pressure in the colony. \n Fix it with 20 Screw and 10 Population to stop the loss of pressure. \n Lose 25 Screw to ignore the loss of pressure.",
+            "fixDamage": [
+                {
+                    "name": "FoodStacked",
+                    "qta": 10
+                },
+                {
+                    "name": "Population",
+                    "qta": 10
+                }
+            ],
+            "damage": [
+                {
+                    "name": "FoodStacked",
+                    "qta": 20
+                }
+            ]
+        },
+        {
+            "name": "Cyber Attack",
+            "description": "A cyber attack threatens the colony's security. \nSolve the problem with 15 Screw and 10 Population to stop the attack. \nTo ignore the attack, lose 20 Screw.",
+            "fixDamage": [
+                {
+                    "name": "ScrewStacked",
+                    "qta": 15
+                },
+                {
+                    "name": "Population",
+                    "qta": 10
+                }
+            ],
+            "damage": [
+                {
+                    "name": "ScrewStacked",
+                    "qta": 20
+                }
+            ]
+        },
+        {
+            "name": "Robot Malfunction",
+            "description": "The colony's robots are malfunctioning. \nResolve the situation with 10 Screws and 15 Population to repair the robots. \nTo ignore the problem, lose 15 Population.",
+            "fixDamage": [
+                {
+                    "name": "ScrewStacked",
+                    "qta": 10
+                },
+                {
+                    "name": "Population",
+                    "qta": 15
+                }
+            ],
+            "damage": [
+                {
+                    "name": "Population",
+                    "qta": 15
+                }
+            ]
+        },
+        {
+            "name": "Pandemic Spread",
+            "description": "A pandamic spread through the colony. \n Solve the crisis with 15 Medicines and 10 Population to treat the sick. \nTo ignore the epidemic, lose 25 Population.",
+            "fixDamage": [
+                {
+                    "name": "ScrewStacked",
+                    "qta": 10
+                },
+                {
+                    "name": "Population",
+                    "qta": 15
+                }
+            ],
+            "damage": [
+                {
+                    "name": "Population",
+                    "qta": 15
+                }
+            ]
+        },
+        {
+            "name": "Power Outage",
+            "description": "There was a blackout in the colony. \nSolve the problem with 20 Screw and 5 Population to restore electricity. \nTo ignore the blackout, lose 30 Screw.",
+            "fixDamage": [
+                {
+                    "name": "ScrewStacked",
+                    "qta": 20
+                },
+                {
+                    "name": "Population",
+                    "qta": 5
+                }
+            ],
+            "damage": [
+                {
+                    "name": "Population",
+                    "qta": 30
+                }
+            ]
+        },
+        {
+            "name": "Infiltration",
+            "description": "Undercover agents threaten the colony's security. \nResolve the situation with 15 Weapons and 10 Population to neutralize the infiltrators. \nTo ignore the infiltration, lose 25 Weapons.",
+            "fixDamage": [
+                {
+                    "name": "WeaponsStacked",
+                    "qta": 15
+                },
+                {
+                    "name": "Population",
+                    "qta": 10
+                }
+            ],
+            "damage": [
+                {
+                    "name": "WeaponsStacked",
+                    "qta": 30
+                }
+            ]
+        },
+        {
+            "name": "Resource Contamination",
+            "description": "The colony's resources have been contaminated. \nSolve the problem with 15 Medicine and 5 Population to purify the resources. \nTo ignore the contamination, you lose 25 Medicine,15 Food.",
+            "fixDamage": [
+                {
+                    "name": "MedicineStacked",
+                    "qta": 15
+                },
+                {
+                    "name": "Population",
+                    "qta": 5
+                }
+            ],
+            "damage": [
+                {
+                    "name": "MedicineStacked",
+                    "qta": 25
+                },
+                {
+                    "name": "FoodStacked",
+                    "qta": 15
+                }
+            ]
+        },
+        {
+            "name": "Fire in the Server Room",
+            "description": "A violent fire broke out in the colony's server room, putting the integrity of the data and the continuity of communications at risk. \nResolve the situation with 25 Screws and 15 Population to put out the flames and restore the systems. \nTo ignore the fire, lose 30 Screw.",
+            "fixDamage": [
+                {
+                    "name": "ScrewStacked",
+                    "qta": 20
+                },
+                {
+                    "name": "Population",
+                    "qta": 5
+                }
+            ],
+            "damage": [
+                {
+                    "name": "ScrewStacked",
+                    "qta": 35
+                }
+            ]
+        },
+        {
+            "name": "Insurrection",
+            "description": "A growing insurrection by a group of settlers threatens the stability of the colony. They demand improvements in living conditions and greater involvement in decisions. \nResolve the situation with 20 Weapons and 15 Population to quell the rebellion and negotiate a peaceful solution. \nTo ignore the insurrection, lose 25 Weapons.",
+            "fixDamage": [
+                {
+                    "name": "WeaponsStacked",
+                    "qta": 15
+                },
+                {
+                    "name": "Population",
+                    "qta": 10
+                }
+            ],
+            "damage": [
+                {
+                    "name": "WeaponsStacked",
+                    "qta": 20
+                },
+                {
+                    "name": "Population",
+                    "qta": 20
+                }
+            ]
+        },
+        {
+            "name": "Insurrection",
+            "description": "A growing insurrection by a group of settlers threatens the stability of the colony. They demand improvements in living conditions and greater involvement in decisions. \nResolve the situation with 20 Weapons and 15 Population to quell the rebellion and negotiate a peaceful solution. \nTo ignore the insurrection, lose 25 Weapons.",
+            "fixDamage": [
+                {
+                    "name": "WeaponsStacked",
+                    "qta": 15
+                },
+                {
+                    "name": "Population",
+                    "qta": 10
+                }
+            ],
+            "damage": [
+                {
+                    "name": "WeaponsStacked",
+                    "qta": 20
+                },
+                {
+                    "name": "Population",
+                    "qta": 20
+                }
+            ]
+        }
+    ]
+}

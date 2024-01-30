@@ -24,7 +24,7 @@ class SerializationTest {
     private static SimulationSerialization simulationSerialization;
     private static EventSerialization eventSerialization;
     private static StackedResource resourceStacked = new FoodStacked(10);
-    private static BaseResource resourceBase = new Food(0);
+    private static StackedResource resourceBase = new FoodStacked(0);
     private static BaseSettler settler = new Cook();
     private static Simulation simulation = new Simulation("test", List.of(settler), List.of(resourceStacked),
             DifficultiesType.EASY, 0);

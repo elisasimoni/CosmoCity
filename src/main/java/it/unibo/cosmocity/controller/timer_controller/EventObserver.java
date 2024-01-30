@@ -13,7 +13,11 @@ public class EventObserver {
     public void update(long time) {
         dashBoardController.updateTimeLabel(time);
         dashBoardController.updateResourceLabel();
-        dashBoardController.createEvent(time);
+        dashBoardController.createRandomEvent(time);
         dashBoardController.changeStatus();
+        dashBoardController.zeroResource();
+        dashBoardController.populationDoThing(time);
+        dashBoardController.createGoodEvent(time);
+
     }
 }

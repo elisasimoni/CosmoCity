@@ -10,7 +10,8 @@ public class ImageManagerImpl implements ImageManager{
 
     public Image loadImage(String path) {
         try {
-            InputStream inputStream = getClass().getResourceAsStream("/it/unibo/resources/" + path);
+            
+            InputStream inputStream = ImageManagerImpl.class.getResourceAsStream("/it/unibo/asset/img/"+path);
             
             if (inputStream != null) {
                 return new Image(inputStream);

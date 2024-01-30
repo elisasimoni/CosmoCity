@@ -45,7 +45,7 @@ public class LandingPage extends ViewImpl implements LandingPageView {
         final BorderPane root = new BorderPane();
         final ImageManagerImpl imageManager = new ImageManagerImpl();
         final Pane backgroundPane = new Pane();
-        final Image backgroundImage = imageManager.loadImage("img/menu_background_img.png");
+        final Image backgroundImage = imageManager.loadImage("menu_background_img.png");
         final ImageView backgroundImageView = new ImageView(backgroundImage);
         backgroundPane.getChildren().add(backgroundImageView);
         root.setCenter(backgroundPane);
@@ -79,10 +79,11 @@ public class LandingPage extends ViewImpl implements LandingPageView {
         root.setRight(menuBtnBox);
 
         final AudioManager audioManager = new AudioManager();
-        audioManager.play("audio/menu_music.mp3");
-        audioManager.stop();
+        //audioManager.play("menu_music.mp3");
         newGameBtn.setOnAction(e -> {
+            //audioManager.stop();
             startSimulation();
+
 
         });
         loadGameBtn.setOnAction(e -> {

@@ -5,6 +5,8 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
 import it.unibo.cosmocity.model.event.Event;
 import it.unibo.cosmocity.model.resources.BaseResource;
+import it.unibo.cosmocity.model.resources.StackedResource;
+
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -32,9 +34,7 @@ public class EventSerialization implements Serialization {
   @Override
   public List<Event> deserialize() {
     try {
-      final InputStream inputStream = getClass()
-        .getClassLoader()
-        .getResourceAsStream("it/unibo/resources/event/RandomEvent.json");
+      InputStream inputStream = EventSerialization.class.getResourceAsStream("/it/unibo/asset/event/RandomEvent.json");
 
       if (inputStream != null) {
         final String jsonContent = new String(
@@ -46,18 +46,18 @@ public class EventSerialization implements Serialization {
         final List<Event> events = new ArrayList<>();
 
         for (final JsonNode eventNode : jsonNode.get("randomEvents")) {
-          final List<BaseResource> fixDamageList = new ArrayList<>();
+          final List<StackedResource> fixDamageList = new ArrayList<>();
           for (final JsonNode fixDamageNode : eventNode.get("fixDamage")) {
-            final BaseResource fixDamage = translator.createResourceFromNameAndQta(
+            final StackedResource fixDamage = translator.createResourceFromNameAndQta(
               fixDamageNode.get("name").asText(),
               fixDamageNode.get("qta").asInt()
             );
             fixDamageList.add(fixDamage);
           }
 
-          final List<BaseResource> damageList = new ArrayList<>();
+          final List<StackedResource> damageList = new ArrayList<>();
           for (final JsonNode damageNode : eventNode.get("damage")) {
-            final BaseResource damage = translator.createResourceFromNameAndQta(
+            final StackedResource damage = translator.createResourceFromNameAndQta(
               damageNode.get("name").asText(),
               damageNode.get("qta").asInt()
             );

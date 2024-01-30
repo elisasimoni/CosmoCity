@@ -25,14 +25,11 @@ import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.view_controller.CreateColonyController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
-import it.unibo.cosmocity.model.Simulation;
-import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 
 public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
@@ -113,12 +110,12 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
         hboxMandatorySettler.setAlignment(Pos.CENTER);
         hboxMandatorySettler.setSpacing(10);
 
-        hboxMandatorySettler.getChildren().add(createImageControl("img/settler_icon/Farmer_Icon.png", "Farmer"));
+        hboxMandatorySettler.getChildren().add(createImageControl("settler_icon/Farmer_Icon.png", "Farmer"));
         hboxMandatorySettler.getChildren()
-                .add(createImageControl("img/settler_icon/Gunsmith_Icon.png", "Blacksmith"));
-        hboxMandatorySettler.getChildren().add(createImageControl("img/settler_icon/Doctor_Icon.png", "Doctor"));
-        hboxMandatorySettler.getChildren().add(createImageControl("img/settler_icon/Military_Icon.png", "Military"));
-        hboxMandatorySettler.getChildren().add(createImageControl("img/settler_icon/Blacksmith_Icon.png", "Gunsmith"));
+                .add(createImageControl("settler_icon/Gunsmith_Icon.png", "Blacksmith"));
+        hboxMandatorySettler.getChildren().add(createImageControl("settler_icon/Doctor_Icon.png", "Doctor"));
+        hboxMandatorySettler.getChildren().add(createImageControl("settler_icon/Military_Icon.png", "Military"));
+        hboxMandatorySettler.getChildren().add(createImageControl("settler_icon/Blacksmith_Icon.png", "Gunsmith"));
        
         vbox.getChildren().add(hboxMandatorySettler);
 
@@ -132,10 +129,10 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
         HBox hboxOptionalSettler = new HBox();
         hboxOptionalSettler.setAlignment(Pos.CENTER);
         hboxOptionalSettler.setSpacing(10);
-        hboxOptionalSettler.getChildren().add(createImageControl("img/settler_icon/Cook_Icon.png", "Cook"));
+        hboxOptionalSettler.getChildren().add(createImageControl("settler_icon/Cook_Icon.png", "Cook"));
         hboxOptionalSettler.getChildren()
-                .add(createImageControl("img/settler_icon/Technician_Icon.png", "Technician"));
-        hboxOptionalSettler.getChildren().add(createImageControl("img/settler_icon/Chemist_Icon.png", "Chemist"));
+                .add(createImageControl("settler_icon/Technician_Icon.png", "Technician"));
+        hboxOptionalSettler.getChildren().add(createImageControl("settler_icon/Chemist_Icon.png", "Chemist"));
 
         vbox.getChildren().add(hboxOptionalSettler);
         Text difficultyText = new Text("Choose difficulty:");
@@ -163,7 +160,7 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
             if (checkForm()) {
                 createColonyController.createColony(colonyNameField.getText(), this.selectedSettlers,
                         difficultyComboBox.getValue());
-                sceneController.nextSceneNavigator(new AssignSettler(stage, screenWidth * 0.8, screenHeight * 0.8,this.simulatorController));
+                sceneController.nextSceneNavigator(new AssignSettler(stage, 900, 700,this.simulatorController));
             }
 
         });

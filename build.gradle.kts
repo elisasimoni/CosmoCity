@@ -49,8 +49,8 @@ dependencies {
 }
 
 application {
-    // Define the main class for the application.
     mainClass.set("it.unibo.cosmocity.Launcher")
+    
     
    
 }

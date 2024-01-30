@@ -4,21 +4,22 @@ import java.util.List;
 
 
 import it.unibo.cosmocity.model.resources.BaseResource;
+import it.unibo.cosmocity.model.resources.StackedResource;
 
 public class Event {
     private String name;
     private String description;
-    private List<BaseResource> fixResources;
-    private List<BaseResource> demageResources;
+    private List<StackedResource> fixResources;
+    private List<StackedResource> demageResources;
 
-    public Event(String name, String description, List<BaseResource> fixResources, List<BaseResource> demageResources) {
+    public Event(String name, String description, List<StackedResource> fixResources, List<StackedResource> demageResources) {
         this.name = name;
         this.description = description;
         this.fixResources = fixResources;
         this.demageResources = demageResources;
     }
 
-    public Event(String name, String description, List<BaseResource> fixResources) {
+    public Event(String name, String description, List<StackedResource> fixResources) {
         this.name = name;
         this.description = description;
         this.fixResources = fixResources;
@@ -37,11 +38,11 @@ public class Event {
         return this.description;
     }
 
-    public List<BaseResource> getFixResources() {
+    public List<StackedResource> getFixResources() {
         return this.fixResources;
     }
 
-    public List<BaseResource> getDemageResources() {
+    public List<StackedResource> getDemageResources() {
         return this.demageResources;
     }
 

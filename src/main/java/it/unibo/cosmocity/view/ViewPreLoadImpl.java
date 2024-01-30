@@ -22,7 +22,7 @@ public abstract class ViewPreLoadImpl implements View {
      */
     public void show() {
         stage.setScene(this.scene);
-        stage.getIcons().add(new ImageManagerImpl().loadImage("img/cosmocity_icon.png"));
+        stage.getIcons().add(new ImageManagerImpl().loadImage("cosmocity_icon.png"));
         stage.show();
     }
 }

@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Collections;
 
 import it.unibo.cosmocity.controller.serialization.EventSerialization;
+import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.Doctor;
 
 public class EventManager {
@@ -28,8 +29,8 @@ public class EventManager {
         return new BaseEvent(baseEvent.get(0).getName(),baseEvent.get(0).getDescription());
     }
 
-    public Event generateGoodEvent(){
-        return new GoodEvent(goodEvent.getName(), goodEvent.getDescription(), new Doctor());
+    public GoodEvent generateGoodEvent(BaseSettler baseSettler){
+        return new GoodEvent(goodEvent.getName(), goodEvent.getDescription(), baseSettler);
     }
 
     public boolean isEmptyResource(){

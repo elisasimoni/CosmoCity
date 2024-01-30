@@ -11,13 +11,22 @@ import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.Sector.Status;
 import it.unibo.cosmocity.model.event.Event;
 import it.unibo.cosmocity.model.event.EventManager;
+import it.unibo.cosmocity.model.event.GoodEvent;
 import it.unibo.cosmocity.model.event.RandomEvent;
+import it.unibo.cosmocity.model.resources.BaseResource;
+import it.unibo.cosmocity.model.resources.Food;
 import it.unibo.cosmocity.model.resources.FoodStacked;
+import it.unibo.cosmocity.model.resources.StackedResource;
+import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.view.DashboardView;
 import javafx.application.Platform;
 
 import java.util.List;
 import java.util.Timer;
+import java.util.TimerTask;
+import java.util.*; 
+
+import org.jooq.lambda.Collectable;
 
 public class DashboardController {
     private static final int TIMER_PERIOD = 1000;
@@ -26,21 +35,28 @@ public class DashboardController {
     private static final int TIMER_HOUR = 3600;
     private static final int TIMER_MINUT = 60;
 
-    private static final int TIME_APPETITE = 11;
-    private static final int TIME_RANDOM_EVENT = 120;
+    private static final int TIME_SETTLER_APPETITE = 11;
+    private static final int TIME_POPULATION_APPETITE = 30;
+    private static final int TIME_POPULATION_SICK = 65;
+    private static final int TIME_POPULATION_BREAK = 70;
+    private static final int TIME_RANDOM_EVENT = 123;
 
     private static final int RESOURCE_TO_ADD = 5;
-    private static final int RESOURCE_QUANTITY = 2;
+    private static final int RESOURCE_TO_REMOVE = 50;
+    private static final int RESOURCE_QUANTITY_DEFAULT = 0;
 
-    private DashboardView dashboardView;;
+    private static final int GOOD_EVENT = 57;
+
+    private DashboardView dashboardView;
     private Simulation simulation;
     private ResourceHandler resourceHandler;
     private SimulationController simulationController;
     private Timer timer;
     private TimerObservable timerObservable = new TimerObservable();
-    private EventObserver eventObserver;
+    private EventObserver eventObserver = new EventObserver(this);
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
     private EventManager eventManager = new EventManager();
+    private int goodPlayer = 0;
 
     public DashboardController(DashboardView dashboardView, Simulation simulation) {
         this.dashboardView = dashboardView;
@@ -54,9 +70,8 @@ public class DashboardController {
     }
 
     public void updateTimeLabel(long time) {
-        if (time % TIME_APPETITE == 0) {
-
-            resourceHandler.incrementResource(new FoodStacked(RESOURCE_QUANTITY), RESOURCE_TO_ADD);
+        if (time % TIME_SETTLER_APPETITE == 0) {
+            resourceHandler.decrementResource(new FoodStacked(RESOURCE_QUANTITY_DEFAULT), RESOURCE_TO_REMOVE);
         }
 
         long hours = time / TIMER_HOUR;
@@ -64,7 +79,7 @@ public class DashboardController {
         long seconds = time % TIMER_MINUT;
 
         Platform.runLater(() -> {
-            dashboardView.updateTimeLabel(String.format("%02d:%02d:%02d", hours, minutes, seconds));
+            dashboardView.updateTimeLabel(String.format("%02d : %02d : %02d", hours, minutes, seconds));
             updateResourceLabel();
         });
 
@@ -78,21 +93,67 @@ public class DashboardController {
         dashboardView.updateSimulationInfo(simulation.getColonyName());
     }
 
-    public void createEvent(long time) {
+    public void createRandomEvent(long time) {
         Platform.runLater(() -> {
             if (time % TIME_RANDOM_EVENT == 0) {
                 RandomEvent event = eventManager.generateRandomEvent();
                 dashboardView.createRandomEvent(event);
-                getDamage(event);
+
             }
         });
     }
 
-    public void getDamage(Event event) {
-        event.getDemageResources().forEach(resource -> {
-            this.resourceHandler.decrementResource(resource, resource.getQta());
+    public void createGoodEvent(long time) {
+
+        this.simulation.getResources().stream().forEach(
+                resource -> {
+                    if (resource.getQta() > this.simulation.getResources().get(0).getQta() / 2) {
+                        goodPlayer++;
+                    } else {
+                        goodPlayer = 0;
+                    }
+                }
+
+        );
+        Platform.runLater(() -> {
+            List<BaseSettler> settlers = simulation.getSettlers();
+            Collections.shuffle(settlers);
+            if (goodPlayer == GOOD_EVENT) {
+                GoodEvent event = eventManager.generateGoodEvent(settlers.get(0));
+                dashboardView.createGoodEvent(event);
+                simulationController.addSettler(event.getSettler());
+
+            }
         });
 
+    }
+
+    public void getDamage(Event event) {
+        System.out.println("Event: " + event.getDemageResources());
+        List<StackedResource> listResources = event.getDemageResources();
+        for (StackedResource baseResource : listResources) {
+            resourceHandler.decrementResource(baseResource, baseResource.getQta());
+        }
+
+    }
+
+    public void populationDoThing(long time) {
+        if (time % TIME_POPULATION_APPETITE == 0) {
+            resourceHandler.populationGetAppetite();
+        } else if (time % TIME_POPULATION_SICK == 0) {
+            resourceHandler.populationGetSick();
+        } else if (time % TIME_POPULATION_BREAK == 0) {
+            resourceHandler.populationBreakThing();
+        } else if(time % 350 == 0){
+            resourceHandler.populationNewBorn();
+        }
+    }
+
+    public void zeroResource() {
+        if (!resourceHandler.checkQtaResource()) {
+            simulationController.gameOverSimulation();
+            dashboardView.showGameOver();
+        }
     }
 
     public void changeStatus() {

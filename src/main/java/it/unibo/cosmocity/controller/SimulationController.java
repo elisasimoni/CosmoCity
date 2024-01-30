@@ -28,14 +28,14 @@ public class SimulationController {
 
     public SimulationController(Simulation simulation) {
         this.simulation = simulation;
+        this.resourceHandler = new ResourceHandlerImpl(simulation);
     }
 
     public void startSimulation(String colonyName, List<String> settlers, Map<String, Integer> resources,
             DifficultiesType difficulty) {
-        Dashboard dashboard = new Dashboard(new Stage(), 900, 700,this)  ;
+        Dashboard dashboard = new Dashboard(new Stage(), 1200, 800, this);
 
         sceneController.nextSceneNavigator(dashboard);
-        this.resourceHandler = new ResourceHandlerImpl(simulation);
         this.dashBoardController = new DashboardController(dashboard, simulation);
 
     }
@@ -95,8 +95,23 @@ public class SimulationController {
 
     }
 
-    public void exitSimulation() {
+    public void modifyOptionalSettlerDuringSim(Map<String, String> settlers) {
+        List<BaseSettler> settlerListTotal = this.simulation.getSettlers();
+        for (var settler : settlerListTotal) {
+            if (settler instanceof SimpleSettler) {
+                SimpleSettler simpleSettler = (SimpleSettler) settler;
+                if (simpleSettler.getClass().getSimpleName().equals(settlers.get("name"))) {
+                    simpleSettler.setSectorAssigned(settlers.get("sector"));
+                }
+            }
+        }
+        this.simulation = new Simulation(this.simulation.getColonyName(), settlerListTotal,
+                this.simulation.getResources(), this.simulation.getDifficulty(), 0);
 
+    }
+
+    public void exitSimulation() {
+        System.exit(0);
         System.out.println("Simulation exited");
     }
 
@@ -135,5 +150,9 @@ public class SimulationController {
 
     public Simulation getSimulation() {
         return this.simulation;
+    }
+
+    public void addSettler(BaseSettler settler) {
+        this.simulation.getSettlers().add(settler);
     }
 }

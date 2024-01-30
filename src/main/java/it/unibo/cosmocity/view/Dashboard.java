@@ -9,8 +9,10 @@ import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.Sector.SectorName;
 import it.unibo.cosmocity.model.Sector.Status;
+import it.unibo.cosmocity.model.event.GoodEvent;
 import it.unibo.cosmocity.model.event.RandomEvent;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
+import it.unibo.cosmocity.view.dialog.GameOverDialog;
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
 import it.unibo.cosmocity.view.dialog.PauseDialog;
 import it.unibo.cosmocity.view.dialog.SaveGameDialog;
@@ -46,12 +48,14 @@ public class Dashboard extends ViewImpl implements DashboardView {
         WEAPONS,
         SCREW
     }
+
     private static enum TextButton {
         PAUSE,
         SAVE,
         RESOURCES,
         EXIT
     }
+
     private static final String GAME_TITLE = "CosmoCity - Colony Dashboard";
     private static final String FONT_FAMILY = "Elephant";
 
@@ -104,7 +108,8 @@ public class Dashboard extends ViewImpl implements DashboardView {
     Circle statusCircleManufactory;
     Circle statusCircleMilitaryBase;
 
-    public Dashboard(final Stage stage, final double width, final double height,final SimulationController simulationController) {
+    public Dashboard(final Stage stage, final double width, final double height,
+            final SimulationController simulationController) {
         super(stage, width, height);
         this.simulationController = simulationController;
     }
@@ -132,9 +137,9 @@ public class Dashboard extends ViewImpl implements DashboardView {
         saveButton.setOnAction(e -> {
             final SaveGameDialog saveGameDialog = new SaveGameDialog();
             saveGameDialog.show();
-            if(saveGameDialog.isSaved()) {
+            if (saveGameDialog.isSaved()) {
                 simulationController.saveSimulation();
-            }else{
+            } else {
                 sceneController.nextSceneNavigator(this);
             }
         });
@@ -142,7 +147,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         final Button Resources = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.RESOURCES.toString().toLowerCase())));
         Resources.setOnAction(e -> {
-            new MoveResource();
+            new MoveResource(simulationController);
         });
 
         final Button exitButton = createButton(
@@ -271,22 +276,22 @@ public class Dashboard extends ViewImpl implements DashboardView {
         gridPane.setAlignment(Pos.CENTER);
 
         // Create Farm Sector
-        createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0,
+        createSector("dashbord_image/corn_field.jpeg", gridPane, 0, 0,
                 String.valueOf(WordUtils.capitalizeFully(SectorName.FARM.toString().toLowerCase())));
         statusCircleFarm = new Circle(CIRCLE_STATUS_RADIUS);
 
         // Create Hospital Sector
-        createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0,
+        createSector("dashbord_image/hospital.jpeg", gridPane, 1, 0,
                 String.valueOf(WordUtils.capitalizeFully(SectorName.HOSPITAL.toString().toLowerCase())));
         statusCircleHospital = new Circle(CIRCLE_STATUS_RADIUS);
 
         // Create Manufactory Sector
-        createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1,
+        createSector("dashbord_image/manufactory.jpg", gridPane, 0, 1,
                 String.valueOf(WordUtils.capitalizeFully(SectorName.MANUFACTORY.toString().toLowerCase())));
         statusCircleManufactory = new Circle(CIRCLE_STATUS_RADIUS);
 
         // Create Military Base Sector
-        createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1, String
+        createSector("dashbord_image/security.jpeg", gridPane, 1, 1, String
                 .valueOf(WordUtils
                         .capitalizeFully(SectorName.MILITARY_BASE.toString().replace("_", " ").toLowerCase())));
         statusCircleMilitaryBase = new Circle(CIRCLE_STATUS_RADIUS);
@@ -319,13 +324,12 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     public void updateCirle(final List<Status> statuses) {
-        System.out.println("Status View: " + statuses);
         Platform.runLater(() -> {
 
-            statusCircleFarm.setFill(statusColor(statuses.get(0)));
-            statusCircleHospital.setFill(statusColor(statuses.get(1)));
-            statusCircleManufactory.setFill(statusColor(statuses.get(2)));
-            statusCircleMilitaryBase.setFill(statusColor(statuses.get(3)));
+            statusCircleFarm.setFill(statusColor(statuses.get(1)));
+            statusCircleHospital.setFill(statusColor(statuses.get(2)));
+            statusCircleManufactory.setFill(statusColor(statuses.get(3)));
+            statusCircleMilitaryBase.setFill(statusColor(statuses.get(4)));
         });
     }
 
@@ -335,9 +339,15 @@ public class Dashboard extends ViewImpl implements DashboardView {
         });
     }
 
+    @Override
     public void createRandomEvent(final RandomEvent randomEvent) {
-        System.out.println("Event View: " + randomEvent.getDemageResources());
         new NewEventDialog(randomEvent).show();
+    }
+
+    @Override
+    public void createGoodEvent(final GoodEvent goodEvent) {
+
+        new NewEventDialog(goodEvent).show();
     }
 
     @Override
@@ -348,7 +358,8 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
     }
 
-    private void createSector(final String backgroundImagePath, final GridPane gridPane, final int colIndex, final int rowIndex,
+    private void createSector(final String backgroundImagePath, final GridPane gridPane, final int colIndex,
+            final int rowIndex,
             final String sectorName) {
 
         final Circle[][] statusCircles = new Circle[2][2];
@@ -396,10 +407,10 @@ public class Dashboard extends ViewImpl implements DashboardView {
         if (status == Status.GREEN) {
             return Color.GREEN;
         } else if (status == Status.YELLOW) {
-             
+
             return Color.YELLOW;
         } else {
-              
+
             return Color.RED;
         }
     }
@@ -415,6 +426,13 @@ public class Dashboard extends ViewImpl implements DashboardView {
         button.setStyle(BACKGROUND_COLOR_WHITE);
         button.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, BUTTON_FONT_SIZE));
         return button;
+    }
+
+    @Override
+    public void showGameOver() {
+        Platform.runLater(() -> {
+            new GameOverDialog().show();
+        });
     }
 
 }

@@ -5,12 +5,17 @@ import java.util.List;
 import java.util.Map;
 
 import it.unibo.cosmocity.controller.SimulationController;
+import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
 import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.settlers.Gunsmith;
 import it.unibo.cosmocity.model.settlers.Military;
+import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
@@ -21,36 +26,60 @@ import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Modality;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
+import java.util.HashMap;
 
 public class MoveResource {
 
     private AssignSettlerController assignSettlerController;
+    List<String> settlers = new ArrayList<>();
+    private ComboBox<String> sectorDropdownMenu;
+    private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+    SimulationController simulatorController;
+    private static final String SECTOR_DROPDOWN_MENU_TEXT = "Select a sector";
+    private static final int SECTOR_DROPDOWN_MENU_WIDTH = 200;
+    private static final int SECTOR_DROPDOWN_MENU_HEIGHT = 50;
+    private static final String GAME_TITLE = "CosmoCity - Assign Settler";
+    private static final String FONT_FAMILY = "Elephant";
+    private static final String BACKGROUND_COLOR_WHITE = "-fx-background-color: #ffffff";
+    private static final String BACKGROUND_COLOR_DARK_BLUE = "-fx-background-color: darkBlue";
+    private static final int NEW_GAME_TEXT_FONT_SIZE = 100;
+    private static final int FONT_SIZE_20 = 20;
+    private static final int BTN_FONT_SIZE = 15;
 
-    public MoveResource() {
-        List<BaseSettler> settlers = new ArrayList<>();
-        settlers.add(new Military());
-        settlers.add(new Doctor());
-        settlers.add(new Gunsmith());
-        settlers.add(new Gunsmith());
-        //assignSettlerController = new AssignSettlerController(settlers);
+    private static final int BTN_WIDTH = 300;
+    private static final int BTN_HEIGHT = 50;
+
+    private static final int DIVIDE_20 = 20;
+    private static final int DIVIDE_40 = 40;
+    private static final double DIVIDE_HALF = 2.5;
+
+    private static final int SPACING_10 = 10;
+    private static final int SPACING_30 = 30;
+    private static final String STRING_CONCAT = "-fx-font-size:";
+    private Map<String, String> settlerAssigned = new HashMap<>();
+
+    public MoveResource(SimulationController simulatorController) {
+        this.simulatorController = simulatorController;
+        this.settlers = this.simulatorController.getSettlers();
+        assignSettlerController = new AssignSettlerController(settlers, this.simulatorController);
         doing();
     }
 
     private void doing() {
         Alert moveSettlerAlert = createSettlerAssignmentAlert(assignSettlerController);
-        ButtonType startColonyButtonType = new ButtonType("Start Colony", ButtonBar.ButtonData.OK_DONE);
+        ButtonType startColonyButtonType = new ButtonType("Return to dashboard", ButtonBar.ButtonData.OK_DONE);
         moveSettlerAlert.getButtonTypes().add(startColonyButtonType);
 
         moveSettlerAlert.showAndWait();
 
-        // Handle button click if needed
         if (moveSettlerAlert.getResult() == startColonyButtonType) {
-            //SimulationController simulatorController = new SimulationController();
-            //simulatorController.startSimulation(List.of("Gunsmith", "Doctor"), Map.of("Medicine", 5, "Food", 5));
+            simulatorController.modifyOptionalSettlerDuringSim(settlerAssigned);
         }
     }
 
@@ -72,11 +101,9 @@ public class MoveResource {
         newGameText.setFill(Color.WHITE);
         vbox.getChildren().add(newGameText);
 
-        for (String settlerName : assignSettlerController.getSettlersNames()) {
-            //vbox.getChildren().add(createSettlerAssignBox(settlerName, assignSettlerController.getSettlerQuantity(settlerName)));
+        for (String settlerName : translator.translateListToOptionalSettlerList(simulatorController.getSettlers())) {
+            vbox.getChildren().add(createSettlerAssignBox(settlerName));
         }
-
-        // Removed "Return to Dashboard" button
 
         root.setCenter(vbox);
 
@@ -85,29 +112,29 @@ public class MoveResource {
         return alert;
     }
 
-    private HBox createSettlerAssignBox(String settlerName, long settlerQta) {
+    private HBox createSettlerAssignBox(String settlerName) {
         HBox hbox = new HBox();
-        hbox.setSpacing(5); // Reduced spacing
+        hbox.setAlignment(Pos.CENTER);
+        hbox.setSpacing(SPACING_10);
         Text settlerText = new Text(settlerName);
-        settlerText.setFont(Font.font("Elephant", 15)); // Reduced font size
-        settlerText.setFill(Color.WHITE);
+        settlerText.setFont(Font.font(FONT_FAMILY, FontWeight.NORMAL, FONT_SIZE_20));
         settlerText.setTextAlignment(TextAlignment.CENTER);
         hbox.getChildren().add(settlerText);
 
-        ComboBox<String> sectorDropdownMenu = new ComboBox<>();
-        sectorDropdownMenu.setPromptText("Sector");
-        sectorDropdownMenu.setStyle("-fx-background-color: #ffffff");
-        sectorDropdownMenu.setPrefWidth(100); // Reduced width
+        ObservableList<String> sectorsOption = FXCollections
+                .observableArrayList(assignSettlerController.getSectorOptions());
 
-        ComboBox<String> qtaSettlerDropdownMenu = new ComboBox<>();
-        for (int i = 0; i < settlerQta; i++) {
-            qtaSettlerDropdownMenu.getItems().add(String.valueOf(i + 1));
-        }
-        qtaSettlerDropdownMenu.setPromptText("Quantity");
-        qtaSettlerDropdownMenu.setStyle("-fx-background-color: #ffffff");
-        qtaSettlerDropdownMenu.setPrefWidth(100); // Reduced width
+        sectorDropdownMenu = new ComboBox<>(sectorsOption);
+        sectorDropdownMenu.setPromptText(SECTOR_DROPDOWN_MENU_TEXT);
+        sectorDropdownMenu.setStyle(BACKGROUND_COLOR_WHITE);
+        sectorDropdownMenu.setPrefWidth(SECTOR_DROPDOWN_MENU_WIDTH);
+        sectorDropdownMenu.setPrefHeight(SECTOR_DROPDOWN_MENU_HEIGHT);
+
+        sectorDropdownMenu.setOnAction(e -> {
+            settlerAssigned.put(settlerName, sectorDropdownMenu.getValue());
+        });
+
         hbox.getChildren().add(sectorDropdownMenu);
-        hbox.getChildren().add(qtaSettlerDropdownMenu);
 
         return hbox;
     }

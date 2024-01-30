@@ -3,13 +3,9 @@ package it.unibo.cosmocity.controller.view_controller;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.commons.lang3.builder.Diff;
-
 import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
 import it.unibo.cosmocity.model.DifficultiesType;
-import it.unibo.cosmocity.model.Simulation;
-import it.unibo.cosmocity.model.resources.BaseResource;
 import it.unibo.cosmocity.model.resources.FoodStacked;
 import it.unibo.cosmocity.model.resources.MedicineStacked;
 import it.unibo.cosmocity.model.resources.Population;
@@ -55,21 +51,21 @@ public class CreateColonyController {
                 this.resources = List.of(new Population(DifficultiesType.EASY.getDifficulty()),
                         new FoodStacked(DifficultiesType.EASY.getDifficulty()),
                         new ScrewStacked(DifficultiesType.EASY.getDifficulty()),
-                        new WeaponsStacked(DifficultiesType.EASY.getDifficulty()),
+                        new WeaponsStacked(150),
                         new MedicineStacked(DifficultiesType.EASY.getDifficulty()));
                 break;
             case "MEDIUM":
                 this.resources = List.of(new Population(DifficultiesType.MEDIUM.getDifficulty()),
                         new FoodStacked(DifficultiesType.MEDIUM.getDifficulty()),
                         new ScrewStacked(DifficultiesType.MEDIUM.getDifficulty()),
-                        new WeaponsStacked(DifficultiesType.MEDIUM.getDifficulty()),
+                        new WeaponsStacked(150),
                         new MedicineStacked(DifficultiesType.MEDIUM.getDifficulty()));
                 break;
             case "HARD":
                 this.resources = List.of(new Population(DifficultiesType.HARD.getDifficulty()),
                         new FoodStacked(DifficultiesType.HARD.getDifficulty()),
                         new ScrewStacked(DifficultiesType.HARD.getDifficulty()),
-                        new WeaponsStacked(DifficultiesType.HARD.getDifficulty()),
+                        new WeaponsStacked(100),
                         new MedicineStacked(DifficultiesType.HARD.getDifficulty()));
                 break;
             default:

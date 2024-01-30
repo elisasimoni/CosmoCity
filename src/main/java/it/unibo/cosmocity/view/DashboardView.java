@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 
 import it.unibo.cosmocity.model.Sector.Status;
+import it.unibo.cosmocity.model.event.GoodEvent;
 import it.unibo.cosmocity.model.event.RandomEvent;
 
 public interface DashboardView {
@@ -17,5 +18,9 @@ public interface DashboardView {
     void updateSimulationInfo(String colonyName);
 
     void createRandomEvent(RandomEvent randomEvent);
+
+    void createGoodEvent(GoodEvent goodEvent);
+
+    void showGameOver();
 
 }
