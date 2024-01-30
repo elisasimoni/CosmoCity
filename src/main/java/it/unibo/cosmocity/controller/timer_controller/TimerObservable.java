@@ -6,7 +6,8 @@ import java.util.TimerTask;
 
 public class TimerObservable extends TimerTask {
 
-    private final static int DELAY = 2;
+    private static final int DELAY = 2;
+    private static final int MILLIS = 1000;
 
     private List<EventObserver> observers = new ArrayList<>();
     private boolean isPaused = false;
@@ -15,6 +16,7 @@ public class TimerObservable extends TimerTask {
     private long totalPauseTime = 0;
 
     private final Object lock = new Object(); // Object to manage synchronization
+    
     private long startTime = System.currentTimeMillis();
 
     // Add Event Observer
@@ -44,7 +46,7 @@ public class TimerObservable extends TimerTask {
 
                     try {
 
-                        waitTime = pauseTime + pauseDuration + 1000 - System.currentTimeMillis();
+                        waitTime = pauseTime + pauseDuration + MILLIS - System.currentTimeMillis();
 
                         if (waitTime > 0) {
 
@@ -65,16 +67,16 @@ public class TimerObservable extends TimerTask {
                 }
             }
 
-            long timeMillis = System.currentTimeMillis() / 1000;
+            long timeMillis = System.currentTimeMillis() / MILLIS;
 
-            long timeElapsedSeconds = ((timeMillis) - startTime / 1000);
+            long timeElapsedSeconds = ((timeMillis) - startTime / MILLIS);
 
             notifyObservers(
-                    timeElapsedSeconds - waitTime / 1000 + pauseDuration / 1000 - totalPauseTime / 1000 + DELAY);
+                    timeElapsedSeconds - waitTime / MILLIS + pauseDuration / MILLIS - totalPauseTime / MILLIS + DELAY);
 
             try {
 
-                Thread.sleep(1000); // Sleep for 1 second
+                Thread.sleep(MILLIS); // Sleep for 1 second
 
             } catch (InterruptedException e) {
 
