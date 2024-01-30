@@ -6,11 +6,16 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import it.unibo.cosmocity.model.DifficultiesType;
+import it.unibo.cosmocity.model.resources.BaseResource;
+import it.unibo.cosmocity.model.resources.Food;
 import it.unibo.cosmocity.model.resources.FoodStacked;
+import it.unibo.cosmocity.model.resources.Medicine;
 import it.unibo.cosmocity.model.resources.MedicineStacked;
 import it.unibo.cosmocity.model.resources.Population;
+import it.unibo.cosmocity.model.resources.Screw;
 import it.unibo.cosmocity.model.resources.ScrewStacked;
 import it.unibo.cosmocity.model.resources.StackedResource;
+import it.unibo.cosmocity.model.resources.Weapons;
 import it.unibo.cosmocity.model.resources.WeaponsStacked;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.Blacksmith;
@@ -279,5 +284,27 @@ public class TranslatorStringToClassHelper {
             default -> "do nothing";
         }).collect(Collectors.toList());
         return settlerOpt;
+    }
+
+    /**
+     * Support function to create a resource
+     * @param resourceName
+     * @param quantity
+     * @return
+     */
+    public BaseResource createResourceFromNameAndQta(String resourceName, int quantity) {
+        switch (resourceName) {
+            case "Screw":
+                return new Screw(quantity);
+            case "Weapons":
+                return new Weapons(quantity);
+            case "Medicine":
+                return new Medicine(quantity);
+            case "Food":
+                return new Food(quantity);
+            default:
+                return null;
+        }
+
     }
 }

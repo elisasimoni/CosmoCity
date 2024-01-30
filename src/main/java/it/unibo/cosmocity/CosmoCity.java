@@ -3,11 +3,8 @@ package it.unibo.cosmocity;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import it.unibo.cosmocity.controller.SimulationController;
-import it.unibo.cosmocity.controller.view_controller.CreateColonyController;
 import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.Simulation;
-import it.unibo.cosmocity.view.AssignSettler;
-import it.unibo.cosmocity.view.Dashboard;
 import it.unibo.cosmocity.view.LandingPage;
 import java.util.*;
 

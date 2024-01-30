@@ -1,96 +1,83 @@
 package it.unibo.cosmocity.controller.serialization;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
-
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
-import it.unibo.cosmocity.model.DifficultiesType;
-import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.event.Event;
 import it.unibo.cosmocity.model.resources.BaseResource;
-import it.unibo.cosmocity.model.resources.Food;
-import it.unibo.cosmocity.model.resources.FoodStacked;
-import it.unibo.cosmocity.model.resources.Medicine;
-import it.unibo.cosmocity.model.resources.MedicineStacked;
-import it.unibo.cosmocity.model.resources.Screw;
-import it.unibo.cosmocity.model.resources.ScrewStacked;
-import it.unibo.cosmocity.model.resources.StackedResource;
-import it.unibo.cosmocity.model.resources.Weapons;
-import it.unibo.cosmocity.model.resources.WeaponsStacked;
-import it.unibo.cosmocity.model.settlers.BaseSettler;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Objects;
 
 public class EventSerialization implements Serialization {
 
-    private ObjectMapper mapper = new ObjectMapper();
-    Path filePath = Path.of("src\\main\\java\\it\\unibo\\resources\\event\\RandomEvent.json");
-    TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+  private final ObjectMapper mapper = new ObjectMapper();
+  TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
 
-    @Override
-    public void serialize(Object object) {
-        // not need to implemet now
-    }
+  /*
+   * Not need to implement now
+   */
+  @Override
+  public void serialize(final Object object) {
+    // not need to implemet now
+  }
 
-    @Override
-    public List<Event> deserialize() {
-        try {
-            if (filePath.toFile().exists()) {
-                String jsonContent = Files.readString(filePath);
+  /*
+   * Deserialize jsonEvent file and return a list of event
+   *  
+  */
+  @Override
+  public List<Event> deserialize() {
+    try {
+      final InputStream inputStream = getClass()
+        .getClassLoader()
+        .getResourceAsStream("it/unibo/resources/event/RandomEvent.json");
 
-                JsonNode jsonNode = mapper.readTree(jsonContent);
+      if (inputStream != null) {
+        final String jsonContent = new String(
+          Objects.requireNonNull(inputStream).readAllBytes()
+        );
 
-                List<Event> events = new ArrayList<>();
+        final JsonNode jsonNode = mapper.readTree(jsonContent);
 
-                for (JsonNode eventNode : jsonNode.get("randomEvents")) {
+        final List<Event> events = new ArrayList<>();
 
-                    List<BaseResource> fixDamageList = new ArrayList<>();
-                    for (JsonNode fixDamageNode : eventNode.get("fixDamage")) {
-                        BaseResource fixDamage = createResource(fixDamageNode.get("name").asText(),
-                                fixDamageNode.get("qta").asInt());
-                        fixDamageList.add(fixDamage);
-                    }
+        for (final JsonNode eventNode : jsonNode.get("randomEvents")) {
+          final List<BaseResource> fixDamageList = new ArrayList<>();
+          for (final JsonNode fixDamageNode : eventNode.get("fixDamage")) {
+            final BaseResource fixDamage = translator.createResourceFromNameAndQta(
+              fixDamageNode.get("name").asText(),
+              fixDamageNode.get("qta").asInt()
+            );
+            fixDamageList.add(fixDamage);
+          }
 
-                    List<BaseResource> damageList = new ArrayList<>();
-                    for (JsonNode damageNode : eventNode.get("damage")) {
-                        BaseResource damage = createResource(damageNode.get("name").asText(),
-                                damageNode.get("qta").asInt());
-                        damageList.add(damage);
-                    }
-                    Event event = new Event(eventNode.get("name").asText(), eventNode.get("description").asText(),
-                            fixDamageList, damageList);
-                    events.add(event);
-                }
-
-                return events;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+          final List<BaseResource> damageList = new ArrayList<>();
+          for (final JsonNode damageNode : eventNode.get("damage")) {
+            final BaseResource damage = translator.createResourceFromNameAndQta(
+              damageNode.get("name").asText(),
+              damageNode.get("qta").asInt()
+            );
+            damageList.add(damage);
+          }
+          final Event event = new Event(
+            eventNode.get("name").asText(),
+            eventNode.get("description").asText(),
+            fixDamageList,
+            damageList
+          );
+          events.add(event);
         }
 
-        return null;
+        return events;
+      }
+    } catch (final IOException e) {
+      e.printStackTrace();
     }
 
-    private BaseResource createResource(String resourceName, int quantity) {
-        switch (resourceName) {
-            case "Screw":
-                return new Screw(quantity);
-            case "Weapons":
-                return new Weapons(quantity);
-            case "Medicine":
-                return new Medicine(quantity);
-            case "Food":
-                return new Food(quantity);
-            default:
-                return null;
-        }
-
-    }
-
+    return Collections.emptyList();
+  }
 }

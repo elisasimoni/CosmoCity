@@ -1,6 +1,8 @@
 package it.unibo.cosmocity.view;
 
+import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
+import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
 import it.unibo.cosmocity.view.dialog.PauseDialog;
@@ -26,6 +28,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
+import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.Sector.Status;
 import it.unibo.cosmocity.model.event.RandomEvent;
 
@@ -43,13 +46,16 @@ public class Dashboard extends ViewImpl implements DashboardView {
     private Label population;
     Map<String, String> settlerSectorMap;
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+    private SimulationController simulationController;
+    private SceneController sceneController = new SceneController();
     Circle statusCircleFarm;
     Circle statusCircleHospital;
     Circle statusCircleManufactory;
     Circle statusCircleMilitaryBase;
 
-    public Dashboard(Stage stage, double width, double height) {
+    public Dashboard(Stage stage, double width, double height, SimulationController simulationController) {
         super(stage, width, height);
+        this.simulationController = simulationController;
     }
 
     @Override
@@ -71,7 +77,13 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
         Button saveButton = createButton("Save");
         saveButton.setOnAction(e -> {
-            new SaveGameDialog().show();
+            SaveGameDialog saveGameDialog = new SaveGameDialog();
+            saveGameDialog.show();
+            if(saveGameDialog.isSaved()) {
+                simulationController.saveSimulation();
+            }else{
+                sceneController.nextSceneNavigator(this);
+            }
         });
 
         Button Resources = createButton("Resources");
@@ -254,7 +266,6 @@ public class Dashboard extends ViewImpl implements DashboardView {
         StackPane.setAlignment(textBackground, Pos.TOP_CENTER);
         sectorPane.getChildren().addAll(backgroundImageView, statusCircles[colIndex][rowIndex], textBackground,
                 textNameSector);
-        // Collections.reverse(sectorPane.getChildren());
 
         gridPane.add(sectorPane, colIndex, rowIndex);
 
@@ -271,13 +282,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     public void updateCirle(List<Status> statuses) {
-        System.out.println("Status View: " + statuses);
         Platform.runLater(() -> {
-
-            System.out.println("Farm Status: " + statuses.get(0));
-            System.out.println("Hospital Status: " + statuses.get(1));
-            System.out.println("Manufactory Status: " + statuses.get(2));
-            System.out.println("Military Base Status: " + statuses.get(3));
 
             statusCircleFarm.setFill(statusColor(statuses.get(0)));
             statusCircleHospital.setFill(statusColor(statuses.get(1)));
@@ -290,8 +295,10 @@ public class Dashboard extends ViewImpl implements DashboardView {
         if (status == Status.GREEN) {
             return Color.GREEN;
         } else if (status == Status.YELLOW) {
+             
             return Color.YELLOW;
         } else {
+              
             return Color.RED;
         }
     }
@@ -316,7 +323,6 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     public void createRandomEvent(RandomEvent randomEvent) {
-        System.out.println("Event View: " + randomEvent.getDemageResources());
         new NewEventDialog(randomEvent).show();
     }
 

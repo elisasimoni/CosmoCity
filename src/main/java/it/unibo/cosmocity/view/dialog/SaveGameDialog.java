@@ -8,20 +8,19 @@ import it.unibo.cosmocity.model.utility.AudioManager;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 
-public class SaveGameDialog implements PopUpDialog{
+public class SaveGameDialog implements PopUpDialog {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
 
-
-
+    private boolean isSaved = false;
 
     @Override
     public void show() {
         createPopUpGUI();
         Optional<ButtonType> btnPressed = alert.showAndWait();
         if (btnPressed.get() == alert.getButtonTypes().get(0)) {
-            //new SimulationController().saveSimulation();
+            setSaved(true);
         } else {
-            //new SimulationController().exitSimulation();
+            setSaved(false);
 
         }
     }
@@ -32,11 +31,16 @@ public class SaveGameDialog implements PopUpDialog{
         ButtonType fixDamageBtn = new ButtonType("Yes");
         ButtonType getDamageBtn = new ButtonType("No");
         alert.getButtonTypes().setAll(fixDamageBtn, getDamageBtn);
-        
+
         return alert;
     }
 
+    public boolean isSaved() {
+        return isSaved;
+    }
 
-
+    public void setSaved(boolean isSaved) {
+        this.isSaved = isSaved;
+    }
 
 }

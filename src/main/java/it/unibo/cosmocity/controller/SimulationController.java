@@ -9,7 +9,7 @@ import it.unibo.cosmocity.model.ResourceHandlerImpl;
 import it.unibo.cosmocity.view.Dashboard;
 import it.unibo.cosmocity.view.LandingPageView;
 import it.unibo.cosmocity.controller.serialization.SimulationSerialization;
-import it.unibo.cosmocity.controller.view_controller.DashBoardController;
+import it.unibo.cosmocity.controller.view_controller.DashboardController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 
 import javafx.stage.Stage;
@@ -20,7 +20,7 @@ import java.util.Map;
 public class SimulationController {
     private Simulation simulation;
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
-    private DashBoardController dashBoardController;
+    private DashboardController dashBoardController;
     private SimulationSerialization serializationSimulation = new SimulationSerialization();
     private ResourceHandler resourceHandler;
     private SceneController sceneController = new SceneController();
@@ -32,11 +32,11 @@ public class SimulationController {
 
     public void startSimulation(String colonyName, List<String> settlers, Map<String, Integer> resources,
             DifficultiesType difficulty) {
-        Dashboard dashboard = new Dashboard(new Stage(), 900, 700);
+        Dashboard dashboard = new Dashboard(new Stage(), 900, 700,this)  ;
 
         sceneController.nextSceneNavigator(dashboard);
         this.resourceHandler = new ResourceHandlerImpl(simulation);
-        this.dashBoardController = new DashBoardController(dashboard, simulation);
+        this.dashBoardController = new DashboardController(dashboard, simulation);
 
     }
 
@@ -131,5 +131,9 @@ public class SimulationController {
 
     public List<String> getSettlers() {
         return this.simulation.getSettlers().stream().map(s -> s.getClass().getSimpleName()).toList();
+    }
+
+    public Simulation getSimulation() {
+        return this.simulation;
     }
 }

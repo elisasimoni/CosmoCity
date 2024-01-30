@@ -1,5 +1,6 @@
 package it.unibo.cosmocity.controller.view_controller;
 
+import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
 import it.unibo.cosmocity.controller.timer_controller.EventObserver;
 import it.unibo.cosmocity.controller.timer_controller.TimerObservable;
@@ -23,22 +24,24 @@ import javafx.application.Platform;
 import java.util.List;
 import java.util.Timer;
 
-public class DashBoardController {
+public class DashboardController {
     private static final int TIME_APPETITE = 11;
     private static final int TIME_RANDOM_EVENT = 7;
     private DashboardView dashboardView;;
     private Simulation simulation;
     private ResourceHandler resourceHandler;
+    private SimulationController simulationController;
     private Timer timer;
     private TimerObservable timerObservable = new TimerObservable();
     private EventObserver eventObserver = new EventObserver(this);
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
     private EventManager eventManager = new EventManager();
 
-    public DashBoardController(DashboardView dashboardView, Simulation simulation) {
+    public DashboardController(DashboardView dashboardView, Simulation simulation) {
         this.dashboardView = dashboardView;
         this.simulation = simulation;
         this.resourceHandler = new ResourceHandlerImpl(simulation);
+        this.simulationController = new SimulationController(simulation);
         updateSimulationInfo();
         timer = new Timer();
         timerObservable.addObserver(eventObserver);
@@ -81,19 +84,11 @@ public class DashBoardController {
 
     public void getDamage(Event event) {
         event.getDemageResources().forEach(resource -> {
-            System.out.println(resource.getQta());
-            resourceHandler.decrementResource(resource,resource.getQta());
+            this.resourceHandler.decrementResource(resource,resource.getQta());
         });
         
     }
 
-
-
-    private void productioN(List<StackedResource> resources) {
-        resourceHandler.incrementResource(new FoodStacked(2), 5);
-        resourceHandler.incrementResource(new FoodStacked(2), 5);
-        resourceHandler.incrementResource(new FoodStacked(2), 5);
-    }
 
     public void changeStatus() {
         SectorManager sectorManager = new SectorManager(this.simulation.getResources());

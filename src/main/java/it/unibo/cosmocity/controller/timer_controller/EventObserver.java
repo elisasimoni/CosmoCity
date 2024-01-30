@@ -1,12 +1,12 @@
 package it.unibo.cosmocity.controller.timer_controller;
 
-import it.unibo.cosmocity.controller.view_controller.DashBoardController;
+import it.unibo.cosmocity.controller.view_controller.DashboardController;
 
 
 public class EventObserver {
-    private DashBoardController dashBoardController;
+    private DashboardController dashBoardController;
 
-    public EventObserver(DashBoardController dashBoardController) {
+    public EventObserver(DashboardController dashBoardController) {
         this.dashBoardController = dashBoardController;
     }
 

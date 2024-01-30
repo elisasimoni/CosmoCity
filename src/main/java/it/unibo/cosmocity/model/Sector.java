@@ -2,7 +2,6 @@ package it.unibo.cosmocity.model;
 
 public class Sector {
 
-    private String name;
     private Status status;
 
     public enum Status {
@@ -11,14 +10,10 @@ public class Sector {
         RED
     }
 
-    public Sector(String name) {
-        this.name = name;
+    public Sector() {
         this.status = Status.GREEN;
     }
 
-    public String getName() {
-        return name;
-    }
 
     public Status getStatus() {
         return this.status;

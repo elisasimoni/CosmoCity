@@ -60,6 +60,8 @@ javafx {
     modules("javafx.controls", "javafx.fxml","javafx.media")
 }
 
+
+
 tasks.test {
     useJUnitPlatform()
     testLogging {
