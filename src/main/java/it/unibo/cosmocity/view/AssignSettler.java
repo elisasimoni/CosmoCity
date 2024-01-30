@@ -4,6 +4,7 @@ import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.layout.BorderPane;
@@ -21,29 +22,28 @@ import javafx.stage.Stage;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-
+import java.util.HashMap;
 import it.unibo.cosmocity.controller.SimulationController;
+import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
 import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
-import it.unibo.cosmocity.controller.view_controller.SceneController;
-import it.unibo.cosmocity.model.DifficultiesType;
-import it.unibo.cosmocity.model.settlers.BaseSettler;
-import it.unibo.cosmocity.model.settlers.Doctor;
-import it.unibo.cosmocity.model.settlers.Gunsmith;
-import it.unibo.cosmocity.model.settlers.Military;
 
-public class AssignSettler extends ViewImpl {
+public class AssignSettler extends ViewPreLoadImpl {
 
     AssignSettlerController assignSettlerController;
     private final Screen screen = Screen.getPrimary();
-    private final double screenWidth = screen.getBounds().getWidth();
-    private final double screenHeight = screen.getBounds().getHeight();
-    private Map<String,String> settlerAssigned;
+    List<String> settlers = new ArrayList<>();
+    private Map<String, String> settlerAssigned = new HashMap<>();
     private ComboBox<String> sectorDropdownMenu;
-    SimulationController simulatorController = new SimulationController();
+    private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+    SimulationController simulatorController;
 
-    public AssignSettler(Stage stage, double width, double height) {
+    public AssignSettler(Stage stage, double width, double height, SimulationController simulatorController) {
         super(stage, width, height);
-        
+        this.simulatorController = simulatorController;
+        this.settlers = this.simulatorController.getSettlers();
+        assignSettlerController = new AssignSettlerController(settlers, this.simulatorController);
+        this.scene = new Scene(new Pane(), width, height);
+        this.scene.setRoot(this.createGUI());
 
     }
 
@@ -53,10 +53,7 @@ public class AssignSettler extends ViewImpl {
 
     @Override
     public Pane createGUI() {
-        System.out.println(simulatorController.getSettlers());
-        List<String> settlers = simulatorController.getSettlers();
-        System.out.println(settlers);
-        assignSettlerController = new AssignSettlerController(settlers);
+
         stage.setTitle("CosmoCity - Assign Settler");
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: darkBlue;");
@@ -71,10 +68,9 @@ public class AssignSettler extends ViewImpl {
         newGameText.setFill(Color.WHITE);
         newGameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(20)));
         vbox.getChildren().add(newGameText);
-
-        for (String settlerName : assignSettlerController.getSettlersNames()) {
-            vbox.getChildren()
-                    .add(createSettlerAssignBox(settlerName));
+        ;
+        for (String settlerName : translator.translateListToOptionalSettlerList(simulatorController.getSettlers())) {
+            vbox.getChildren().add(createSettlerAssignBox(settlerName));
         }
 
         Button startColonyButton = createButton("Start Colony");
@@ -83,20 +79,20 @@ public class AssignSettler extends ViewImpl {
         vbox.getChildren().add(startColonyButton);
         vbox.maxHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
-        SceneController sceneController = new SceneController();
         
+
         startColonyButton.setOnAction(e -> {
-
-            
-            DifficultiesType difficulty = DifficultiesType.EASY;
-            System.out.println("Difficulty: " +difficulty);
-            simulatorController.modifyOptionalSettler(settlerAssigned);
-            this.stage.close();
-
+            sendSimulation();
         });
         root.setCenter(vbox);
 
         return root;
+    }
+
+    private void sendSimulation() {
+        this.assignSettlerController.sendSimulation(this.settlerAssigned);
+
+        this.stage.close();
     }
 
     private Button createButton(String text) {
@@ -134,9 +130,7 @@ public class AssignSettler extends ViewImpl {
 
         hbox.getChildren().add(sectorDropdownMenu);
 
-
         return hbox;
     }
-
 
 }

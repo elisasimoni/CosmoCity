@@ -92,13 +92,15 @@ public class TranslatorStringToClassHelper {
 
     }
 
-    public List<BaseSettler> translateSettlerToListFromMapMO(List<MandatorySettler> settlersM, List<SimpleSettler> settlersS) {
+    public List<BaseSettler> translateSettlerToListFromMapMO(List<MandatorySettler> settlersM,
+            List<SimpleSettler> settlersS) {
         List<BaseSettler> settlerNew = new ArrayList();
         settlersM.stream().forEach(settlerNew::add);
         settlersS.stream().forEach(settlerNew::add);
         return settlerNew;
 
     }
+
     public List<MandatorySettler> translateSettlerToMapMandatory(Map<String, String> settlerAndSector) {
         return settlerAndSector.entrySet().stream().map(entry -> {
             String settlerName = entry.getKey();
@@ -112,12 +114,15 @@ public class TranslatorStringToClassHelper {
                     return new Gunsmith();
                 case "Military":
                     return new Military();
+                case "Blacksmith":
+                    return new Blacksmith();
                 default:
                     throw new IllegalArgumentException("Invalid settler name");
             }
         }).collect(Collectors.toList());
 
     }
+
     public List<SimpleSettler> translateSettlerToMapOptional(Map<String, String> settlerAndSector) {
         return settlerAndSector.entrySet().stream().map(entry -> {
             String settlerName = entry.getKey();
@@ -142,6 +147,7 @@ public class TranslatorStringToClassHelper {
             case "Farmer" -> new Farmer();
             case "Gunsmith" -> new Gunsmith();
             case "Military" -> new Military();
+            case "Blacksmith" -> new Blacksmith();
             default -> throw new IllegalArgumentException("Invalid settler name");
         }).collect(Collectors.toList());
     }
@@ -179,7 +185,7 @@ public class TranslatorStringToClassHelper {
             case "Military" -> "Military";
             case "Cook" -> "Cook";
             case "Gunsmith" -> "Gunsmith";
-            case "Pharmacist" -> "Pharmacist";
+            case "Chemist" -> "Chemist";
             case "Blacksmith" -> "Blacksmith";
             default -> throw new IllegalArgumentException("Invalid settler name");
         }).collect(Collectors.toList());
@@ -203,8 +209,8 @@ public class TranslatorStringToClassHelper {
                     return "Cook";
                 case "Gunsmith":
                     return "Gunsmith";
-                case "Pharmacist":
-                    return "Pharmacist";
+                case "Chemist":
+                    return "Chemist";
                 case "Blacksmith":
                     return "Blacksmith";
                 default:
@@ -262,5 +268,16 @@ public class TranslatorStringToClassHelper {
             case "ScrewStacked" -> "Workshop";
             default -> throw new IllegalArgumentException("Invalid resource name");
         }).toString();
+    }
+
+    public List<String> translateListToOptionalSettlerList(List<String> settler) {
+        List<String> settlerOpt = new ArrayList();
+        settler.stream().map(settlerName -> switch (settlerName) {
+            case "Cook" -> settlerOpt.add("Cook");
+            case "Technician" -> settlerOpt.add("Technician");
+            case "Chemist" -> settlerOpt.add("Chemist");
+            default -> "do nothing";
+        }).collect(Collectors.toList());
+        return settlerOpt;
     }
 }

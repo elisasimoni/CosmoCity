@@ -38,10 +38,11 @@ public class LandingPage extends ViewImpl implements LandingPageView {
     private final Screen screen = Screen.getPrimary();
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
-    private SimulationController simulationController = new SimulationController();
+    private SimulationController simulationController;
 
-    public LandingPage(Stage stage, double width, double height) {
+    public LandingPage(Stage stage, double width, double height, SimulationController simulationController) {
         super(stage, width, height);
+        this.simulationController = simulationController;
 
     }
 
@@ -124,7 +125,7 @@ public class LandingPage extends ViewImpl implements LandingPageView {
     @Override
     public void startSimulation() {
         SceneController sceneController = new SceneController();
-        sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
+        sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9, simulationController));
     }
 
     @Override

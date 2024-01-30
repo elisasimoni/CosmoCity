@@ -27,6 +27,10 @@ public class Simulation {
 
     }
 
+    public Simulation() {
+        //TODO Auto-generated constructor stub
+    }
+
     public List<BaseSettler> getSettlers() {
         return settlers;
     }

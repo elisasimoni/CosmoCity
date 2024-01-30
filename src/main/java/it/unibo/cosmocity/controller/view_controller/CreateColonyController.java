@@ -25,9 +25,11 @@ public class CreateColonyController {
     private List<StackedResource> resources;
     private DifficultiesType difficulty;
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+    private SimulationController simulationController;
 
-    public CreateColonyController(CreateColonyPageView createColonyPageView) {
+    public CreateColonyController(CreateColonyPageView createColonyPageView, SimulationController simulationController) {
         this.createColonyPageView = createColonyPageView;
+        this.simulationController = simulationController;
     }
 
     public void createColony(String colonyName, Map<String, Integer> settlers,
@@ -36,8 +38,9 @@ public class CreateColonyController {
         this.settlers = settlers;
         this.resources = saveDifficulty(difficulty);
         this.difficulty = DifficultiesType.valueOf(difficulty.toUpperCase());
-        new SimulationController().updateSimulation(this.colonyName,translator.translateSettlerToListFromMap(this.settlers),
+        this.simulationController.updateSimulation(this.colonyName,translator.translateSettlerToListFromMap(this.settlers),
                 translator.translateResourceToMap(this.resources),this.difficulty);
+        System.out.println(this.simulationController.getSettlers());
     }
 
     public List<StackedResource> saveResources(Map<String, Integer> resources) {

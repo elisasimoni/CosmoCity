@@ -49,7 +49,7 @@ public class MoveResource {
 
         // Handle button click if needed
         if (moveSettlerAlert.getResult() == startColonyButtonType) {
-            SimulationController simulatorController = new SimulationController();
+            //SimulationController simulatorController = new SimulationController();
             //simulatorController.startSimulation(List.of("Gunsmith", "Doctor"), Map.of("Medicine", 5, "Food", 5));
         }
     }
@@ -73,7 +73,7 @@ public class MoveResource {
         vbox.getChildren().add(newGameText);
 
         for (String settlerName : assignSettlerController.getSettlersNames()) {
-            vbox.getChildren().add(createSettlerAssignBox(settlerName, assignSettlerController.getSettlerQuantity(settlerName)));
+            //vbox.getChildren().add(createSettlerAssignBox(settlerName, assignSettlerController.getSettlerQuantity(settlerName)));
         }
 
         // Removed "Return to Dashboard" button

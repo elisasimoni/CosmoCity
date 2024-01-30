@@ -19,9 +19,9 @@ public class SaveGameDialog implements PopUpDialog{
         createPopUpGUI();
         Optional<ButtonType> btnPressed = alert.showAndWait();
         if (btnPressed.get() == alert.getButtonTypes().get(0)) {
-            new SimulationController().saveSimulation();
+            //new SimulationController().saveSimulation();
         } else {
-            new SimulationController().exitSimulation();
+            //new SimulationController().exitSimulation();
 
         }
     }

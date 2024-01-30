@@ -26,13 +26,15 @@ public class SimulationController {
     private SceneController sceneController = new SceneController();
     private LandingPageView landingPageView;
 
+    public SimulationController(Simulation simulation) {
+        this.simulation = simulation;
+    }
+
     public void startSimulation(String colonyName, List<String> settlers, Map<String, Integer> resources,
             DifficultiesType difficulty) {
         Dashboard dashboard = new Dashboard(new Stage(), 900, 700);
 
         sceneController.nextSceneNavigator(dashboard);
-        this.simulation = new Simulation("PINO COLONY", translator.translateSettler(settlers),
-                translator.translateResources(resources), DifficultiesType.EASY, 0);
         this.resourceHandler = new ResourceHandlerImpl(simulation);
         this.dashBoardController = new DashBoardController(dashboard, simulation);
 
@@ -68,15 +70,16 @@ public class SimulationController {
 
     }
 
-    public void updateSimulationSettler(Map<String,String> settlers) {
-        var settlerList = translator.translateSettlerToListFromMapMO(translator.translateSettlerToMapMandatory(settlers), 
-        translator.translateSettlerToMapOptional(settlers));
+    public void updateSimulationSettler(Map<String, String> settlers) {
+        var settlerList = translator.translateSettlerToListFromMapMO(
+                translator.translateSettlerToMapMandatory(settlers),
+                translator.translateSettlerToMapOptional(settlers));
         this.simulation = new Simulation(this.simulation.getColonyName(), settlerList,
                 this.simulation.getResources(), this.simulation.getDifficulty(), 0);
 
     }
 
-    public void modifyOptionalSettler(Map<String,String> settlers ) {
+    public void modifyOptionalSettler(Map<String, String> settlers) {
         List<BaseSettler> settlerListTotal = this.simulation.getSettlers();
         for (var settler : settlerListTotal) {
             if (settler instanceof SimpleSettler) {
@@ -89,11 +92,8 @@ public class SimulationController {
         startSimulation(this.simulation.getColonyName(),
                 translator.translateSettlerToString(this.simulation.getSettlers()),
                 translator.translateResourceToMap(this.simulation.getResources()), this.simulation.getDifficulty());
-        
-
 
     }
-
 
     public void exitSimulation() {
 

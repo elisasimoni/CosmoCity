@@ -28,8 +28,10 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.view_controller.CreateColonyController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
+import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 
@@ -41,15 +43,17 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
     private final double screenHeight = screen.getBounds().getHeight();
     private final SceneController sceneController = new SceneController();
     private final CreateColonyController createColonyController;
+    private SimulationController simulatorController;
     private Map<String, Integer> selectedSettlers = new HashMap<>();
     private Button nextButton;
     private Text colonyNameText;
     private ComboBox<String> difficultyComboBox;
     private Text warningText;
 
-    public CreateColonyPage(Stage stage, double width, double height) {
+    public CreateColonyPage(Stage stage, double width, double height, SimulationController simulatorController) {
         super(stage, width, height);
-        this.createColonyController = new CreateColonyController(this);
+        this.simulatorController = simulatorController;
+        this.createColonyController = new CreateColonyController(this, this.simulatorController);
     }
 
     @Override
@@ -111,9 +115,11 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
 
         hboxMandatorySettler.getChildren().add(createImageControl("img/settler_icon/Farmer_Icon.png", "Farmer"));
         hboxMandatorySettler.getChildren()
-                .add(createImageControl("img/settler_icon/Technician_Icon.png", "Technician"));
+                .add(createImageControl("img/settler_icon/Gunsmith_Icon.png", "Blacksmith"));
         hboxMandatorySettler.getChildren().add(createImageControl("img/settler_icon/Doctor_Icon.png", "Doctor"));
         hboxMandatorySettler.getChildren().add(createImageControl("img/settler_icon/Military_Icon.png", "Military"));
+        hboxMandatorySettler.getChildren().add(createImageControl("img/settler_icon/Blacksmith_Icon.png", "Gunsmith"));
+       
         vbox.getChildren().add(hboxMandatorySettler);
 
         // Optional Settler
@@ -126,10 +132,10 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
         HBox hboxOptionalSettler = new HBox();
         hboxOptionalSettler.setAlignment(Pos.CENTER);
         hboxOptionalSettler.setSpacing(10);
-        hboxOptionalSettler.getChildren().add(createImageControl("img/settler_icon/Farmer_Icon.png", "Farmer"));
+        hboxOptionalSettler.getChildren().add(createImageControl("img/settler_icon/Cook_Icon.png", "Cook"));
         hboxOptionalSettler.getChildren()
                 .add(createImageControl("img/settler_icon/Technician_Icon.png", "Technician"));
-        hboxOptionalSettler.getChildren().add(createImageControl("img/settler_icon/Doctor_Icon.png", "Doctor"));
+        hboxOptionalSettler.getChildren().add(createImageControl("img/settler_icon/Chemist_Icon.png", "Chemist"));
 
         vbox.getChildren().add(hboxOptionalSettler);
         Text difficultyText = new Text("Choose difficulty:");
@@ -152,12 +158,12 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
         vbox.maxHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
 
-        SceneController sceneController = new SceneController();
+        
         nextButton.setOnAction(e -> {
             if (checkForm()) {
                 createColonyController.createColony(colonyNameField.getText(), this.selectedSettlers,
                         difficultyComboBox.getValue());
-                sceneController.nextSceneNavigator(new AssignSettler(stage, screenWidth * 0.8, screenHeight * 0.8));
+                sceneController.nextSceneNavigator(new AssignSettler(stage, screenWidth * 0.8, screenHeight * 0.8,this.simulatorController));
             }
 
         });
