@@ -86,7 +86,6 @@ public class LandingPage extends ViewImpl implements LandingPageView {
 
         AudioManager audioManager = new AudioManager();
         audioManager.play("audio/menu_music.mp3");
-        audioManager.stop();
         SceneController sceneController = new SceneController();
         newGameBtn.setOnAction(e -> {
             startSimulation();

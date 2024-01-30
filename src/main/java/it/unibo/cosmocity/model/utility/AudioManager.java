@@ -11,27 +11,37 @@ import javafx.scene.media.MediaPlayer;
  */
 public class AudioManager {
 
+  private MediaPlayer mediaPlayer;
+
   /**
    * Play audio file from path
    *
    * @param path
    * @throws FileNotFoundException
    */
-  public void play(String path) {
-    MediaPlayer mediaPlayer;
+  public void play(final String path) {
+
     try {
-      URL resourceUrl = getClass()
-        .getClassLoader()
-        .getResource("it/unibo/resources/" + path);
+      final URL resourceUrl = getClass()
+          .getClassLoader()
+          .getResource("it/unibo/resources/" + path);
       if (resourceUrl == null) {
         throw new FileNotFoundException("Can't find audio file");
       }
-      Media sound = new Media(resourceUrl.toString());
+      final Media sound = new Media(resourceUrl.toString());
       mediaPlayer = new MediaPlayer(sound);
       mediaPlayer.setVolume(25);
       mediaPlayer.play();
-    } catch (Exception e) {
+    } catch (final Exception e) {
       e.printStackTrace();
     }
+  }
+
+  /**
+   * Stop audio file
+   */
+  public void stop() {
+
+    mediaPlayer.stop();
   }
 }
