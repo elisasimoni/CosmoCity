@@ -22,7 +22,7 @@ public class TimerObservable extends TimerTask {
         observers.add(observer);
     }
 
-    // Add Event Observer
+    // Remove Event Observer
     public void removeObserver(EventObserver observer) {
         observers.remove(observer);
     }

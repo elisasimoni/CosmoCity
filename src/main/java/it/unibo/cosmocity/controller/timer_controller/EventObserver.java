@@ -15,6 +15,5 @@ public class EventObserver {
         dashBoardController.updateResourceLabel();
         dashBoardController.createEvent(time);
         dashBoardController.changeStatus();
-        
     }
 }
