@@ -1,9 +1,13 @@
 package it.unibo.cosmocity.view;
 
 import javafx.beans.binding.Bindings;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -38,10 +42,16 @@ public class CreateColonyPage extends ViewImpl {
     public Pane createGUI() {
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: darkBlue;");
+        root.setPadding(new Insets(10, 0, 20, 50));
+
+        // Creazione del contentPane
+        Pane contentPane = new Pane();
+        contentPane.setStyle("-fx-background-color: darkBlue;");
 
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(30);
+        vbox.setPadding(new Insets(10, 0, 40, 30));
 
         Text newGameText = new Text("NEW GAME");
         newGameText.setFont(Font.font(FONT, FontWeight.BOLD, 150));
@@ -80,6 +90,7 @@ public class CreateColonyPage extends ViewImpl {
         mandatorySettlerlText.setTextAlignment(TextAlignment.CENTER);
         vbox.getChildren().add(mandatorySettlerlText);
 
+        // Mandatory Settler
         HBox hboxMandatorySettler = new HBox();
         hboxMandatorySettler.setAlignment(Pos.CENTER);
         hboxMandatorySettler.setSpacing(10);
@@ -91,6 +102,7 @@ public class CreateColonyPage extends ViewImpl {
         hboxMandatorySettler.getChildren().add(createImageControl("img/settler_icon/Military_Icon.png", "Military"));
         vbox.getChildren().add(hboxMandatorySettler);
 
+        // Optional Settler
         Text optionalText = new Text("Optional:");
         optionalText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
         optionalText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
@@ -104,9 +116,18 @@ public class CreateColonyPage extends ViewImpl {
         hboxOptionalSettler.getChildren()
                 .add(createImageControl("img/settler_icon/Technician_Icon.png", "Technician"));
         hboxOptionalSettler.getChildren().add(createImageControl("img/settler_icon/Doctor_Icon.png", "Doctor"));
-        hboxOptionalSettler.getChildren().add(createImageControl("img/settler_icon/Military_Icon.png", "Military"));
 
         vbox.getChildren().add(hboxOptionalSettler);
+
+        Text difficultyText = new Text("Choose difficulty:");
+        difficultyText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
+        difficultyText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
+        difficultyText.setFill(Color.WHITE);
+        difficultyText.setTextAlignment(TextAlignment.CENTER);
+        vbox.getChildren().add(difficultyText);
+
+        ComboBox<String> difficultyComboBox = difficultyChooser();
+        vbox.getChildren().add(difficultyComboBox);
 
         Button nextButton = createButton("Next");
         nextButton.maxHeightProperty().bind(scene.heightProperty());
@@ -114,11 +135,17 @@ public class CreateColonyPage extends ViewImpl {
         vbox.getChildren().add(nextButton);
         vbox.maxHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
+
         SceneController sceneController = new SceneController();
         nextButton.setOnAction(e -> {
             sceneController.nextSceneNavigator(new AssignSettler(stage, screenWidth * 0.8, screenHeight * 0.8));
         });
-        root.setCenter(vbox);
+
+        contentPane.getChildren().add(vbox);
+        ScrollPane scrollPane = new ScrollPane(contentPane);
+        scrollPane.setFitToWidth(true);
+
+        root.setCenter(scrollPane); // Imposta la ScrollPane come il centro del BorderPane
 
         return root;
     }
@@ -179,6 +206,21 @@ public class CreateColonyPage extends ViewImpl {
         vbox.setAlignment(Pos.CENTER);
 
         return vbox;
+    }
+
+    private ComboBox<String> difficultyChooser() {
+        ObservableList<String> difficultyOptions = FXCollections.observableArrayList(
+                "Easy",
+                "Medium",
+                "Hard");
+
+        ComboBox<String> comboBox = new ComboBox<>(difficultyOptions);
+        comboBox.setValue("Medium"); // Imposta un valore predefinito
+        comboBox.setStyle("-fx-background-color: #ffffff");
+        comboBox.setPrefWidth(200);
+        comboBox.setPrefHeight(30);
+
+        return comboBox;
     }
 
     @Override

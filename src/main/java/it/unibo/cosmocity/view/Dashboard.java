@@ -25,6 +25,9 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import it.unibo.cosmocity.model.Sector.Status;
+
+import java.util.List;
 import java.util.Map;
 
 public class Dashboard extends ViewImpl {
@@ -34,6 +37,11 @@ public class Dashboard extends ViewImpl {
     private Label medicineVal;
     private Label weaponVal;
     private Label screwVal;
+    Circle statusCircleFarm;
+    Circle statusCircleHospital;
+    Circle statusCircleManufactory;
+    Circle statusCircleMilitaryBase;
+    
 
     public Dashboard(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -151,11 +159,29 @@ public class Dashboard extends ViewImpl {
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
-        // Aggiungi i settori alla griglia
         createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0);
+        statusCircleFarm = new Circle(20);
+        statusCircleFarm.setFill(Color.GREEN);
+        StackPane.setAlignment(statusCircleFarm, Pos.BOTTOM_CENTER);
+        gridPane.getChildren().add(statusCircleFarm);
+
         createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0);
+        statusCircleHospital = new Circle(20);
+        statusCircleHospital.setFill(Color.GREEN);
+        StackPane.setAlignment(statusCircleHospital, Pos.BOTTOM_CENTER);
+        gridPane.getChildren().add(statusCircleHospital);
+
         createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1);
+        statusCircleManufactory = new Circle(20);
+        statusCircleManufactory.setFill(Color.GREEN);
+        StackPane.setAlignment(statusCircleManufactory, Pos.BOTTOM_CENTER);
+        gridPane.getChildren().add(statusCircleManufactory);
+
         createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1);
+        statusCircleMilitaryBase = new Circle(20);
+        statusCircleMilitaryBase.setFill(Color.GREEN);
+        StackPane.setAlignment(statusCircleMilitaryBase, Pos.BOTTOM_CENTER);
+        gridPane.getChildren().add(statusCircleMilitaryBase);
 
         root.setCenter(gridPane);
 
@@ -190,15 +216,21 @@ public class Dashboard extends ViewImpl {
 
         StackPane sectorPane = new StackPane();
         sectorPane.getChildren().add(backgroundImageView);
+        
+    }
 
-        Circle statusCircle = new Circle(20);
+    public void updateCirle(List<Status> statuses){
+        statusCircleFarm.setFill(statusColor(statuses.get(1)));
 
-        statusCircle.setFill(Color.GREEN);
-        StackPane.setAlignment(statusCircle, Pos.BOTTOM_CENTER);
-
-        sectorPane.getChildren().add(statusCircle);
-
-        gridPane.add(sectorPane, colIndex, rowIndex);
+    }
+    private Color statusColor(Status status){
+        if(status == Status.GREEN){
+            return Color.GREEN;
+        }else if(status == Status.YELLOW){
+            return Color.YELLOW;
+        }else{
+            return Color.RED;
+        }
     }
 
     /**

@@ -12,11 +12,11 @@ public class EventManager {
     private List<Event> randomEvents;
     private List<Event> baseEvent;
     private Event goodEvent;
-    private Serialization serialization = new EventSerialization();
+    private EventSerialization serialization = new EventSerialization();
 
     public EventManager() {
-        this.randomEvents = serialization.deserialize();
-        this.baseEvent = serialization.deserialize();
+        //this.randomEvents = serialization.deserialize();
+        //this.baseEvent = serialization.deserialize();
     }
 
     public RandomEvent generateRandomEvent(){
