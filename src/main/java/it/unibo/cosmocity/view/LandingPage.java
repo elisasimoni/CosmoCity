@@ -1,19 +1,13 @@
 package it.unibo.cosmocity.view;
 
-import java.util.List;
 
 import it.unibo.cosmocity.controller.SimulationController;
 
 import it.unibo.cosmocity.controller.view_controller.SceneController;
-import it.unibo.cosmocity.model.Simulation;
-import it.unibo.cosmocity.model.event.Event;
-import it.unibo.cosmocity.model.resources.Weapons;
 import it.unibo.cosmocity.model.utility.AudioManager;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 
-import it.unibo.cosmocity.view.dialog.GameOverDialog;
 import it.unibo.cosmocity.view.dialog.LoadGameDialog;
-import it.unibo.cosmocity.view.dialog.NewEventDialog;
 
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
@@ -38,9 +32,9 @@ public class LandingPage extends ViewImpl implements LandingPageView {
     private final Screen screen = Screen.getPrimary();
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
-    private SimulationController simulationController;
+    private final SimulationController simulationController;
 
-    public LandingPage(Stage stage, double width, double height, SimulationController simulationController) {
+    public LandingPage(final Stage stage, final double width, final double height, final SimulationController simulationController) {
         super(stage, width, height);
         this.simulationController = simulationController;
 
@@ -48,28 +42,28 @@ public class LandingPage extends ViewImpl implements LandingPageView {
 
     @Override
     public Pane createGUI() {
-        BorderPane root = new BorderPane();
-        ImageManagerImpl imageManager = new ImageManagerImpl();
-        Pane backgroundPane = new Pane();
-        Image backgroundImage = imageManager.loadImage("img/menu_background_img.png");
-        ImageView backgroundImageView = new ImageView(backgroundImage);
+        final BorderPane root = new BorderPane();
+        final ImageManagerImpl imageManager = new ImageManagerImpl();
+        final Pane backgroundPane = new Pane();
+        final Image backgroundImage = imageManager.loadImage("img/menu_background_img.png");
+        final ImageView backgroundImageView = new ImageView(backgroundImage);
         backgroundPane.getChildren().add(backgroundImageView);
         root.setCenter(backgroundPane);
 
-        Text title = new Text("Cosmo\nCity");
+        final Text title = new Text("Cosmo\nCity");
         title.setFont(Font.font("Elephant", FontWeight.BOLD, 200));
         title.setTextAlignment(TextAlignment.CENTER);
         title.setFill(Color.WHITE);
         title.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(10)));
-        StackPane stackPane = new StackPane();
+        final StackPane stackPane = new StackPane();
         stackPane.getChildren().addAll(backgroundPane, title);
         root.setCenter(stackPane);
 
-        Button newGameBtn = createButton("New Game");
-        Button loadGameBtn = createButton("Load Game");
-        Button exitBtn = createButton("Exit");
+        final Button newGameBtn = createButton("New Game");
+        final Button loadGameBtn = createButton("Load Game");
+        final Button exitBtn = createButton("Exit");
 
-        VBox menuBtnBox = new VBox(20);
+        final VBox menuBtnBox = new VBox(20);
         menuBtnBox.getChildren().addAll(newGameBtn, loadGameBtn, exitBtn);
         menuBtnBox.setPadding(new Insets(0, 50, 0, 0));
         menuBtnBox.setAlignment(Pos.CENTER);
@@ -84,9 +78,9 @@ public class LandingPage extends ViewImpl implements LandingPageView {
 
         root.setRight(menuBtnBox);
 
-        AudioManager audioManager = new AudioManager();
+        final AudioManager audioManager = new AudioManager();
         audioManager.play("audio/menu_music.mp3");
-        SceneController sceneController = new SceneController();
+        audioManager.stop();
         newGameBtn.setOnAction(e -> {
             startSimulation();
 
@@ -106,8 +100,8 @@ public class LandingPage extends ViewImpl implements LandingPageView {
      * @param text
      * @return a button with text
      */
-    private Button createButton(String text) {
-        Button button = new Button(text);
+    private Button createButton(final String text) {
+        final Button button = new Button(text);
         button.setPrefWidth(300);
         button.setPrefHeight(50);
         button.setStyle("-fx-background-color: #ffffff");
@@ -123,25 +117,25 @@ public class LandingPage extends ViewImpl implements LandingPageView {
 
     @Override
     public void startSimulation() {
-        SceneController sceneController = new SceneController();
+        final SceneController sceneController = new SceneController();
         sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9, simulationController));
     }
 
     @Override
     public void loadSimulation() {
-        AudioManager audioManager = new AudioManager();
+        final AudioManager audioManager = new AudioManager();
         audioManager.stop();
 
         try {
             simulationController.loadSimulation();
-        } catch (Exception e) {
+        } catch (final Exception e) {
             new LoadGameDialog().show();
         }
     }
 
     @Override
     public void exitSimulation() {
-        AudioManager audioManager = new AudioManager();
+        final AudioManager audioManager = new AudioManager();
         audioManager.stop();
         stage.close();
         simulationController.exitSimulation();

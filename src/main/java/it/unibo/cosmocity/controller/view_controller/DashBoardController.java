@@ -23,12 +23,15 @@ public class DashboardController {
     private static final int TIMER_PERIOD = 1000;
     private static final int TIMER_DELAY = 0;
 
+    private static final int TIMER_HOUR = 3600;
+    private static final int TIMER_MINUT = 60;
+
     private static final int TIME_APPETITE = 11;
     private static final int TIME_RANDOM_EVENT = 120;
 
     private static final int RESOURCE_TO_ADD = 5;
     private static final int RESOURCE_QUANTITY = 2;
-    
+
     private DashboardView dashboardView;;
     private Simulation simulation;
     private ResourceHandler resourceHandler;
@@ -52,12 +55,16 @@ public class DashboardController {
 
     public void updateTimeLabel(long time) {
         if (time % TIME_APPETITE == 0) {
-            
+
             resourceHandler.incrementResource(new FoodStacked(RESOURCE_QUANTITY), RESOURCE_TO_ADD);
         }
 
+        long hours = time / TIMER_HOUR;
+        long minutes = (time % TIMER_HOUR) / TIMER_MINUT;
+        long seconds = time % TIMER_MINUT;
+
         Platform.runLater(() -> {
-            dashboardView.updateTimeLabel(time);
+            dashboardView.updateTimeLabel(String.format("%02d:%02d:%02d", hours, minutes, seconds));
             updateResourceLabel();
         });
 
@@ -83,9 +90,9 @@ public class DashboardController {
 
     public void getDamage(Event event) {
         event.getDemageResources().forEach(resource -> {
-            this.resourceHandler.decrementResource(resource,resource.getQta());
+            this.resourceHandler.decrementResource(resource, resource.getQta());
         });
-        
+
     }
 
     public void changeStatus() {

@@ -1,8 +1,6 @@
 package it.unibo.cosmocity.view;
 
-import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
-import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
 import it.unibo.cosmocity.view.dialog.PauseDialog;
@@ -28,14 +26,66 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.Sector.Status;
 import it.unibo.cosmocity.model.event.RandomEvent;
 
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.lang3.text.WordUtils;
+
 public class Dashboard extends ViewImpl implements DashboardView {
+
+    private static final String GAME_TITLE = "CosmoCity - Colony Dashboard";
+    private static final String FONT_FAMILY = "Elephant";
+    private static final String BACKGROUND_COLOR_WHITE = "-fx-background-color: #ffffff";
+    private static final String BACKGROUND_COLOR_DARK_BLUE = "-fx-background-color: darkBlue";
+
+    private static final int PANE_GAP_10 = 10;
+    private static final int SPACING_10 = 10;
+    private static final int SPACING_20 = 20;
+
+    private static final int FONT_SIZE_LABEL = 20;
+    private static final int FONT_SIZE_30 = 30;
+
+    private static final int BUTTON_FONT_SIZE = 15;
+    private static final int BUTTON_WIDTH = 150;
+    private static final int BUTTON_HEIGHT = 50;
+
+    private static final int INFO_VBOX_PADDING_TOP = 0;
+    private static final int INFO_VBOX_PADDING_BOTTOM = 0;
+    private static final int INFO_VBOX_PADDING_LEFT = 50;
+    private static final int INFO_VBOX_PADDING_RIGHT = 50;
+
+    private static final int MENU_BTN_BOX_PADDING_TOP = 50;
+    private static final int MENU_BTN_BOX_PADDING_BOTTOM = 0;
+    private static final int MENU_BTN_BOX_PADDING_LEFT = 50;
+    private static final int MENU_BTN_BOX_PADDING_RIGHT = 50;
+
+    private static final int SECTOR_WIDTH = 300;
+    private static final int SECTOR_HEIGHT = 300;
+
+    private static final int BACKGROUND_SECTOR_TITLE_WIDTH = 300;
+    private static final int BACKGROUND_SECTOR_TITLE_HEIGHT = 30;
+
+    private static final int CIRCLE_STATUS_RADIUS = 20;
+
+    private static enum TextResources {
+        TIME,
+        POPULATION,
+        FOOD,
+        MEDICINE,
+        WEAPONS,
+        SCREW
+    }
+
+    private static enum TextButton {
+        PAUSE,
+        SAVE,
+        RESOURCES,
+        EXIT
+    }
+
     private GridPane gridPane;
     private Label foodVal;
     private Label timeLabel;
@@ -46,14 +96,12 @@ public class Dashboard extends ViewImpl implements DashboardView {
     private Label population;
     Map<String, String> settlerSectorMap;
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
-    private SimulationController simulationController;
-    private SceneController sceneController = new SceneController();
     Circle statusCircleFarm;
     Circle statusCircleHospital;
     Circle statusCircleManufactory;
     Circle statusCircleMilitaryBase;
 
-    public Dashboard(Stage stage, double width, double height, SimulationController simulationController) {
+    public Dashboard(Stage stage, double width, double height) {
         super(stage, width, height);
         this.simulationController = simulationController;
     }
@@ -66,16 +114,18 @@ public class Dashboard extends ViewImpl implements DashboardView {
     @Override
     public Pane createGUI() {
 
-        stage.setTitle("CosmoCity - Colony Dashboard");
-        BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: darkBlue;");
+        stage.setTitle(GAME_TITLE);
+        final BorderPane root = new BorderPane();
+        root.setStyle(BACKGROUND_COLOR_DARK_BLUE);
 
-        Button pauseButton = createButton("Pause");
+        final Button pauseButton = createButton(
+                String.valueOf(WordUtils.capitalizeFully(TextButton.PAUSE.toString().toLowerCase())));
         pauseButton.setOnAction(e -> {
             new PauseDialog().show();
         });
 
-        Button saveButton = createButton("Save");
+        final Button saveButton = createButton(
+                String.valueOf(WordUtils.capitalizeFully(TextButton.SAVE.toString().toLowerCase())));
         saveButton.setOnAction(e -> {
             SaveGameDialog saveGameDialog = new SaveGameDialog();
             saveGameDialog.show();
@@ -86,182 +136,210 @@ public class Dashboard extends ViewImpl implements DashboardView {
             }
         });
 
-        Button Resources = createButton("Resources");
+        final Button Resources = createButton(
+                String.valueOf(WordUtils.capitalizeFully(TextButton.RESOURCES.toString().toLowerCase())));
         Resources.setOnAction(e -> {
             new MoveResource();
         });
 
-        Button exitButton = createButton("Exit");
+        final Button exitButton = createButton(
+                String.valueOf(WordUtils.capitalizeFully(TextButton.EXIT.toString().toLowerCase())));
 
-        VBox menuBtnBox = new VBox(20);
+        final VBox menuBtnBox = new VBox(SPACING_20);
         menuBtnBox.getChildren().addAll(pauseButton, saveButton, Resources, exitButton);
-        menuBtnBox.setPadding(new Insets(50, 50, 0, 50));
+        menuBtnBox.setPadding(new Insets(MENU_BTN_BOX_PADDING_TOP, MENU_BTN_BOX_PADDING_RIGHT,
+                MENU_BTN_BOX_PADDING_BOTTOM, MENU_BTN_BOX_PADDING_LEFT));
 
-        VBox leftBox = new VBox(20);
+        final VBox leftBox = new VBox(SPACING_20);
         leftBox.setAlignment(Pos.CENTER);
         leftBox.getChildren().add(menuBtnBox);
 
         root.setLeft(leftBox);
 
-        StackPane titlePane = new StackPane();
+        final StackPane titlePane = new StackPane();
         nameColony = new Text("");
-        nameColony.setFont(Font.font("Elephant", FontWeight.BOLD, 30));
+        nameColony.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_30));
         nameColony.setFill(Color.WHITE);
         titlePane.getChildren().add(nameColony);
 
         root.setTop(titlePane);
 
-        String foodText = "Food: ";
-        String mediceneText = "Medicine: ";
-        String weaponsText = "Weapons: ";
-        String screwText = "Screw: ";
-        String popolationText = "Popolation: ";
-
-        Text timerLabel = new Text("Time:");
-        timerLabel.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
+        // Timer
+        final Text timerLabel = new Text(
+                String.valueOf(WordUtils.capitalizeFully(TextResources.TIME.toString().toLowerCase())));
+        timerLabel.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         timerLabel.setFill(Color.WHITE);
+
         this.timeLabel = new Label("");
-        timeLabel.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
+        timeLabel.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         timeLabel.setTextFill(Color.YELLOW);
 
-        Text popolationLabel = new Text(popolationText);
-        popolationLabel.setFont(Font.font("Elephant", 20));
-        popolationLabel.setFill(Color.WHITE);
+        // Population
+        final Text populationLabel = new Text(
+                String.valueOf(WordUtils.capitalizeFully(TextResources.POPULATION.toString().toLowerCase())));
+        populationLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
+        populationLabel.setFill(Color.WHITE);
 
         this.population = new Label("");
-        population.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
+        population.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         population.setTextFill(Color.YELLOW);
 
-        Text foodLabel = new Text(foodText);
-        foodLabel.setFont(Font.font("Elephant", 20));
+        // Food
+        final Text foodLabel = new Text(
+                String.valueOf(WordUtils.capitalizeFully(TextResources.FOOD.toString().toLowerCase())));
+        foodLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         foodLabel.setFill(Color.WHITE);
 
-        this.foodVal = new Label("");
-        foodVal.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
+        this.foodVal = new Label();
+        foodVal.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         foodVal.setTextFill(Color.YELLOW);
 
-        Text medicineLabel = new Text(mediceneText);
-        medicineLabel.setFont(Font.font("Elephant", 20));
+        // Medicine
+        final Text medicineLabel = new Text(
+                String.valueOf(WordUtils.capitalizeFully(TextResources.MEDICINE.toString().toLowerCase())));
+        medicineLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         medicineLabel.setFill(Color.WHITE);
 
-        this.medicineVal = new Label("");
-        medicineVal.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
+        this.medicineVal = new Label();
+        medicineVal.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         medicineVal.setTextFill(Color.YELLOW);
 
-        Text weaponLabel = new Text(weaponsText);
-        weaponLabel.setFont(Font.font("Elephant", 20));
+        // Weapon
+        final Text weaponLabel = new Text(
+                String.valueOf(WordUtils.capitalizeFully(TextResources.WEAPONS.toString().toLowerCase())));
+        weaponLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         weaponLabel.setFill(Color.WHITE);
 
-        this.weaponVal = new Label("");
-        weaponVal.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
+        this.weaponVal = new Label();
+        weaponVal.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         weaponVal.setTextFill(Color.YELLOW);
 
-        Text screwLabel = new Text(screwText);
-        screwLabel.setFont(Font.font("Elephant", 20));
+        // Screw
+        final Text screwLabel = new Text(
+                String.valueOf(WordUtils.capitalizeFully(TextResources.SCREW.toString().toLowerCase())));
+        screwLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         screwLabel.setFill(Color.WHITE);
 
-        this.screwVal = new Label("");
-        screwVal.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
+        this.screwVal = new Label();
+        screwVal.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         screwVal.setTextFill(Color.YELLOW);
 
-        HBox popolationBox = new HBox(10);
-        popolationBox.getChildren().addAll(popolationLabel, population);
+        final HBox popolationBox = new HBox(SPACING_10);
+        popolationBox.getChildren().addAll(populationLabel, population);
+        popolationBox.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox timerBox = new HBox(10);
+        final HBox timerBox = new HBox(SPACING_10);
         timerBox.getChildren().addAll(timerLabel, timeLabel);
+        timerBox.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox foodInfoBox = new HBox(10);
+        final HBox foodInfoBox = new HBox(SPACING_10);
         foodInfoBox.getChildren().addAll(foodLabel, foodVal);
+        foodInfoBox.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox medicineInfoBox = new HBox(10);
+        final HBox medicineInfoBox = new HBox(SPACING_10);
         medicineInfoBox.getChildren().addAll(medicineLabel, medicineVal);
+        medicineInfoBox.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox weaponInfoBox = new HBox(10);
+        final HBox weaponInfoBox = new HBox(SPACING_10);
         weaponInfoBox.getChildren().addAll(weaponLabel, weaponVal);
+        weaponInfoBox.setAlignment(Pos.CENTER_RIGHT);
 
-        HBox screwInfoBox = new HBox(10);
+        final HBox screwInfoBox = new HBox(SPACING_10);
         screwInfoBox.getChildren().addAll(screwLabel, screwVal);
+        screwInfoBox.setAlignment(Pos.CENTER_RIGHT);
 
-        VBox infoVBox = new VBox(10);
+        final VBox infoVBox = new VBox(SPACING_10);
         infoVBox.getChildren().addAll(timerBox, popolationBox, foodInfoBox, medicineInfoBox, weaponInfoBox,
                 screwInfoBox);
         infoVBox.setAlignment(Pos.CENTER_RIGHT);
-        infoVBox.setPadding(new Insets(0, 50, 0, 0));
+        infoVBox.setPadding(new Insets(INFO_VBOX_PADDING_TOP, INFO_VBOX_PADDING_RIGHT, INFO_VBOX_PADDING_BOTTOM,
+                INFO_VBOX_PADDING_LEFT));
 
         StackPane.setAlignment(infoVBox, Pos.CENTER_RIGHT);
 
-        StackPane infoStackPane = new StackPane();
+        final StackPane infoStackPane = new StackPane();
         infoStackPane.getChildren().add(infoVBox);
 
         root.setRight(infoStackPane);
 
         gridPane = new GridPane();
-        gridPane.setHgap(10);
-        gridPane.setVgap(10);
+        gridPane.setHgap(PANE_GAP_10);
+        gridPane.setVgap(PANE_GAP_10);
         gridPane.setAlignment(Pos.CENTER);
 
         // Create Farm Sector
-        createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0, "Farm");
-        statusCircleFarm = new Circle(20);
+        createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0,
+                String.valueOf(WordUtils.capitalizeFully(SectorName.FARM.toString().toLowerCase())));
+        statusCircleFarm = new Circle(CIRCLE_STATUS_RADIUS);
 
         // Create Hospital Sector
-        createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0, "Hospital");
-        statusCircleHospital = new Circle(20);
+        createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0,
+                String.valueOf(WordUtils.capitalizeFully(SectorName.HOSPITAL.toString().toLowerCase())));
+        statusCircleHospital = new Circle(CIRCLE_STATUS_RADIUS);
 
         // Create Manufactory Sector
-        createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1, "Manufactory");
-        statusCircleManufactory = new Circle(20);
+        createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1,
+                String.valueOf(WordUtils.capitalizeFully(SectorName.MANUFACTORY.toString().toLowerCase())));
+        statusCircleManufactory = new Circle(CIRCLE_STATUS_RADIUS);
 
         // Create Military Base Sector
-        createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1, "Military Base");
-        statusCircleMilitaryBase = new Circle(20);
+        createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1, String
+                .valueOf(WordUtils
+                        .capitalizeFully(SectorName.MILITARY_BASE.toString().replace("_", " ").toLowerCase())));
+        statusCircleMilitaryBase = new Circle(CIRCLE_STATUS_RADIUS);
 
         root.setCenter(gridPane);
 
         return root;
     }
 
-    public void updateTimeLabel(long time) {
-        System.out.println("Time View: " + time);
+    public void updateTimeLabel(final long time) {
         Platform.runLater(() -> {
             timeLabel.setText(String.valueOf(time));
         });
     }
 
-    public void updateResourceLabel(Map<String, Integer> resources) {
+    public void updateResourceLabel(final Map<String, Integer> resources) {
 
         Platform.runLater(() -> {
-            foodVal.setText(String.valueOf(resources.get("Food")));
-            medicineVal.setText(String.valueOf(resources.get("Medicine")));
-            weaponVal.setText(String.valueOf(resources.get("Weapons")));
-            screwVal.setText(String.valueOf(resources.get("Screw")));
-            population.setText(String.valueOf(resources.get("Population")));
+            population.setText(String.valueOf(resources.get(
+                    String.valueOf(WordUtils.capitalizeFully(TextResources.POPULATION.toString().toLowerCase())))));
+            foodVal.setText(String.valueOf(resources
+                    .get(String.valueOf(WordUtils.capitalizeFully(TextResources.FOOD.toString().toLowerCase())))));
+            medicineVal.setText(String.valueOf(resources
+                    .get(String.valueOf(WordUtils.capitalizeFully(TextResources.MEDICINE.toString().toLowerCase())))));
+            weaponVal.setText(String.valueOf(resources
+                    .get(String.valueOf(WordUtils.capitalizeFully(TextResources.WEAPONS.toString().toLowerCase())))));
+            screwVal.setText(String.valueOf(resources
+                    .get(String.valueOf(WordUtils.capitalizeFully(TextResources.SCREW.toString().toLowerCase())))));
         });
     }
 
-    private void createSector(String backgroundImagePath, GridPane gridPane, int colIndex, int rowIndex,
-            String sectorName) {
-        Circle[][] statusCircles = new Circle[2][2];
+    private void createSector(final String backgroundImagePath, final GridPane gridPane, final int colIndex, final int rowIndex,
+            final String sectorName) {
 
-        ImageManagerImpl imageManager = new ImageManagerImpl();
+        final Circle[][] statusCircles = new Circle[2][2];
 
-        Image backgroundImage = imageManager.loadImage(backgroundImagePath);
-        Text textNameSector = new Text();
-        textNameSector.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
+        final ImageManagerImpl imageManager = new ImageManagerImpl();
+
+        final Image backgroundImage = imageManager.loadImage(backgroundImagePath);
+        final Text textNameSector = new Text();
+        textNameSector.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         textNameSector.setText(sectorName);
         textNameSector.setFill(Color.WHITE);
-        Rectangle textBackground = new Rectangle(300, 30);
-        ImageView backgroundImageView = new ImageView(backgroundImage);
-        backgroundImageView.setFitWidth(300);
-        backgroundImageView.setFitHeight(300);
 
-        statusCircles[colIndex][rowIndex] = new Circle(22);
+        final Rectangle textBackground = new Rectangle(BACKGROUND_SECTOR_TITLE_WIDTH, BACKGROUND_SECTOR_TITLE_HEIGHT);
+        final ImageView backgroundImageView = new ImageView(backgroundImage);
+        backgroundImageView.setFitWidth(SECTOR_WIDTH);
+        backgroundImageView.setFitHeight(SECTOR_HEIGHT);
+
+        statusCircles[colIndex][rowIndex] = new Circle(CIRCLE_STATUS_RADIUS);
         statusCircles[colIndex][rowIndex].setFill(Color.GREEN);
         statusCircles[colIndex][rowIndex].radiusProperty()
-                .bind(Bindings.min(gridPane.widthProperty(), gridPane.heightProperty()).divide(20));
+                .bind(Bindings.min(gridPane.widthProperty(), gridPane.heightProperty()).divide(SPACING_20));
         statusCircles[colIndex][rowIndex].setStroke(Color.BLACK);
 
-        StackPane sectorPane = new StackPane();
+        final StackPane sectorPane = new StackPane();
         StackPane.setAlignment(textNameSector, Pos.TOP_CENTER);
         StackPane.setAlignment(textBackground, Pos.TOP_CENTER);
         sectorPane.getChildren().addAll(backgroundImageView, statusCircles[colIndex][rowIndex], textBackground,
@@ -282,6 +360,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     public void updateCirle(List<Status> statuses) {
+        System.out.println("Status View: " + statuses);
         Platform.runLater(() -> {
 
             statusCircleFarm.setFill(statusColor(statuses.get(0)));
@@ -291,7 +370,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         });
     }
 
-    private Color statusColor(Status status) {
+    private Color statusColor(final Status status) {
         if (status == Status.GREEN) {
             return Color.GREEN;
         } else if (status == Status.YELLOW) {
@@ -307,23 +386,32 @@ public class Dashboard extends ViewImpl implements DashboardView {
      * @param text
      * @return a button with text
      */
-    private Button createButton(String text) {
-        Button button = new Button(text);
-        button.setPrefWidth(150);
-        button.setPrefHeight(50);
-        button.setStyle("-fx-background-color: #ffffff");
-        button.setFont(Font.font("Elephant", FontWeight.BOLD, 18));
+    private Button createButton(final String text) {
+        final Button button = new Button(text);
+        button.setPrefWidth(BUTTON_WIDTH);
+        button.setPrefHeight(BUTTON_HEIGHT);
+        button.setStyle(BACKGROUND_COLOR_WHITE);
+        button.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, BUTTON_FONT_SIZE));
         return button;
     }
 
-    public void updateSimulationInfo(String colonyName) {
+    public void updateSimulationInfo(final String colonyName) {
         Platform.runLater(() -> {
             nameColony.setText(colonyName);
         });
     }
 
     public void createRandomEvent(RandomEvent randomEvent) {
+        System.out.println("Event View: " + randomEvent.getDemageResources());
         new NewEventDialog(randomEvent).show();
+    }
+
+    @Override
+    public void updateTimeLabel(final String time) {
+        Platform.runLater(() -> {
+            timeLabel.setText(time);
+        });
+
     }
 
 }

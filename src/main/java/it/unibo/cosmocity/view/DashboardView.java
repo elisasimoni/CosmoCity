@@ -8,7 +8,7 @@ import it.unibo.cosmocity.model.event.RandomEvent;
 
 public interface DashboardView {
 
-    void updateTimeLabel(long time);
+    void updateTimeLabel(String time);
 
     void updateResourceLabel(Map<String, Integer> resources);
 
