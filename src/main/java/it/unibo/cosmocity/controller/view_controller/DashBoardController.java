@@ -12,12 +12,7 @@ import it.unibo.cosmocity.model.Sector.Status;
 import it.unibo.cosmocity.model.event.Event;
 import it.unibo.cosmocity.model.event.EventManager;
 import it.unibo.cosmocity.model.event.RandomEvent;
-import it.unibo.cosmocity.model.resources.Food;
 import it.unibo.cosmocity.model.resources.FoodStacked;
-import it.unibo.cosmocity.model.resources.ScrewStacked;
-import it.unibo.cosmocity.model.resources.StackedResource;
-import it.unibo.cosmocity.model.resources.WeaponsStacked;
-import it.unibo.cosmocity.view.Dashboard;
 import it.unibo.cosmocity.view.DashboardView;
 import javafx.application.Platform;
 
@@ -25,15 +20,22 @@ import java.util.List;
 import java.util.Timer;
 
 public class DashboardController {
+    private static final int TIMER_PERIOD = 1000;
+    private static final int TIMER_DELAY = 0;
+
     private static final int TIME_APPETITE = 11;
-    private static final int TIME_RANDOM_EVENT = 7;
+    private static final int TIME_RANDOM_EVENT = 120;
+
+    private static final int RESOURCE_TO_ADD = 5;
+    private static final int RESOURCE_QUANTITY = 2;
+    
     private DashboardView dashboardView;;
     private Simulation simulation;
     private ResourceHandler resourceHandler;
     private SimulationController simulationController;
     private Timer timer;
     private TimerObservable timerObservable = new TimerObservable();
-    private EventObserver eventObserver = new EventObserver(this);
+    private EventObserver eventObserver;
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
     private EventManager eventManager = new EventManager();
 
@@ -45,15 +47,13 @@ public class DashboardController {
         updateSimulationInfo();
         timer = new Timer();
         timerObservable.addObserver(eventObserver);
-        timer.scheduleAtFixedRate(timerObservable, 0, 1000);
+        timer.scheduleAtFixedRate(timerObservable, TIMER_DELAY, TIMER_PERIOD);
     }
 
     public void updateTimeLabel(long time) {
         if (time % TIME_APPETITE == 0) {
-
-            timerObservable.pause(3000);
-
-            resourceHandler.incrementResource(new FoodStacked(2), 5);
+            
+            resourceHandler.incrementResource(new FoodStacked(RESOURCE_QUANTITY), RESOURCE_TO_ADD);
         }
 
         Platform.runLater(() -> {
@@ -77,7 +77,6 @@ public class DashboardController {
                 RandomEvent event = eventManager.generateRandomEvent();
                 dashboardView.createRandomEvent(event);
                 getDamage(event);
-
             }
         });
     }
@@ -88,7 +87,6 @@ public class DashboardController {
         });
         
     }
-
 
     public void changeStatus() {
         SectorManager sectorManager = new SectorManager(this.simulation.getResources());
