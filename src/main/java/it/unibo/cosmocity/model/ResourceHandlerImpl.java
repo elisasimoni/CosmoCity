@@ -37,8 +37,8 @@ public class ResourceHandlerImpl implements ResourceHandler {
   }
 
   public void settlerGetAppetite(List<BaseSettler> settlersList) {
-    FoodStacked foodEaten = new FoodStacked(settlersList.stream().mapToInt(BaseSettler::getAppetite).sum());
-    decrementResource(foodEaten, foodEaten.getQta());
+    int foodEaten = settlersList.stream().mapToInt(BaseSettler::getAppetite).sum();
+    decrementResource(new FoodStacked(0), foodEaten);
   }
 
   public void populationGetAppetite() {
@@ -64,7 +64,6 @@ public class ResourceHandlerImpl implements ResourceHandler {
       BaseResource resource = settler.getProductedResource();
       StackedResource stackedResource = translator
           .createResourceFromNameAndQta(resource.getClass().getSimpleName() + "Stacked", resource.getQta());
-      incrementResource(stackedResource, stackedResource.getQta());
       return stackedResource;
     }).collect(Collectors.toList());
   }
@@ -73,11 +72,15 @@ public class ResourceHandlerImpl implements ResourceHandler {
     TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
     return settlersList.stream().map(settler -> {
       BaseResource resource = settler.getProductedResource();
-      StackedResource stackedResource = translator
-          .createResourceFromNameAndQta(resource.getClass().getSimpleName() + "Stacked", resource.getQta());
-      incrementResource(stackedResource, stackedResource.getQta());
+      StackedResource stackedResource = translator.createResourceFromNameAndQta(resource.getClass().getSimpleName() + "Stacked", resource.getQta());
       return stackedResource;
     }).collect(Collectors.toList());
+  }
+
+  public void incrementWithProduction(List<StackedResource> resourcesList) {
+    resourcesList.stream().forEach(resource -> {
+      incrementResource(resource, resource.getQta());
+    });
   }
   
 

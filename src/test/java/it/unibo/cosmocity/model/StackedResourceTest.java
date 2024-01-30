@@ -7,7 +7,7 @@ import org.junit.jupiter.api.Test;
 
 import it.unibo.cosmocity.model.resources.FoodStacked;
 
-class StackedResource {
+class StackedResourceTest {
     private static FoodStacked stackedResource;
     @BeforeAll
     static void setUp() {

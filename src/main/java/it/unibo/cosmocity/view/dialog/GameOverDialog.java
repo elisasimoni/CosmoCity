@@ -10,6 +10,7 @@ public class GameOverDialog implements PopUpDialog{
     public void show() {
         createPopUpGUI();
         alert.showAndWait();
+        
     }
 
     @Override

@@ -92,7 +92,7 @@ public class SimulationController {
         startSimulation(this.simulation.getColonyName(),
                 translator.translateSettlerToString(this.simulation.getSettlers()),
                 translator.translateResourceToMap(this.simulation.getResources()), this.simulation.getDifficulty());
-
+        //LOOK AT THIS
     }
 
     public void modifyOptionalSettlerDuringSim(Map<String, String> settlers) {
@@ -115,18 +115,31 @@ public class SimulationController {
         System.out.println("Simulation exited");
     }
 
-    public void loadSimulation() throws IOException {
-        var objectDesirialize = serializationSimulation.deserialize();
-        if (objectDesirialize instanceof Simulation) {
-            this.simulation = (Simulation) objectDesirialize;
-            this.startSimulation(this.simulation.getColonyName(),
+    public void loadSimulation() {
+    try {
+        var objectDeserialization = serializationSimulation.deserialize();
+        System.out.println(objectDeserialization);
+        
+        if (objectDeserialization instanceof Simulation) {
+            this.simulation = (Simulation) objectDeserialization;
+           
+            this.startSimulation(
+                    this.simulation.getColonyName(),
                     translator.translateSettlerToString(this.simulation.getSettlers()),
-                    translator.translateResourceToMap(this.simulation.getResources()), this.simulation.getDifficulty());
+                    translator.translateResourceToMap(this.simulation.getResources()),
+                    this.simulation.getDifficulty()
+            );
         } else {
-            throw new IOException();
+            System.out.println("Invalid save file");
         }
-
+    } catch (Exception e) {
+        e.printStackTrace(); // Stampa la traccia dell'eccezione per diagnosticare il problema.
+        System.out.println("Error loading simulation: " + e.getMessage());
+        // Eventualmente gestisci l'errore in base alle tue esigenze, ad esempio, mostri un messaggio all'utente.
+        // new LoadGameDialog().show();
     }
+}
+
 
     public void pauseSimulation() {
 

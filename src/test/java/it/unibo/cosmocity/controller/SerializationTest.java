@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
 import it.unibo.cosmocity.controller.serialization.EventSerialization;
+import it.unibo.cosmocity.controller.serialization.SimulationSerialization;
 import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.event.Event;
@@ -38,12 +39,12 @@ class SerializationTest {
 
     @Test
     void testSimulationSerialization() throws IOException {
-        simulationSerialization.serializeSimulation(simulation);
-        assertEquals(simulation.getColonyName(), simulationSerialization.deserializeSimulation().getColonyName());
-        assertEquals(simulation.getDifficulty(), simulationSerialization.deserializeSimulation().getDifficulty());
-        assertEquals(simulation.getStartTime(), simulationSerialization.deserializeSimulation().getStartTime());
-        assertEquals(simulation.getSettlers().get(0).getClass().getSimpleName(), simulationSerialization.deserializeSimulation().getSettlers().get(0).getClass().getSimpleName());
-        assertEquals(simulation.getSettlers().get(0).getSectorAssigned(), simulationSerialization.deserializeSimulation().getSettlers().get(0).getSectorAssigned());
+        simulationSerialization.serialize(simulation);
+        assertEquals(simulation.getColonyName(), simulationSerialization.deserialize().getColonyName());
+        assertEquals(simulation.getDifficulty(), simulationSerialization.deserialize().getDifficulty());
+        assertEquals(simulation.getStartTime(), simulationSerialization.deserialize().getStartTime());
+        assertEquals(simulation.getSettlers().get(0).getClass().getSimpleName(), simulationSerialization.deserialize().getSettlers().get(0).getClass().getSimpleName());
+        assertEquals(simulation.getSettlers().get(0).getSectorAssigned(), simulationSerialization.deserialize().getSettlers().get(0).getSectorAssigned());
 
     }
 

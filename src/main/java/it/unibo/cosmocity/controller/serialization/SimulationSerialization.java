@@ -7,6 +7,7 @@ import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.resources.BaseResource;
 import it.unibo.cosmocity.model.resources.FoodStacked;
 import it.unibo.cosmocity.model.resources.MedicineStacked;
+import it.unibo.cosmocity.model.resources.Population;
 import it.unibo.cosmocity.model.resources.ScrewStacked;
 import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.resources.WeaponsStacked;
@@ -19,9 +20,8 @@ import it.unibo.cosmocity.model.settlers.Farmer;
 import it.unibo.cosmocity.model.settlers.Gunsmith;
 import it.unibo.cosmocity.model.settlers.Military;
 import it.unibo.cosmocity.model.settlers.Technician;
+import java.nio.file.Path;
 import java.io.*;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -36,13 +36,8 @@ public class SimulationSerialization implements Serialization {
 
   @Override
   public void serialize(Object object) {
-    try (
-      JarOutputStream jos = new JarOutputStream(
-        new FileOutputStream("CosmoCity.jar", true)
-      )
-    ) {
+    try {
       Simulation simulation = (Simulation) object;
-
       List<Map<String, Object>> settlersToJson = new ArrayList<>();
       List<Map<String, Object>> resourcesToJson = new ArrayList<>();
 
@@ -67,50 +62,41 @@ public class SimulationSerialization implements Serialization {
       jsonMap.put("difficulty", simulation.getDifficulty());
       jsonMap.put("startTime", simulation.getStartTime());
 
-      String filePathInJar = "/it/unibo/asset/saves/Colony.json";
-
-      // Creazione delle directory se non esistono
-      Files.createDirectories(Paths.get(filePathInJar).getParent());
-
-      // Creazione del file se non esiste
-      if (!Files.exists(Paths.get(filePathInJar))) {
-        Files.createFile(Paths.get(filePathInJar));
+      System.out.println(mapper.writeValueAsString(jsonMap));
+      try (Writer writer = Files.newBufferedWriter(Path.of("/it/unibo/asset/saves/Colony.json"))) {
+        writer.write(mapper.writeValueAsString(jsonMap));
+      } catch (IOException e) {
+        e.printStackTrace();
       }
 
-      jos.putNextEntry(new JarEntry(filePathInJar));
-      jos.write(mapper.writeValueAsString(jsonMap).getBytes());
-
-      jos.closeEntry();
     } catch (IOException e) {
       e.printStackTrace();
     }
   }
 
   @Override
-  public Object deserialize() {
-    try (
+  public Simulation deserialize() {
+    try {
       InputStream inputStream = SimulationSerialization.class
-        .getResourceAsStream("/it/unibo/asset/saves/Colony.json")
-    ) {
+          .getResourceAsStream("/it/unibo/asset/saves/Colony.json");
+      System.out.println(inputStream);
       if (inputStream != null) {
-        String jsonContent = new String(inputStream.readAllBytes());
 
+        String jsonContent = new String(inputStream.readAllBytes());
+        System.out.println(jsonContent);
         Map<String, Object> jsonMap = mapper.readValue(
-          jsonContent,
-          new TypeReference<>() {}
-        );
+            jsonContent,
+            new TypeReference<>() {
+            });
 
         String colonyName = (String) jsonMap.get("colonyName");
         List<Map<String, Object>> settlersJsonList = (List<Map<String, Object>>) jsonMap.get(
-          "settlers"
-        );
+            "settlers");
         List<Map<String, Object>> resourcesJsonList = (List<Map<String, Object>>) jsonMap.get(
-          "resources"
-        );
+            "resources");
         String difficultyString = (String) jsonMap.get("difficulty");
         DifficultiesType difficulty = DifficultiesType.valueOf(
-          difficultyString
-        );
+            difficultyString);
         Number startTimeNumber = (Number) jsonMap.get("startTime");
         long startTime = startTimeNumber.longValue();
 
@@ -132,14 +118,14 @@ public class SimulationSerialization implements Serialization {
         }
 
         return new Simulation(
-          colonyName,
-          settlers,
-          resources,
-          difficulty,
-          startTime
-        );
+            colonyName,
+            settlers,
+            resources,
+            difficulty,
+            startTime);
       }
     } catch (IOException e) {
+      System.out.println("Error while loading the game");
       e.printStackTrace();
     }
 
@@ -148,6 +134,8 @@ public class SimulationSerialization implements Serialization {
 
   private StackedResource createResource(String resourceName, int quantity) {
     switch (resourceName) {
+      case "Population":
+        return new Population(quantity);
       case "ScrewStacked":
         return new ScrewStacked(quantity);
       case "WeaponsStacked":

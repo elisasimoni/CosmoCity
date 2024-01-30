@@ -19,7 +19,7 @@ public class Sector {
 
     public Sector() {
 
-        this.status = Status.GREEN;
+        
     }
 
     public Status getStatus() {

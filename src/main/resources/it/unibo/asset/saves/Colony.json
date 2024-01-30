@@ -1,0 +1,37 @@
+{
+    "difficulty": "EASY",
+    "resources": [
+        {
+            "quantity": 300,
+            "resourceName": "MedicineStacked"
+        },
+        {
+            "quantity": 300,
+            "resourceName": "ScrewStacked"
+        },
+        {
+            "quantity": 150,
+            "resourceName": "WeaponsStacked"
+        },
+        {
+            "quantity": 300,
+            "resourceName": "Population"
+        },
+        {
+            "quantity": 300,
+            "resourceName": "FoodStacked"
+        }
+    ],
+    "startTime": 0,
+    "colonyName": "Test Colony",
+    "settlers": [
+        {
+            "settlerName": "Doctor",
+            "sector": "Hospital"
+        },
+        {
+            "settlerName": "Technician",
+            "sector": "Workshop"
+        }
+    ]
+}

@@ -1,6 +1,5 @@
 package it.unibo.cosmocity.view;
 
-
 import it.unibo.cosmocity.controller.SimulationController;
 
 import it.unibo.cosmocity.controller.view_controller.SceneController;
@@ -33,8 +32,10 @@ public class LandingPage extends ViewImpl implements LandingPageView {
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
     private final SimulationController simulationController;
+    private final AudioManager audioManager = new AudioManager();
 
-    public LandingPage(final Stage stage, final double width, final double height, final SimulationController simulationController) {
+    public LandingPage(final Stage stage, final double width, final double height,
+            final SimulationController simulationController) {
         super(stage, width, height);
         this.simulationController = simulationController;
 
@@ -79,11 +80,10 @@ public class LandingPage extends ViewImpl implements LandingPageView {
         root.setRight(menuBtnBox);
 
         final AudioManager audioManager = new AudioManager();
-        //audioManager.play("menu_music.mp3");
+        // audioManager.play("menu_music.mp3");
         newGameBtn.setOnAction(e -> {
-            //audioManager.stop();
+            // audioManager.stop();
             startSimulation();
-
 
         });
         loadGameBtn.setOnAction(e -> {
@@ -119,13 +119,14 @@ public class LandingPage extends ViewImpl implements LandingPageView {
     @Override
     public void startSimulation() {
         final SceneController sceneController = new SceneController();
-        sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9, simulationController));
+        sceneController.nextSceneNavigator(
+                new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9, simulationController));
     }
 
     @Override
     public void loadSimulation() {
-        final AudioManager audioManager = new AudioManager();
-        audioManager.stop();
+
+        //audioManager.stop();
 
         try {
             simulationController.loadSimulation();
@@ -137,7 +138,7 @@ public class LandingPage extends ViewImpl implements LandingPageView {
     @Override
     public void exitSimulation() {
         final AudioManager audioManager = new AudioManager();
-        audioManager.stop();
+        //audioManager.stop();
         stage.close();
         simulationController.exitSimulation();
     }

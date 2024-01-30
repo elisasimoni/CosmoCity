@@ -1,4 +1,4 @@
-package it.unibo.cosmocity.view;
+ package it.unibo.cosmocity.view;
 
 import java.util.List;
 import java.util.Map;
@@ -11,9 +11,11 @@ import it.unibo.cosmocity.model.Sector.SectorName;
 import it.unibo.cosmocity.model.Sector.Status;
 import it.unibo.cosmocity.model.event.GoodEvent;
 import it.unibo.cosmocity.model.event.RandomEvent;
+import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import it.unibo.cosmocity.view.dialog.GameOverDialog;
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
+import it.unibo.cosmocity.view.dialog.NewSettlerDialog;
 import it.unibo.cosmocity.view.dialog.PauseDialog;
 import it.unibo.cosmocity.view.dialog.SaveGameDialog;
 import javafx.application.Platform;
@@ -40,7 +42,7 @@ import javafx.stage.Stage;
 
 public class Dashboard extends ViewImpl implements DashboardView {
 
-    private static enum TextResources {
+    private enum TextResources {
         TIME,
         POPULATION,
         FOOD,
@@ -49,7 +51,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         SCREW
     }
 
-    private static enum TextButton {
+    private enum TextButton {
         PAUSE,
         SAVE,
         RESOURCES,
@@ -103,10 +105,10 @@ public class Dashboard extends ViewImpl implements DashboardView {
     Map<String, String> settlerSectorMap;
     private final SimulationController simulationController;
     private final SceneController sceneController = new SceneController();
-    Circle statusCircleFarm;
-    Circle statusCircleHospital;
-    Circle statusCircleManufactory;
-    Circle statusCircleMilitaryBase;
+    private Circle statusCircleFarm;
+    private Circle statusCircleHospital;
+    private Circle statusCircleManufactory;
+    private Circle statusCircleMilitaryBase;
 
     public Dashboard(final Stage stage, final double width, final double height,
             final SimulationController simulationController) {
@@ -198,7 +200,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         foodLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         foodLabel.setFill(Color.WHITE);
 
-        this.foodVal = new Label();
+        this.foodVal = new Label("");
         foodVal.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         foodVal.setTextFill(Color.YELLOW);
 
@@ -208,7 +210,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         medicineLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         medicineLabel.setFill(Color.WHITE);
 
-        this.medicineVal = new Label();
+        this.medicineVal = new Label("");
         medicineVal.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         medicineVal.setTextFill(Color.YELLOW);
 
@@ -218,7 +220,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         weaponLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         weaponLabel.setFill(Color.WHITE);
 
-        this.weaponVal = new Label();
+        this.weaponVal = new Label("");
         weaponVal.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         weaponVal.setTextFill(Color.YELLOW);
 
@@ -228,7 +230,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         screwLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         screwLabel.setFill(Color.WHITE);
 
-        this.screwVal = new Label();
+        this.screwVal = new Label("");
         screwVal.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         screwVal.setTextFill(Color.YELLOW);
 
@@ -295,6 +297,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
                 .valueOf(WordUtils
                         .capitalizeFully(SectorName.MILITARY_BASE.toString().replace("_", " ").toLowerCase())));
         statusCircleMilitaryBase = new Circle(CIRCLE_STATUS_RADIUS);
+        statusCircleMilitaryBase.setFill(Color.RED);
 
         root.setCenter(gridPane);
 
@@ -312,25 +315,19 @@ public class Dashboard extends ViewImpl implements DashboardView {
         Platform.runLater(() -> {
             population.setText(String.valueOf(resources.get(
                     String.valueOf(WordUtils.capitalizeFully(TextResources.POPULATION.toString().toLowerCase())))));
-            foodVal.setText(String.valueOf(resources
-                    .get(String.valueOf(WordUtils.capitalizeFully(TextResources.FOOD.toString().toLowerCase())))));
-            medicineVal.setText(String.valueOf(resources
-                    .get(String.valueOf(WordUtils.capitalizeFully(TextResources.MEDICINE.toString().toLowerCase())))));
-            weaponVal.setText(String.valueOf(resources
-                    .get(String.valueOf(WordUtils.capitalizeFully(TextResources.WEAPONS.toString().toLowerCase())))));
-            screwVal.setText(String.valueOf(resources
-                    .get(String.valueOf(WordUtils.capitalizeFully(TextResources.SCREW.toString().toLowerCase())))));
+            foodVal.setText(resources.get("FoodStacked").toString());
+            medicineVal.setText(resources.get("MedicineStacked").toString());
+            weaponVal.setText(resources.get("WeaponsStacked").toString());
+            screwVal.setText(resources.get("ScrewStacked").toString());
         });
     }
 
     public void updateCirle(final List<Status> statuses) {
-        Platform.runLater(() -> {
-
+        
             statusCircleFarm.setFill(statusColor(statuses.get(1)));
             statusCircleHospital.setFill(statusColor(statuses.get(2)));
             statusCircleManufactory.setFill(statusColor(statuses.get(3)));
             statusCircleMilitaryBase.setFill(statusColor(statuses.get(4)));
-        });
     }
 
     public void updateSimulationInfo(final String colonyName) {
@@ -340,14 +337,16 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     @Override
-    public void createRandomEvent(final RandomEvent randomEvent) {
-        new NewEventDialog(randomEvent).show();
+    public boolean createRandomEvent(final RandomEvent randomEvent) {
+        NewEventDialog eventDiag = new NewEventDialog(randomEvent, false);
+         eventDiag.show();
+         return eventDiag.getChosen();
+
     }
 
     @Override
     public void createGoodEvent(final GoodEvent goodEvent) {
-
-        new NewEventDialog(goodEvent).show();
+        new NewSettlerDialog(goodEvent).show();
     }
 
     @Override
@@ -404,13 +403,15 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     private Color statusColor(final Status status) {
+        
         if (status == Status.GREEN) {
+            System.out.println("GREEN");
             return Color.GREEN;
         } else if (status == Status.YELLOW) {
-
+            System.out.println("YELLOW");
             return Color.YELLOW;
         } else {
-
+            System.out.println("RED");
             return Color.RED;
         }
     }
@@ -431,8 +432,15 @@ public class Dashboard extends ViewImpl implements DashboardView {
     @Override
     public void showGameOver() {
         Platform.runLater(() -> {
+            new SceneController().nextSceneNavigator(new LandingPage(stage, 900, 700, simulationController));
             new GameOverDialog().show();
+            
         });
+    }
+
+    @Override
+    public void updateSettlerInfo(List<String> settlers) {
+        
     }
 
 }

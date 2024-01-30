@@ -1,9 +1,7 @@
 package it.unibo.cosmocity.controller.view_controller;
 
 import it.unibo.cosmocity.controller.SimulationController;
-import it.unibo.cosmocity.model.settlers.BaseSettler;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;

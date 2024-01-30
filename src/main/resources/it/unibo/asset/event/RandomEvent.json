@@ -9,7 +9,7 @@
                     "qta": 5
                 },
                 {
-                    "name": "PopulationStacked",
+                    "name": "Population",
                     "qta": 10
                 }
             ],
@@ -19,7 +19,7 @@
                     "qta": 10
                 },
                 {
-                    "name": "PopulationStacked",
+                    "name": "Population",
                     "qta": 10
                 }
             ]
@@ -33,7 +33,7 @@
                     "qta": 10
                 },
                 {
-                    "name": "PopulationStacked",
+                    "name": "Population",
                     "qta": 20
                 }
             ],

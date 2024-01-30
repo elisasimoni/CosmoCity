@@ -12,6 +12,8 @@ public class EventObserver {
 
     public void update(long time) {
         dashBoardController.updateTimeLabel(time);
+        dashBoardController.settlerAppetite(time);
+        dashBoardController.getProductedResource(time);
         dashBoardController.updateResourceLabel();
         dashBoardController.createRandomEvent(time);
         dashBoardController.changeStatus();

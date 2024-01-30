@@ -11,9 +11,10 @@ import javafx.scene.control.ButtonType;
 public class NewEventDialog implements PopUpDialog {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
     AudioManager audioManager = new AudioManager();
+    boolean chosen = false;
 
 
-    public NewEventDialog(Event event) {
+    public NewEventDialog(Event event, boolean chose) {
         alert.setTitle(event.getName());
         alert.setHeaderText(event.getDescription());
     }
@@ -24,9 +25,9 @@ public class NewEventDialog implements PopUpDialog {
         createPopUpGUI();
         Optional<ButtonType> btnPressed = alert.showAndWait();
         if (btnPressed.get() == alert.getButtonTypes().get(0)) {
-            //audioManager.play("good_event_sound.mp3");
+            chosen = true;
         } else {
-            //audioManager.play("bad_event_sound.mp3");
+            chosen = false;
 
         }
     }
@@ -39,6 +40,10 @@ public class NewEventDialog implements PopUpDialog {
         alert.getButtonTypes().setAll(fixDamageBtn, getDamageBtn);
         
         return alert;
+    }
+
+    public boolean getChosen() {
+        return chosen;
     }
 
 

@@ -63,17 +63,18 @@ public class TranslatorStringToClassHelper {
     public List<StackedResource> translateResources(Map<String, Integer> resources) {
         return resources.entrySet().stream().map(entry -> {
             String resourceName = entry.getKey();
+            System.out.println("Resource name: " + resourceName);
             int resourceValue = entry.getValue();
             switch (resourceName) {
                 case "Population":
                     return new Population(resourceValue);
-                case "Food":
+                case "FoodStacked":
                     return new FoodStacked(resourceValue);
-                case "Medicine":
+                case "MedicineStacked":
                     return new MedicineStacked(resourceValue);
-                case "Screw":
+                case "ScrewStacked":
                     return new ScrewStacked(resourceValue);
-                case "Weapons":
+                case "WeaponsStacked":
                     return new WeaponsStacked(resourceValue);
                 default:
                     throw new IllegalArgumentException("Invalid resource name");
@@ -238,13 +239,13 @@ public class TranslatorStringToClassHelper {
                 case "Population":
                     return Map.entry("Population", resourceValue);
                 case "FoodStacked":
-                    return Map.entry("Food", resourceValue);
+                    return Map.entry("FoodStacked", resourceValue);
                 case "MedicineStacked":
-                    return Map.entry("Medicine", resourceValue);
+                    return Map.entry("MedicineStacked", resourceValue);
                 case "ScrewStacked":
-                    return Map.entry("Screw", resourceValue);
+                    return Map.entry("ScrewStacked", resourceValue);
                 case "WeaponsStacked":
-                    return Map.entry("Weapons", resourceValue);
+                    return Map.entry("WeaponsStacked", resourceValue);
                 default:
                     throw new IllegalArgumentException("Invalid resource name");
             }
@@ -308,5 +309,20 @@ public class TranslatorStringToClassHelper {
                 return null;
         }
 
+    }
+
+
+    public List<SimpleSettler> getOptionalSettlerFromAMixedList(List<BaseSettler> settlers) {
+        return settlers.stream()
+                .filter(settler -> settler instanceof SimpleSettler)
+                .map(settler -> (SimpleSettler) settler)
+                .collect(Collectors.toList());
+    }
+
+    public List<MandatorySettler> getMandatorySettlerFromAMixedList(List<BaseSettler> settlers) {
+        return settlers.stream()
+                .filter(settler -> settler instanceof MandatorySettler)
+                .map(settler -> (MandatorySettler) settler)
+                .collect(Collectors.toList());
     }
 }

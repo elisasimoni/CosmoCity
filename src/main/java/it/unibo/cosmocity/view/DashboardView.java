@@ -6,6 +6,7 @@ import java.util.Map;
 import it.unibo.cosmocity.model.Sector.Status;
 import it.unibo.cosmocity.model.event.GoodEvent;
 import it.unibo.cosmocity.model.event.RandomEvent;
+import it.unibo.cosmocity.model.settlers.BaseSettler;
 
 public interface DashboardView {
 
@@ -17,10 +18,12 @@ public interface DashboardView {
 
     void updateSimulationInfo(String colonyName);
 
-    void createRandomEvent(RandomEvent randomEvent);
+    boolean createRandomEvent(RandomEvent randomEvent);
 
     void createGoodEvent(GoodEvent goodEvent);
 
     void showGameOver();
+
+    void updateSettlerInfo(List<String> settlers);
 
 }
