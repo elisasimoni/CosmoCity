@@ -50,7 +50,7 @@ public class MoveResource {
         // Handle button click if needed
         if (moveSettlerAlert.getResult() == startColonyButtonType) {
             SimulationController simulatorController = new SimulationController();
-            simulatorController.startSimulation(List.of("Gunsmith", "Doctor"), Map.of("Medicine", 5, "Food", 5));
+            //simulatorController.startSimulation(List.of("Gunsmith", "Doctor"), Map.of("Medicine", 5, "Food", 5));
         }
     }
 

@@ -25,6 +25,7 @@ import java.util.Map;
 import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
+import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.settlers.Gunsmith;
@@ -36,6 +37,7 @@ public class AssignSettler extends ViewImpl {
     private final Screen screen = Screen.getPrimary();
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
+    List<BaseSettler> settlers;
 
     public AssignSettler(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -43,14 +45,12 @@ public class AssignSettler extends ViewImpl {
     }
 
     public void refresh() {
-       createGUI();
+        createGUI();
     }
-
-
 
     @Override
     public Pane createGUI() {
-SimulationController simulatorController = new SimulationController();
+        SimulationController simulatorController = new SimulationController();
         assignSettlerController = new AssignSettlerController(settlers);
         stage.setTitle("CosmoCity - Assign Settler");
         BorderPane root = new BorderPane();
@@ -81,7 +81,14 @@ SimulationController simulatorController = new SimulationController();
         SceneController sceneController = new SceneController();
         
         startColonyButton.setOnAction(e -> {
-            simulatorController.updateSimulation();
+
+            String colonyName = "Pino";
+            List<String> settlers = new ArrayList<>();
+            
+            Map<String, Integer> resources = Map.of("Population", 5, "Food", 10, "Medicine", 4,"Weapons",4, "Screw", 12);;
+            DifficultiesType difficulty = DifficultiesType.EASY;
+            System.out.println("Difficulty: " +difficulty);
+            simulatorController.updateSimulation(colonyName, settlers, resources, difficulty );
             this.stage.close();
 
         });
@@ -123,6 +130,7 @@ SimulationController simulatorController = new SimulationController();
         for (int i = 0; i < settlerQta; i++) {
             qtaSettlerDropdownMenu.getItems().add(String.valueOf(i + 1));
         }
+
         qtaSettlerDropdownMenu.setPromptText("Number of settlers");
         qtaSettlerDropdownMenu.setStyle("-fx-background-color: #ffffff");
         qtaSettlerDropdownMenu.setPrefWidth(200);

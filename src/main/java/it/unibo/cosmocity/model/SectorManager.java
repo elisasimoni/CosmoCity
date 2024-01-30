@@ -14,6 +14,7 @@ public class SectorManager {
     }
 
     public List<Status> checkStatus() {
+        
         List<Status> listOfStatus = new ArrayList<>();
         int populationVal = resourcesList.get(0).getQta();
 

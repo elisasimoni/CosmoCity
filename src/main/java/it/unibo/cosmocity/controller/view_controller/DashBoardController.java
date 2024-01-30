@@ -85,8 +85,6 @@ public class DashBoardController {
             resourceHandler.decrementResource(resource,resource.getQta());
         });
         
-   
-        
     }
 
 

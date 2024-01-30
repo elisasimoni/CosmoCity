@@ -1,15 +1,9 @@
 package it.unibo.cosmocity.model;
 
 import it.unibo.cosmocity.model.resources.BaseResource;
-import it.unibo.cosmocity.model.resources.Screw;
-import it.unibo.cosmocity.model.resources.ScrewStacked;
 import it.unibo.cosmocity.model.resources.StackedResource;
-import it.unibo.cosmocity.model.resources.WeaponsStacked;
-import it.unibo.cosmocity.model.resources.Weapons;
 
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 public class ResourceHandlerImpl implements ResourceHandler {
 

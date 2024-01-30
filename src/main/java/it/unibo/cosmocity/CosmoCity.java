@@ -19,6 +19,7 @@ public class CosmoCity extends Application {
     }
 
     public void start(Stage stage) {
+        
         LandingPage landingPage = new LandingPage(stage, 900, 700);
         landingPage.show();
     }

@@ -1,9 +1,6 @@
 package it.unibo.cosmocity.view;
 
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
-import it.unibo.cosmocity.controller.view_controller.DashBoardController;
-import it.unibo.cosmocity.controller.view_controller.SceneController;
-import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
 import it.unibo.cosmocity.view.dialog.PauseDialog;
@@ -32,11 +29,10 @@ import javafx.stage.Stage;
 import it.unibo.cosmocity.model.Sector.Status;
 import it.unibo.cosmocity.model.event.RandomEvent;
 
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-public class Dashboard extends ViewImpl implements DashboardView{
+public class Dashboard extends ViewImpl implements DashboardView {
     private GridPane gridPane;
     private Label foodVal;
     private Label timeLabel;
@@ -72,14 +68,17 @@ public class Dashboard extends ViewImpl implements DashboardView{
         pauseButton.setOnAction(e -> {
             new PauseDialog().show();
         });
+
         Button saveButton = createButton("Save");
         saveButton.setOnAction(e -> {
             new SaveGameDialog().show();
         });
+
         Button Resources = createButton("Resources");
         Resources.setOnAction(e -> {
             new MoveResource();
         });
+
         Button exitButton = createButton("Exit");
 
         VBox menuBtnBox = new VBox(20);
@@ -107,51 +106,50 @@ public class Dashboard extends ViewImpl implements DashboardView{
         String popolationText = "Popolation: ";
 
         Text timerLabel = new Text("Time:");
-        timerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        timerLabel.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
         timerLabel.setFill(Color.WHITE);
         this.timeLabel = new Label("");
-        timeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        timeLabel.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
         timeLabel.setTextFill(Color.YELLOW);
 
         Text popolationLabel = new Text(popolationText);
-        popolationLabel.setFont(Font.font("Arial", 20));
+        popolationLabel.setFont(Font.font("Elephant", 20));
         popolationLabel.setFill(Color.WHITE);
 
         this.population = new Label("");
-        population.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        population.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
         population.setTextFill(Color.YELLOW);
 
-
         Text foodLabel = new Text(foodText);
-        foodLabel.setFont(Font.font("Arial", 20));
+        foodLabel.setFont(Font.font("Elephant", 20));
         foodLabel.setFill(Color.WHITE);
 
         this.foodVal = new Label("");
-        foodVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        foodVal.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
         foodVal.setTextFill(Color.YELLOW);
 
         Text medicineLabel = new Text(mediceneText);
-        medicineLabel.setFont(Font.font("Arial", 20));
+        medicineLabel.setFont(Font.font("Elephant", 20));
         medicineLabel.setFill(Color.WHITE);
 
         this.medicineVal = new Label("");
-        medicineVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        medicineVal.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
         medicineVal.setTextFill(Color.YELLOW);
 
         Text weaponLabel = new Text(weaponsText);
-        weaponLabel.setFont(Font.font("Arial", 20));
+        weaponLabel.setFont(Font.font("Elephant", 20));
         weaponLabel.setFill(Color.WHITE);
 
         this.weaponVal = new Label("");
-        weaponVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        weaponVal.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
         weaponVal.setTextFill(Color.YELLOW);
 
         Text screwLabel = new Text(screwText);
-        screwLabel.setFont(Font.font("Arial", 20));
+        screwLabel.setFont(Font.font("Elephant", 20));
         screwLabel.setFill(Color.WHITE);
 
         this.screwVal = new Label("");
-        screwVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        screwVal.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
         screwVal.setTextFill(Color.YELLOW);
 
         HBox popolationBox = new HBox(10);
@@ -173,7 +171,8 @@ public class Dashboard extends ViewImpl implements DashboardView{
         screwInfoBox.getChildren().addAll(screwLabel, screwVal);
 
         VBox infoVBox = new VBox(10);
-        infoVBox.getChildren().addAll(timerBox,popolationBox, foodInfoBox, medicineInfoBox, weaponInfoBox, screwInfoBox);
+        infoVBox.getChildren().addAll(timerBox, popolationBox, foodInfoBox, medicineInfoBox, weaponInfoBox,
+                screwInfoBox);
         infoVBox.setAlignment(Pos.CENTER_RIGHT);
         infoVBox.setPadding(new Insets(0, 50, 0, 0));
 
@@ -189,21 +188,21 @@ public class Dashboard extends ViewImpl implements DashboardView{
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
-        createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0,"Farm");
+        // Create Farm Sector
+        createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0, "Farm");
         statusCircleFarm = new Circle(20);
-        statusCircleFarm.setFill(Color.GREEN);
 
+        // Create Hospital Sector
         createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0, "Hospital");
         statusCircleHospital = new Circle(20);
-        statusCircleHospital.setFill(Color.GREEN);
 
-        createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1,"Manufactory");
+        // Create Manufactory Sector
+        createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1, "Manufactory");
         statusCircleManufactory = new Circle(20);
-        statusCircleManufactory.setFill(Color.GREEN);
 
-        createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1,"Military Base");
+        // Create Military Base Sector
+        createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1, "Military Base");
         statusCircleMilitaryBase = new Circle(20);
-        statusCircleMilitaryBase.setFill(Color.GREEN);
 
         root.setCenter(gridPane);
 
@@ -228,7 +227,8 @@ public class Dashboard extends ViewImpl implements DashboardView{
         });
     }
 
-    private void createSector(String backgroundImagePath, GridPane gridPane, int colIndex, int rowIndex, String sectorName) {
+    private void createSector(String backgroundImagePath, GridPane gridPane, int colIndex, int rowIndex,
+            String sectorName) {
         Circle[][] statusCircles = new Circle[2][2];
 
         ImageManagerImpl imageManager = new ImageManagerImpl();
@@ -238,26 +238,26 @@ public class Dashboard extends ViewImpl implements DashboardView{
         textNameSector.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
         textNameSector.setText(sectorName);
         textNameSector.setFill(Color.WHITE);
-        Rectangle textBackground = new Rectangle(300, 30);  // Imposta larghezza e altezza desiderate
+        Rectangle textBackground = new Rectangle(300, 30);
         ImageView backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitWidth(300);
         backgroundImageView.setFitHeight(300);
 
         statusCircles[colIndex][rowIndex] = new Circle(22);
         statusCircles[colIndex][rowIndex].setFill(Color.GREEN);
-        statusCircles[colIndex][rowIndex].radiusProperty().bind(Bindings.min(gridPane.widthProperty(), gridPane.heightProperty()).divide(20));
+        statusCircles[colIndex][rowIndex].radiusProperty()
+                .bind(Bindings.min(gridPane.widthProperty(), gridPane.heightProperty()).divide(20));
         statusCircles[colIndex][rowIndex].setStroke(Color.BLACK);
 
         StackPane sectorPane = new StackPane();
         StackPane.setAlignment(textNameSector, Pos.TOP_CENTER);
         StackPane.setAlignment(textBackground, Pos.TOP_CENTER);
-        sectorPane.getChildren().addAll(backgroundImageView, statusCircles[colIndex][rowIndex],textBackground,textNameSector);
-        //Collections.reverse(sectorPane.getChildren());
-
+        sectorPane.getChildren().addAll(backgroundImageView, statusCircles[colIndex][rowIndex], textBackground,
+                textNameSector);
+        // Collections.reverse(sectorPane.getChildren());
 
         gridPane.add(sectorPane, colIndex, rowIndex);
 
-        // Assegna alle variabili dei cerchi in base alla posizione
         if (colIndex == 0 && rowIndex == 0) {
             statusCircleFarm = statusCircles[colIndex][rowIndex];
         } else if (colIndex == 1 && rowIndex == 0) {
@@ -272,14 +272,19 @@ public class Dashboard extends ViewImpl implements DashboardView{
 
     public void updateCirle(List<Status> statuses) {
         System.out.println("Status View: " + statuses);
-    Platform.runLater(() -> {
-        statusCircleFarm.setFill(statusColor(statuses.get(1)));
-        statusCircleHospital.setFill(statusColor(statuses.get(2)));
-        statusCircleManufactory.setFill(statusColor(statuses.get(3)));
-        statusCircleMilitaryBase.setFill(statusColor(statuses.get(4)));
-    });
-}
+        Platform.runLater(() -> {
 
+            System.out.println("Farm Status: " + statuses.get(0));
+            System.out.println("Hospital Status: " + statuses.get(1));
+            System.out.println("Manufactory Status: " + statuses.get(2));
+            System.out.println("Military Base Status: " + statuses.get(3));
+
+            statusCircleFarm.setFill(statusColor(statuses.get(0)));
+            statusCircleHospital.setFill(statusColor(statuses.get(1)));
+            statusCircleManufactory.setFill(statusColor(statuses.get(2)));
+            statusCircleMilitaryBase.setFill(statusColor(statuses.get(3)));
+        });
+    }
 
     private Color statusColor(Status status) {
         if (status == Status.GREEN) {
@@ -312,7 +317,7 @@ public class Dashboard extends ViewImpl implements DashboardView{
 
     public void createRandomEvent(RandomEvent randomEvent) {
         System.out.println("Event View: " + randomEvent.getDemageResources());
-       new NewEventDialog(randomEvent).show();
+        new NewEventDialog(randomEvent).show();
     }
 
 }

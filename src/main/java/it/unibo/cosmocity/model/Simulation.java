@@ -1,10 +1,6 @@
 package it.unibo.cosmocity.model;
 
 import java.util.List;
-import java.util.Map;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
