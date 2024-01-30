@@ -1,6 +1,15 @@
 package it.unibo.cosmocity.view;
 
-import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
+import java.util.List;
+import java.util.Map;
+
+import org.apache.commons.lang3.text.WordUtils;
+
+import it.unibo.cosmocity.controller.SimulationController;
+import it.unibo.cosmocity.controller.view_controller.SceneController;
+import it.unibo.cosmocity.model.Sector.SectorName;
+import it.unibo.cosmocity.model.Sector.Status;
+import it.unibo.cosmocity.model.event.RandomEvent;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
 import it.unibo.cosmocity.view.dialog.PauseDialog;
@@ -26,49 +35,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
-import it.unibo.cosmocity.model.Sector.Status;
-import it.unibo.cosmocity.model.event.RandomEvent;
-
-import java.util.List;
-import java.util.Map;
-
-import org.apache.commons.lang3.text.WordUtils;
 
 public class Dashboard extends ViewImpl implements DashboardView {
-
-    private static final String GAME_TITLE = "CosmoCity - Colony Dashboard";
-    private static final String FONT_FAMILY = "Elephant";
-    private static final String BACKGROUND_COLOR_WHITE = "-fx-background-color: #ffffff";
-    private static final String BACKGROUND_COLOR_DARK_BLUE = "-fx-background-color: darkBlue";
-
-    private static final int PANE_GAP_10 = 10;
-    private static final int SPACING_10 = 10;
-    private static final int SPACING_20 = 20;
-
-    private static final int FONT_SIZE_LABEL = 20;
-    private static final int FONT_SIZE_30 = 30;
-
-    private static final int BUTTON_FONT_SIZE = 15;
-    private static final int BUTTON_WIDTH = 150;
-    private static final int BUTTON_HEIGHT = 50;
-
-    private static final int INFO_VBOX_PADDING_TOP = 0;
-    private static final int INFO_VBOX_PADDING_BOTTOM = 0;
-    private static final int INFO_VBOX_PADDING_LEFT = 50;
-    private static final int INFO_VBOX_PADDING_RIGHT = 50;
-
-    private static final int MENU_BTN_BOX_PADDING_TOP = 50;
-    private static final int MENU_BTN_BOX_PADDING_BOTTOM = 0;
-    private static final int MENU_BTN_BOX_PADDING_LEFT = 50;
-    private static final int MENU_BTN_BOX_PADDING_RIGHT = 50;
-
-    private static final int SECTOR_WIDTH = 300;
-    private static final int SECTOR_HEIGHT = 300;
-
-    private static final int BACKGROUND_SECTOR_TITLE_WIDTH = 300;
-    private static final int BACKGROUND_SECTOR_TITLE_HEIGHT = 30;
-
-    private static final int CIRCLE_STATUS_RADIUS = 20;
 
     private static enum TextResources {
         TIME,
@@ -78,13 +46,47 @@ public class Dashboard extends ViewImpl implements DashboardView {
         WEAPONS,
         SCREW
     }
-
     private static enum TextButton {
         PAUSE,
         SAVE,
         RESOURCES,
         EXIT
     }
+    private static final String GAME_TITLE = "CosmoCity - Colony Dashboard";
+    private static final String FONT_FAMILY = "Elephant";
+
+    private static final String BACKGROUND_COLOR_WHITE = "-fx-background-color: #ffffff";
+    private static final String BACKGROUND_COLOR_DARK_BLUE = "-fx-background-color: darkBlue";
+    private static final int PANE_GAP_10 = 10;
+
+    private static final int SPACING_10 = 10;
+    private static final int SPACING_20 = 20;
+
+    private static final int FONT_SIZE_LABEL = 20;
+    private static final int FONT_SIZE_30 = 30;
+    private static final int BUTTON_FONT_SIZE = 15;
+
+    private static final int BUTTON_WIDTH = 150;
+    private static final int BUTTON_HEIGHT = 50;
+    private static final int INFO_VBOX_PADDING_TOP = 0;
+    private static final int INFO_VBOX_PADDING_BOTTOM = 0;
+
+    private static final int INFO_VBOX_PADDING_LEFT = 50;
+    private static final int INFO_VBOX_PADDING_RIGHT = 50;
+    private static final int MENU_BTN_BOX_PADDING_TOP = 50;
+    private static final int MENU_BTN_BOX_PADDING_BOTTOM = 0;
+
+    private static final int MENU_BTN_BOX_PADDING_LEFT = 50;
+    private static final int MENU_BTN_BOX_PADDING_RIGHT = 50;
+
+    private static final int SECTOR_WIDTH = 300;
+    private static final int SECTOR_HEIGHT = 300;
+
+    private static final int BACKGROUND_SECTOR_TITLE_WIDTH = 300;
+
+    private static final int BACKGROUND_SECTOR_TITLE_HEIGHT = 30;
+
+    private static final int CIRCLE_STATUS_RADIUS = 20;
 
     private GridPane gridPane;
     private Label foodVal;
@@ -95,13 +97,14 @@ public class Dashboard extends ViewImpl implements DashboardView {
     private Text nameColony;
     private Label population;
     Map<String, String> settlerSectorMap;
-    private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+    private final SimulationController simulationController;
+    private final SceneController sceneController = new SceneController();
     Circle statusCircleFarm;
     Circle statusCircleHospital;
     Circle statusCircleManufactory;
     Circle statusCircleMilitaryBase;
 
-    public Dashboard(Stage stage, double width, double height) {
+    public Dashboard(final Stage stage, final double width, final double height,final SimulationController simulationController) {
         super(stage, width, height);
         this.simulationController = simulationController;
     }
@@ -127,7 +130,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         final Button saveButton = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.SAVE.toString().toLowerCase())));
         saveButton.setOnAction(e -> {
-            SaveGameDialog saveGameDialog = new SaveGameDialog();
+            final SaveGameDialog saveGameDialog = new SaveGameDialog();
             saveGameDialog.show();
             if(saveGameDialog.isSaved()) {
                 simulationController.saveSimulation();
@@ -315,6 +318,36 @@ public class Dashboard extends ViewImpl implements DashboardView {
         });
     }
 
+    public void updateCirle(final List<Status> statuses) {
+        System.out.println("Status View: " + statuses);
+        Platform.runLater(() -> {
+
+            statusCircleFarm.setFill(statusColor(statuses.get(0)));
+            statusCircleHospital.setFill(statusColor(statuses.get(1)));
+            statusCircleManufactory.setFill(statusColor(statuses.get(2)));
+            statusCircleMilitaryBase.setFill(statusColor(statuses.get(3)));
+        });
+    }
+
+    public void updateSimulationInfo(final String colonyName) {
+        Platform.runLater(() -> {
+            nameColony.setText(colonyName);
+        });
+    }
+
+    public void createRandomEvent(final RandomEvent randomEvent) {
+        System.out.println("Event View: " + randomEvent.getDemageResources());
+        new NewEventDialog(randomEvent).show();
+    }
+
+    @Override
+    public void updateTimeLabel(final String time) {
+        Platform.runLater(() -> {
+            timeLabel.setText(time);
+        });
+
+    }
+
     private void createSector(final String backgroundImagePath, final GridPane gridPane, final int colIndex, final int rowIndex,
             final String sectorName) {
 
@@ -359,17 +392,6 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
     }
 
-    public void updateCirle(List<Status> statuses) {
-        System.out.println("Status View: " + statuses);
-        Platform.runLater(() -> {
-
-            statusCircleFarm.setFill(statusColor(statuses.get(0)));
-            statusCircleHospital.setFill(statusColor(statuses.get(1)));
-            statusCircleManufactory.setFill(statusColor(statuses.get(2)));
-            statusCircleMilitaryBase.setFill(statusColor(statuses.get(3)));
-        });
-    }
-
     private Color statusColor(final Status status) {
         if (status == Status.GREEN) {
             return Color.GREEN;
@@ -393,25 +415,6 @@ public class Dashboard extends ViewImpl implements DashboardView {
         button.setStyle(BACKGROUND_COLOR_WHITE);
         button.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, BUTTON_FONT_SIZE));
         return button;
-    }
-
-    public void updateSimulationInfo(final String colonyName) {
-        Platform.runLater(() -> {
-            nameColony.setText(colonyName);
-        });
-    }
-
-    public void createRandomEvent(RandomEvent randomEvent) {
-        System.out.println("Event View: " + randomEvent.getDemageResources());
-        new NewEventDialog(randomEvent).show();
-    }
-
-    @Override
-    public void updateTimeLabel(final String time) {
-        Platform.runLater(() -> {
-            timeLabel.setText(time);
-        });
-
     }
 
 }
