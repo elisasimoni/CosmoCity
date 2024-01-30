@@ -88,6 +88,12 @@ public class AssignSettler extends ViewImpl {
             settlers.add(new Doctor());
             settlers.add(new Gunsmith());
             settlers.add(new Gunsmith());
+            settlers.add(new Military());
+            settlers.add(new Military());
+            settlers.add(new Doctor());
+            settlers.add(new Gunsmith());
+            settlers.add(new Gunsmith());
+            settlers.add(new Military());
             
             Map<String, Integer> resources = Map.of("Population", 5, "Food", 10, "Medicine", 4,"Weapons",4, "Screw", 12);;
             DifficultiesType difficulty = DifficultiesType.EASY;
