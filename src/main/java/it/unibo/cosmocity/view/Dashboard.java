@@ -1,13 +1,16 @@
 package it.unibo.cosmocity.view;
 
+import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
+import it.unibo.cosmocity.controller.view_controller.DashBoardController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
-
+import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
+import it.unibo.cosmocity.view.dialog.PauseDialog;
+import it.unibo.cosmocity.view.dialog.SaveGameDialog;
 import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
@@ -36,10 +39,12 @@ public class Dashboard extends ViewImpl {
     private Label weaponVal;
     private Label screwVal;
     private Text nameColony;
+    private Label Popolation;
+    Map<String, String> settlerSectorMap;
+    private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
 
     public Dashboard(Stage stage, double width, double height) {
         super(stage, width, height);
-
     }
 
     @Override
@@ -50,19 +55,26 @@ public class Dashboard extends ViewImpl {
     @Override
     public Pane createGUI() {
 
-        SceneController sceneController = new SceneController();
-
         stage.setTitle("CosmoCity - Colony Dashboard");
         BorderPane root = new BorderPane();
         root.setStyle("-fx-background-color: darkBlue;");
 
-        Button newGameBtn = createButton("Pause");
-        Button loadGameBtn = createButton("Save");
-        Button settingResources = createButton("Setting Resources");
+        Button pauseButton = createButton("Pause");
+        pauseButton.setOnAction(e -> {
+            new PauseDialog().show();
+        });
+        Button saveButton = createButton("Save");
+        saveButton.setOnAction(e -> {
+            new SaveGameDialog().show();
+        });
+        Button Resources = createButton("Resources");
+        Resources.setOnAction(e -> {
+            new MoveResource();
+        });
         Button exitButton = createButton("Exit");
 
         VBox menuBtnBox = new VBox(20);
-        menuBtnBox.getChildren().addAll(newGameBtn, loadGameBtn, settingResources, exitButton);
+        menuBtnBox.getChildren().addAll(pauseButton, saveButton, Resources, exitButton);
         menuBtnBox.setPadding(new Insets(0, 50, 0, 0));
 
         VBox leftBox = new VBox(20);
@@ -83,6 +95,7 @@ public class Dashboard extends ViewImpl {
         String mediceneText = "Medicine: ";
         String weaponsText = "Weapons: ";
         String screwText = "Screw: ";
+        String popolationText = "Popolation: ";
 
         Text timerLabel = new Text("Time:");
         timerLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
@@ -90,7 +103,9 @@ public class Dashboard extends ViewImpl {
         this.timeLabel = new Label("");
         timeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         timeLabel.setTextFill(Color.YELLOW);
-
+        Text popolationLabel = new Text(popolationText);
+        popolationLabel.setFont(Font.font("Arial", 20));
+        popolationLabel.setFill(Color.WHITE);
         Text foodLabel = new Text(foodText);
         foodLabel.setFont(Font.font("Arial", 20));
         foodLabel.setFill(Color.WHITE);
@@ -155,7 +170,6 @@ public class Dashboard extends ViewImpl {
         gridPane.setAlignment(Pos.CENTER);
 
         createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0);
-        
         createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0);
         createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1);
         createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1);
@@ -183,6 +197,7 @@ public class Dashboard extends ViewImpl {
     }
 
     private void createSector(String backgroundImagePath, GridPane gridPane, int colIndex, int rowIndex) {
+
         ImageManagerImpl imageManager = new ImageManagerImpl();
 
         Image backgroundImage = imageManager.loadImage(backgroundImagePath);
@@ -218,7 +233,9 @@ public class Dashboard extends ViewImpl {
     }
 
     public void updateColonyInformation(String colonyName) {
-        this.nameColony.setText(colonyName);       
+        Platform.runLater(() -> {
+            nameColony.setText(colonyName);
+        });
     }
 
 }

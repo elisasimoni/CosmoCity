@@ -30,7 +30,7 @@ public class DashBoardController {
         this.dashboard = dashboard;
         this.simulation = simulation;
         this.resourceHandler = new ResourceHandlerImpl(simulation);
-
+        setColonyInformation();
         timer = new Timer();
         timerObservable.addObserver(eventObserver);
         timer.scheduleAtFixedRate(timerObservable, 0, 1000);

@@ -1,12 +1,12 @@
 package it.unibo.cosmocity.controller;
 
 import it.unibo.cosmocity.model.Simulation;
-import it.unibo.cosmocity.model.event.Event;
-import it.unibo.cosmocity.model.settlers.Doctor;
+
 import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.ResourceHandler;
+import it.unibo.cosmocity.model.ResourceHandlerImpl;
 import it.unibo.cosmocity.view.Dashboard;
-import it.unibo.cosmocity.controller.serialization.EventSerialization;
+import it.unibo.cosmocity.view.dialog.PauseDialog;
 import it.unibo.cosmocity.controller.serialization.SimulationSerialization;
 import it.unibo.cosmocity.controller.view_controller.DashBoardController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
@@ -26,20 +26,28 @@ public class SimulationController {
 
     public void startSimulation(List<String> settlers, Map<String, Integer> resources) {
         Dashboard dashboard = new Dashboard(new Stage(), 900, 700);
-        
         sceneController.nextSceneNavigator(dashboard);
-        this.simulation = new Simulation("PINO COLONY",translator.translateSettler(settlers),
+        this.simulation = new Simulation("PINO COLONY", translator.translateSettler(settlers),
                 translator.translateResources(resources), DifficultiesType.EASY, 0);
-        
-        new DashBoardController(dashboard, simulation);
+        this.resourceHandler = new ResourceHandlerImpl(simulation);
+        this.dashBoardController = new DashBoardController(dashboard, simulation);
 
     }
 
     public void loadSimulationInfo(List<String> settlers, String colonyName) {
-        /*this.simulation = new Simulation(translator.translateSettler(settlers), DifficultiesType.EASY, 0);
-        this.simulation.setColonyName(colonyName);
-        this.resourceHandler = new ResourceHandlerImpl(simulation);*/
+        /*
+         * this.simulation = new Simulation(translator.translateSettler(settlers),
+         * DifficultiesType.EASY, 0);
+         * this.simulation.setColonyName(colonyName);
+         * this.resourceHandler = new ResourceHandlerImpl(simulation);
+         */
 
+    }
+
+    public void updateSimulation(List<String> settlers, Map<String, Integer> resources, String colonyName) {
+        this.simulation = new Simulation(colonyName, translator.translateSettler(settlers),
+                translator.translateResources(resources), DifficultiesType.EASY, 0);
+        this.resourceHandler = new ResourceHandlerImpl(simulation);
 
     }
 
@@ -52,6 +60,8 @@ public class SimulationController {
         var objectDesirialize = serializationSimulation.deserialize();
         if (objectDesirialize instanceof Simulation) {
             this.simulation = (Simulation) objectDesirialize;
+            this.startSimulation(translator.translateSettlerToString(this.simulation.getSettlers()),
+                    translator.translateResourceToMap(this.simulation.getResources()));
         } else {
             throw new IOException();
         }
@@ -59,18 +69,14 @@ public class SimulationController {
     }
 
     public void pauseSimulation() {
-        // Implementazione della pausa della simulazione
 
-    }
-
-    public void resumeSimulation() {
-        System.out.println("Simulation resumed");
+        Thread.onSpinWait();
 
     }
 
     public void saveSimulation() {
         serializationSimulation.serialize(simulation);
-        System.out.println("Simulation saved!");
+        exitSimulation();
 
     }
 

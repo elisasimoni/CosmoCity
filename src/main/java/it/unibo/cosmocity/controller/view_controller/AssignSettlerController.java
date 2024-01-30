@@ -13,7 +13,7 @@ public class AssignSettlerController {
 
     public AssignSettlerController(List<BaseSettler> settlers) {
         this.settlers = settlers;
-        assignSettler();
+        this.assignSettler();
     }
 
     private void assignSettler() {

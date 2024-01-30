@@ -1,13 +1,15 @@
 package it.unibo.cosmocity.model.settlers;
 
 import it.unibo.cosmocity.model.resources.BaseResource;
+import it.unibo.cosmocity.model.resources.Food;
+import it.unibo.cosmocity.model.resources.Weapons;
 
-public class Military extends SimpleSettler {
+public class Military extends MandatorySettler {
 
-    @Override
+     @Override
     public BaseResource getProductedResource() {
-        return setProductedResource(10, 10, 2, 2);
-    };
+        return new Weapons(1);
+    }
 
     @Override
     public String getSectorAssigned() {

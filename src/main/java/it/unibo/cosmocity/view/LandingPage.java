@@ -15,7 +15,6 @@ import it.unibo.cosmocity.view.dialog.GameOverDialog;
 import it.unibo.cosmocity.view.dialog.LoadGameDialog;
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
 
-import it.unibo.cosmocity.view.dialog.NewSettlerDialog;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -89,7 +88,9 @@ public class LandingPage extends ViewImpl {
         audioManager.stop();
         SceneController sceneController = new SceneController();
         newGameBtn.setOnAction(e -> {
+            
             sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
+
         });
         loadGameBtn.setOnAction(e -> {
             audioManager.stop();
@@ -104,7 +105,12 @@ public class LandingPage extends ViewImpl {
         });
         exitBtn.setOnAction(e -> {
             audioManager.stop();
-            new NewEventDialog(new Event("audio","audio",List.of(new Weapons(1)),List.of(new Weapons(1)))).show();
+           sceneController.nextSceneNavigator(new CreateColonyPage(stage, screenWidth * 0.5, screenHeight * 0.9));
+        });
+    
+        exitBtn.setOnAction(e -> {
+
+            audioManager.stop();
             stage.close();
             simulatorController.exitSimulation();
             

@@ -25,6 +25,17 @@ public class Event {
         this.demageResources = demageResources;
     }
 
+    public Event(String name, String description, List<BaseResource> fixResources) {
+        this.name = name;
+        this.description = description;
+        this.fixResources = fixResources;
+    }
+
+    public Event(String name, String description) {
+        this.name = name;
+        this.description = description;
+    }
+
     public String getName() {
         return this.name;
     }
@@ -40,5 +51,6 @@ public class Event {
     public List<BaseResource> getDemageResources() {
         return this.demageResources;
     }
+    
 
 }

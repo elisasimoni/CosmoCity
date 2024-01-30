@@ -1,9 +1,9 @@
 package it.unibo.cosmocity.controller;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
-
 
 import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.resources.FoodStacked;
@@ -18,14 +18,14 @@ import it.unibo.cosmocity.model.settlers.Cook;
 import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.settlers.Farmer;
 import it.unibo.cosmocity.model.settlers.Gunsmith;
+import it.unibo.cosmocity.model.settlers.MandatorySettler;
 import it.unibo.cosmocity.model.settlers.Military;
-
+import it.unibo.cosmocity.model.settlers.SimpleSettler;
 import it.unibo.cosmocity.model.settlers.Technician;
 
 public class TranslatorStringToClassHelper {
 
     private static Enum SettlerType;
-
 
     public TranslatorStringToClassHelper() {
 
@@ -74,6 +74,40 @@ public class TranslatorStringToClassHelper {
     }
 
     /**
+     * @param settlersM
+     * @param settlersS
+     * @return a map of settlers with sector assigned
+     */
+    public Map<String, String> translateSettlerToMap(List<MandatorySettler> settlersM, List<SimpleSettler> settlersS) {
+        Map<String, String> settlerMap = new HashMap<>();
+        settlersM.stream()
+                .forEach(settler -> settlerMap.put(settler.getClass().getSimpleName(), settler.getSectorAssigned()));
+        settlersS.stream()
+                .forEach(settler -> settlerMap.put(settler.getClass().getSimpleName(), settler.getSectorAssigned()));
+        return settlerMap;
+
+    }
+
+    public List<MandatorySettler> translateMandatorySettler(List<String> settlers) {
+        return settlers.stream().map(settler -> switch (settler) {
+            case "Doctor" -> new Doctor();
+            case "Farmer" -> new Farmer();
+            case "Gunsmith" -> new Gunsmith();
+            case "Military" -> new Military();
+            default -> throw new IllegalArgumentException("Invalid settler name");
+        }).collect(Collectors.toList());
+    }
+
+    public List<SimpleSettler> translateSimpleSettler(List<String> settlers) {
+        return settlers.stream().map(settler -> switch (settler) {
+            case "Cook" -> new Cook();
+            case "Technician" -> new Technician();
+            case "Chemist" -> new Chemist();
+            default -> throw new IllegalArgumentException("Invalid settler name");
+        }).collect(Collectors.toList());
+    }
+
+    /**
      * @param difficulty
      * @return
      */
@@ -91,7 +125,7 @@ public class TranslatorStringToClassHelper {
      */
     public List<String> translateSettlerToString(List<BaseSettler> settlers) {
         return settlers.stream().map(settler -> switch (settler.getClass().getSimpleName()) {
-            case "Doctor"-> "Doctor";
+            case "Doctor" -> "Doctor";
             case "Farmer" -> "Farmer";
             case "Technician" -> "Technician";
             case "Military" -> "Military";
@@ -108,6 +142,7 @@ public class TranslatorStringToClassHelper {
      * @return a list of stacked resources
      */
     public Map<String, Integer> translateResourceToMap(List<StackedResource> resources) {
+
         return resources.stream().map(resource -> {
             String resourceName = resource.getClass().getSimpleName();
             int resourceValue = resource.getQta();

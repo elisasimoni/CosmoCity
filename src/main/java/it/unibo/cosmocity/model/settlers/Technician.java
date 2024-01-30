@@ -3,7 +3,7 @@ package it.unibo.cosmocity.model.settlers;
 import it.unibo.cosmocity.model.resources.BaseResource;
 import it.unibo.cosmocity.model.resources.Screw;
 
-public class Technician extends MandatorySettler{
+public class Technician extends SimpleSettler{
 
     @Override
     public String getSectorAssigned() {
@@ -12,6 +12,7 @@ public class Technician extends MandatorySettler{
 
     @Override
     public BaseResource getProductedResource() {
-        return new Screw(1);
+        return setProductedResource(10, 10, 2, 2);
+    
     }
 }

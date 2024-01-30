@@ -64,4 +64,16 @@ public class CreateColonyController {
         return this.resources;
     }
 
+    public String getColonyName() {
+        return colonyName;
+    }
+
+    public List<BaseSettler> getSettlers() {
+        return settlers;
+    }
+
+    public List<StackedResource> getResources() {
+        return resources;
+    }
+
 }

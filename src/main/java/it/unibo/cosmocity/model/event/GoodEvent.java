@@ -1,11 +1,15 @@
 package it.unibo.cosmocity.model.event;
 
 import it.unibo.cosmocity.model.resources.BaseResource;
+import it.unibo.cosmocity.model.settlers.BaseSettler;
 
 import java.util.List;
 
 public class GoodEvent extends Event {
-    public GoodEvent(String name, String description, List<BaseResource> eventsResources, List<BaseResource> eventsResources1) {
-        super(name, description, eventsResources, eventsResources1 );
+    private BaseSettler settler;
+
+    public GoodEvent(String name, String description, BaseSettler settler) {
+        super(name, description);
+        this.settler = settler;
     }
 }

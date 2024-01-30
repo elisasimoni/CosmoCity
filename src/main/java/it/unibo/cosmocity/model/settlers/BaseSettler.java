@@ -5,5 +5,7 @@ public interface BaseSettler {
 
     public int getAppetite();
 
+    public String getSectorAssigned();
+
     
 }

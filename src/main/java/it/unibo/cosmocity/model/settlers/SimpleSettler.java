@@ -25,7 +25,7 @@ public abstract class SimpleSettler implements BaseSettler {
     /**
      * @return the sector assigned to the settler
      */
-    public String getSectorAssigned(){
+    public String getSectorAssigned (){
         return this.sectorAssigned;
     }
 
