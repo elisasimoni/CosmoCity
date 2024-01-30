@@ -35,7 +35,7 @@ public class NewEventDialog implements PopUpDialog {
 
         alert.setContentText("Do you want to fix or get dameged?");
         ButtonType fixDamageBtn = new ButtonType("Fix");
-        ButtonType getDamageBtn = new ButtonType("No");
+        ButtonType getDamageBtn = new ButtonType("Ignore");
         alert.getButtonTypes().setAll(fixDamageBtn, getDamageBtn);
         
         return alert;

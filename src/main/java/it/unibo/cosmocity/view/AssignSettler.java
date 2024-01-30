@@ -85,7 +85,7 @@ public class AssignSettler extends ViewImpl {
         SceneController sceneController = new SceneController();
         SimulationController simulatorController = new SimulationController();
         startColonyButton.setOnAction(e -> {
-            simulatorController.startSimulation(List.of("Gunsmith", "Doctor"), Map.of("Medicine", 5, "Food", 5));
+            simulatorController.startSimulation(List.of("Farmer", "Chemist","Military","Gunsmith", "Doctor","Military","Gunsmith", "Doctor","Military"), Map.of("Population",10, "Food", 5, "Screw",10, "Weapons", 0, "Medicine", 10));
             this.stage.close();
 
         });

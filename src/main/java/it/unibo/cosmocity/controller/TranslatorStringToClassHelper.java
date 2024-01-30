@@ -8,6 +8,7 @@ import java.util.stream.Collectors;
 import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.resources.FoodStacked;
 import it.unibo.cosmocity.model.resources.MedicineStacked;
+import it.unibo.cosmocity.model.resources.Population;
 import it.unibo.cosmocity.model.resources.ScrewStacked;
 import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.resources.WeaponsStacked;
@@ -58,6 +59,8 @@ public class TranslatorStringToClassHelper {
             String resourceName = entry.getKey();
             int resourceValue = entry.getValue();
             switch (resourceName) {
+                case "Population":
+                    return new Population(resourceValue);
                 case "Food":
                     return new FoodStacked(resourceValue);
                 case "Medicine":
@@ -147,6 +150,8 @@ public class TranslatorStringToClassHelper {
             String resourceName = resource.getClass().getSimpleName();
             int resourceValue = resource.getQta();
             switch (resourceName) {
+                case "Population":
+                    return Map.entry("Population", resourceValue);
                 case "FoodStacked":
                     return Map.entry("Food", resourceValue);
                 case "MedicineStacked":

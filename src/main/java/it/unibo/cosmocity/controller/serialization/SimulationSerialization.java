@@ -84,11 +84,9 @@ public class SimulationSerialization implements Serialization {
             if (filePath.toFile().exists()) {
                 String jsonContent = Files.readString(filePath);
 
-                // Deserializzare la stringa JSON in un oggetto mappa
                 Map<String, Object> jsonMap = mapper.readValue(jsonContent, new TypeReference<>() {
                 });
 
-                // Ricostruire l'oggetto Simulation
                 String colonyName = (String) jsonMap.get("colonyName");
                 List<Map<String, Object>> settlersJsonList = (List<Map<String, Object>>) jsonMap.get("settlers");
                 List<Map<String, Object>> resourcesJsonList = (List<Map<String, Object>>) jsonMap.get("resources");
@@ -97,36 +95,23 @@ public class SimulationSerialization implements Serialization {
                 Number startTimeNumber = (Number) jsonMap.get("startTime");
                 long startTime = startTimeNumber.longValue();
 
-                // Ricostruire la lista di settlers
                 List<BaseSettler> settlers = new ArrayList<>();
                 for (Map<String, Object> settlerJson : settlersJsonList) {
                     String settlerName = (String) settlerJson.get("settlerName");
                     String sector = (String) settlerJson.get("sector");
-
-                    // Creare un'istanza del settler in base al nome ottenuto
-                    BaseSettler settler = createSettlerInstance(settlerName, sector);
-
-                    // Aggiungere il settler alla lista
+                    BaseSettler settler = createSettler(settlerName, sector);
                     settlers.add(settler);
                 }
 
-                // Ricostruire la lista di resources
                 List<StackedResource> resources = new ArrayList<>();
                 for (Map<String, Object> resourceJson : resourcesJsonList) {
                     String resourceName = (String) resourceJson.get("resourceName");
                     int quantity = (int) resourceJson.get("quantity");
+                    StackedResource resource = createResource(resourceName, quantity);
 
-                    // Creare un'istanza della risorsa in base al nome ottenuto
-                    
-
-                    StackedResource resource = createResourceInstance(resourceName, quantity);
-                    System.out.println(resource);
-
-                    // Aggiungere la risorsa alla lista
                     resources.add(resource);
                 }
 
-                // Creare e restituire l'oggetto Simulation ricostruito
                 return new Simulation(colonyName, settlers, resources, difficulty, startTime);
             }
         } catch (IOException e) {
@@ -137,7 +122,7 @@ public class SimulationSerialization implements Serialization {
 
     }
 
-    private StackedResource createResourceInstance(String resourceName, int quantity) {
+    private StackedResource createResource(String resourceName, int quantity) {
         switch (resourceName) {
             case "ScrewStacked":
                 return new ScrewStacked(quantity);
@@ -153,7 +138,7 @@ public class SimulationSerialization implements Serialization {
 
     }
 
-    private BaseSettler createSettlerInstance(String settlerName, String sector) {
+    private BaseSettler createSettler(String settlerName, String sector) {
 
         switch (settlerName) {
             case "Chemist":

@@ -5,6 +5,7 @@ import it.unibo.cosmocity.controller.view_controller.DashBoardController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.settlers.Doctor;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
+import it.unibo.cosmocity.view.dialog.NewEventDialog;
 import it.unibo.cosmocity.view.dialog.PauseDialog;
 import it.unibo.cosmocity.view.dialog.SaveGameDialog;
 import javafx.application.Platform;
@@ -23,12 +24,15 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 import it.unibo.cosmocity.model.Sector.Status;
+import it.unibo.cosmocity.model.event.RandomEvent;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
@@ -40,14 +44,13 @@ public class Dashboard extends ViewImpl {
     private Label weaponVal;
     private Label screwVal;
     private Text nameColony;
-    private Label Popolation;
+    private Label population;
     Map<String, String> settlerSectorMap;
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
     Circle statusCircleFarm;
     Circle statusCircleHospital;
     Circle statusCircleManufactory;
     Circle statusCircleMilitaryBase;
-    
 
     public Dashboard(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -81,7 +84,7 @@ public class Dashboard extends ViewImpl {
 
         VBox menuBtnBox = new VBox(20);
         menuBtnBox.getChildren().addAll(pauseButton, saveButton, Resources, exitButton);
-        menuBtnBox.setPadding(new Insets(0, 50, 0, 0));
+        menuBtnBox.setPadding(new Insets(50, 50, 0, 50));
 
         VBox leftBox = new VBox(20);
         leftBox.setAlignment(Pos.CENTER);
@@ -109,9 +112,16 @@ public class Dashboard extends ViewImpl {
         this.timeLabel = new Label("");
         timeLabel.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         timeLabel.setTextFill(Color.YELLOW);
+
         Text popolationLabel = new Text(popolationText);
         popolationLabel.setFont(Font.font("Arial", 20));
         popolationLabel.setFill(Color.WHITE);
+
+        this.population = new Label("");
+        population.setFont(Font.font("Arial", FontWeight.BOLD, 20));
+        population.setTextFill(Color.YELLOW);
+
+
         Text foodLabel = new Text(foodText);
         foodLabel.setFont(Font.font("Arial", 20));
         foodLabel.setFill(Color.WHITE);
@@ -144,6 +154,9 @@ public class Dashboard extends ViewImpl {
         screwVal.setFont(Font.font("Arial", FontWeight.BOLD, 20));
         screwVal.setTextFill(Color.YELLOW);
 
+        HBox popolationBox = new HBox(10);
+        popolationBox.getChildren().addAll(popolationLabel, population);
+
         HBox timerBox = new HBox(10);
         timerBox.getChildren().addAll(timerLabel, timeLabel);
 
@@ -160,8 +173,9 @@ public class Dashboard extends ViewImpl {
         screwInfoBox.getChildren().addAll(screwLabel, screwVal);
 
         VBox infoVBox = new VBox(10);
-        infoVBox.getChildren().addAll(timerBox, foodInfoBox, medicineInfoBox, weaponInfoBox, screwInfoBox);
+        infoVBox.getChildren().addAll(timerBox,popolationBox, foodInfoBox, medicineInfoBox, weaponInfoBox, screwInfoBox);
         infoVBox.setAlignment(Pos.CENTER_RIGHT);
+        infoVBox.setPadding(new Insets(0, 50, 0, 0));
 
         StackPane.setAlignment(infoVBox, Pos.CENTER_RIGHT);
 
@@ -175,29 +189,21 @@ public class Dashboard extends ViewImpl {
         gridPane.setVgap(10);
         gridPane.setAlignment(Pos.CENTER);
 
-        createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0);
+        createSector("img\\dashbord_image\\corn_field.jpeg", gridPane, 0, 0,"Farm");
         statusCircleFarm = new Circle(20);
         statusCircleFarm.setFill(Color.GREEN);
-        StackPane.setAlignment(statusCircleFarm, Pos.BOTTOM_CENTER);
-        gridPane.getChildren().add(statusCircleFarm);
 
-        createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0);
+        createSector("img\\dashbord_image\\hospital.jpeg", gridPane, 1, 0, "Hospital");
         statusCircleHospital = new Circle(20);
         statusCircleHospital.setFill(Color.GREEN);
-        StackPane.setAlignment(statusCircleHospital, Pos.BOTTOM_CENTER);
-        gridPane.getChildren().add(statusCircleHospital);
 
-        createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1);
+        createSector("img\\dashbord_image\\manufactory.jpg", gridPane, 0, 1,"Manufactory");
         statusCircleManufactory = new Circle(20);
         statusCircleManufactory.setFill(Color.GREEN);
-        StackPane.setAlignment(statusCircleManufactory, Pos.BOTTOM_CENTER);
-        gridPane.getChildren().add(statusCircleManufactory);
 
-        createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1);
+        createSector("img\\dashbord_image\\security.jpeg", gridPane, 1, 1,"Military Base");
         statusCircleMilitaryBase = new Circle(20);
         statusCircleMilitaryBase.setFill(Color.GREEN);
-        StackPane.setAlignment(statusCircleMilitaryBase, Pos.BOTTOM_CENTER);
-        gridPane.getChildren().add(statusCircleMilitaryBase);
 
         root.setCenter(gridPane);
 
@@ -218,34 +224,69 @@ public class Dashboard extends ViewImpl {
             medicineVal.setText(String.valueOf(resources.get("Medicine")));
             weaponVal.setText(String.valueOf(resources.get("Weapons")));
             screwVal.setText(String.valueOf(resources.get("Screw")));
+            population.setText(String.valueOf(resources.get("Population")));
         });
     }
 
-    private void createSector(String backgroundImagePath, GridPane gridPane, int colIndex, int rowIndex) {
+    private void createSector(String backgroundImagePath, GridPane gridPane, int colIndex, int rowIndex, String sectorName) {
+        Circle[][] statusCircles = new Circle[2][2];
 
         ImageManagerImpl imageManager = new ImageManagerImpl();
 
         Image backgroundImage = imageManager.loadImage(backgroundImagePath);
-
+        Text textNameSector = new Text();
+        textNameSector.setFont(Font.font("Elephant", FontWeight.BOLD, 20));
+        textNameSector.setText(sectorName);
+        textNameSector.setFill(Color.WHITE);
+        Rectangle textBackground = new Rectangle(300, 30);  // Imposta larghezza e altezza desiderate
         ImageView backgroundImageView = new ImageView(backgroundImage);
         backgroundImageView.setFitWidth(300);
         backgroundImageView.setFitHeight(300);
 
+        statusCircles[colIndex][rowIndex] = new Circle(22);
+        statusCircles[colIndex][rowIndex].setFill(Color.GREEN);
+        statusCircles[colIndex][rowIndex].radiusProperty().bind(Bindings.min(gridPane.widthProperty(), gridPane.heightProperty()).divide(20));
+        statusCircles[colIndex][rowIndex].setStroke(Color.BLACK);
+
         StackPane sectorPane = new StackPane();
-        sectorPane.getChildren().add(backgroundImageView);
-        
+        StackPane.setAlignment(textNameSector, Pos.TOP_CENTER);
+        StackPane.setAlignment(textBackground, Pos.TOP_CENTER);
+        sectorPane.getChildren().addAll(backgroundImageView, statusCircles[colIndex][rowIndex],textBackground,textNameSector);
+        //Collections.reverse(sectorPane.getChildren());
+
+
+        gridPane.add(sectorPane, colIndex, rowIndex);
+
+        // Assegna alle variabili dei cerchi in base alla posizione
+        if (colIndex == 0 && rowIndex == 0) {
+            statusCircleFarm = statusCircles[colIndex][rowIndex];
+        } else if (colIndex == 1 && rowIndex == 0) {
+            statusCircleHospital = statusCircles[colIndex][rowIndex];
+        } else if (colIndex == 0 && rowIndex == 1) {
+            statusCircleManufactory = statusCircles[colIndex][rowIndex];
+        } else if (colIndex == 1 && rowIndex == 1) {
+            statusCircleMilitaryBase = statusCircles[colIndex][rowIndex];
+        }
+
     }
 
-    public void updateCirle(List<Status> statuses){
+    public void updateCirle(List<Status> statuses) {
+        System.out.println("Status View: " + statuses);
+    Platform.runLater(() -> {
         statusCircleFarm.setFill(statusColor(statuses.get(1)));
+        statusCircleHospital.setFill(statusColor(statuses.get(2)));
+        statusCircleManufactory.setFill(statusColor(statuses.get(3)));
+        statusCircleMilitaryBase.setFill(statusColor(statuses.get(4)));
+    });
+}
 
-    }
-    private Color statusColor(Status status){
-        if(status == Status.GREEN){
+
+    private Color statusColor(Status status) {
+        if (status == Status.GREEN) {
             return Color.GREEN;
-        }else if(status == Status.YELLOW){
+        } else if (status == Status.YELLOW) {
             return Color.YELLOW;
-        }else{
+        } else {
             return Color.RED;
         }
     }
@@ -263,10 +304,15 @@ public class Dashboard extends ViewImpl {
         return button;
     }
 
-    public void updateColonyInformation(String colonyName) {
+    public void updateSimulationInfo(String colonyName) {
         Platform.runLater(() -> {
             nameColony.setText(colonyName);
         });
+    }
+
+    public void createRandomEvent(RandomEvent randomEvent) {
+        System.out.println("Event View: " + randomEvent.getDemageResources());
+       new NewEventDialog(randomEvent).show();
     }
 
 }

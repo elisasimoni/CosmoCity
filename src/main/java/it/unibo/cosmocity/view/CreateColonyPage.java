@@ -24,6 +24,10 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import it.unibo.cosmocity.controller.view_controller.CreateColonyController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 
@@ -33,6 +37,13 @@ public class CreateColonyPage extends ViewImpl {
     private final Screen screen = Screen.getPrimary();
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
+    private final SceneController sceneController = new SceneController();
+    private final CreateColonyController createColonyController = new CreateColonyController();
+    private Map<String, Integer> selectedSettlers = new HashMap<>();
+    private Button nextButton;
+    private Text colonyNameText;
+    private ComboBox<String> difficultyComboBox;
+    private Text warningText;
 
     public CreateColonyPage(Stage stage, double width, double height) {
         super(stage, width, height);
@@ -60,7 +71,7 @@ public class CreateColonyPage extends ViewImpl {
         newGameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(12)));
         vbox.getChildren().add(newGameText);
 
-        Text colonyNameText = new Text("Colony name");
+        colonyNameText = new Text("Colony name");
         colonyNameText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
         colonyNameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(20)));
         colonyNameText.setFill(Color.WHITE);
@@ -125,36 +136,34 @@ public class CreateColonyPage extends ViewImpl {
         difficultyText.setTextAlignment(TextAlignment.CENTER);
         vbox.getChildren().add(difficultyText);
 
-        ComboBox<String> difficultyComboBox = difficultyChooser();
+        difficultyComboBox = difficultyChooser();
         vbox.getChildren().add(difficultyComboBox);
 
-        Text difficultyText = new Text("Choose difficulty:");
-        difficultyText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
-        difficultyText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
-        difficultyText.setFill(Color.WHITE);
-        difficultyText.setTextAlignment(TextAlignment.CENTER);
-        vbox.getChildren().add(difficultyText);
-
-        ComboBox<String> difficultyComboBox = difficultyChooser();
-        vbox.getChildren().add(difficultyComboBox);
-
-        Button nextButton = createButton("Next");
+        nextButton = createButton("Next");
         nextButton.maxHeightProperty().bind(scene.heightProperty());
         nextButton.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
+        warningText = new Text("");
+        warningText.setFont(Font.font(FONT, FontWeight.NORMAL, 25));
+        vbox.getChildren().add(warningText);
         vbox.getChildren().add(nextButton);
         vbox.maxHeightProperty().bind(scene.heightProperty());
         vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
 
         SceneController sceneController = new SceneController();
         nextButton.setOnAction(e -> {
-            sceneController.nextSceneNavigator(new AssignSettler(stage, screenWidth * 0.8, screenHeight * 0.8));
+            if (checkForm()) {
+                createColonyController.createColony(colonyNameField.getText(), this.selectedSettlers,
+                        difficultyComboBox.getValue());
+                sceneController.nextSceneNavigator(new AssignSettler(stage, screenWidth * 0.8, screenHeight * 0.8));
+            }
+
         });
 
         contentPane.getChildren().add(vbox);
         ScrollPane scrollPane = new ScrollPane(contentPane);
         scrollPane.setFitToWidth(true);
 
-        root.setCenter(scrollPane); // Imposta la ScrollPane come il centro del BorderPane
+        root.setCenter(scrollPane);
 
         return root;
     }
@@ -171,20 +180,20 @@ public class CreateColonyPage extends ViewImpl {
         button.setFont(Font.font(FONT, FontWeight.BOLD, 18));
         return button;
     }
-    private ComboBox<String> difficultyChooser() {
-        ObservableList<String> difficultyOptions = FXCollections.observableArrayList(
-                "Easy",
-                "Medium",
-                "Hard"
-    );
 
-        ComboBox<String> comboBox = new ComboBox<>(difficultyOptions);
-        comboBox.setValue("Medium"); // Imposta un valore predefinito
-        comboBox.setStyle("-fx-background-color: #ffffff");
-        comboBox.setPrefWidth(200);
-        comboBox.setPrefHeight(30);
+    private boolean checkForm() {
+        if (colonyNameText.getText().isEmpty() || selectedSettlers.isEmpty()
+                || difficultyComboBox.getValue().isEmpty() || selectedSettlers.size() == 10) {
+            if (selectedSettlers.size() >= 10) {
+                warningText.setText("You can choose max 10 settlers");
+                return false;
+            }
+            
+            return false;
+        } else {
+            return true;
+        }
 
-        return comboBox;
     }
 
     private VBox createImageControl(String imageURL, String nameSettler) {
@@ -213,12 +222,14 @@ public class CreateColonyPage extends ViewImpl {
         plusButton.setOnAction(event -> {
             int count = Integer.parseInt(counterLabel.getText());
             counterLabel.setText(String.valueOf(count + 1));
+            selectedSettlers.put(nameSettler, count + 1);
         });
 
         minusButton.setOnAction(event -> {
             int count = Integer.parseInt(counterLabel.getText());
             if (count > 0) {
                 counterLabel.setText(String.valueOf(count - 1));
+                selectedSettlers.put(nameSettler, count - 1);
             }
         });
 
@@ -234,9 +245,9 @@ public class CreateColonyPage extends ViewImpl {
 
     private ComboBox<String> difficultyChooser() {
         ObservableList<String> difficultyOptions = FXCollections.observableArrayList(
-                "Easy",
-                "Medium",
-                "Hard");
+                "EASY",
+                "MEDIUM",
+                "HARD");
 
         ComboBox<String> comboBox = new ComboBox<>(difficultyOptions);
         comboBox.setValue("Medium"); // Imposta un valore predefinito

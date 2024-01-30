@@ -1,6 +1,5 @@
 package it.unibo.cosmocity.model.resources;
 
-package it.unibo.cosmocity.model.resources;
 
 public class Population extends StackedResource{
 

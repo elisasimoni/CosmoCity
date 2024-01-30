@@ -6,7 +6,6 @@ import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.ResourceHandler;
 import it.unibo.cosmocity.model.ResourceHandlerImpl;
 import it.unibo.cosmocity.view.Dashboard;
-import it.unibo.cosmocity.view.dialog.PauseDialog;
 import it.unibo.cosmocity.controller.serialization.SimulationSerialization;
 import it.unibo.cosmocity.controller.view_controller.DashBoardController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
