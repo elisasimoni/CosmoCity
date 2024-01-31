@@ -11,6 +11,8 @@ import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.SimpleSettler;
 import it.unibo.cosmocity.view.Dashboard;
 import it.unibo.cosmocity.view.LandingPageView;
+
+import java.io.File;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
@@ -137,9 +139,10 @@ public class SimulationController {
         System.exit(0);
     }
 
-    public void loadSimulation() {
+    public void loadSimulation(File file) {
         try {
-            final var objectDeserialization = serializationSimulation.deserialize();
+            final var objectDeserialization = serializationSimulation.deserializeFromExtern(file);
+            System.out.println(objectDeserialization.getClass());
             if (objectDeserialization instanceof Simulation) {
                 this.simulation = (Simulation) objectDeserialization;
                 this.startSimulation();
@@ -151,8 +154,8 @@ public class SimulationController {
         }
     }
 
-    public void saveSimulation() {
-        serializationSimulation.serialize(simulation);
+    public void saveSimulation(File file) {
+        serializationSimulation.serialize(simulation, file);
         exitSimulation();
     }
 

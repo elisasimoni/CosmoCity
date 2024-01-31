@@ -10,7 +10,7 @@ import javafx.scene.control.ButtonType;
 
 public class NewEventDialog implements PopUpDialog {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    AudioManager audioManager = new AudioManager();
+    AudioManager audio = new AudioManager();
     boolean chosen = false;
 
 
@@ -23,7 +23,10 @@ public class NewEventDialog implements PopUpDialog {
     @Override
     public void show() {
         createPopUpGUI();
-        audioManager.play("bad_event_sound.mp3");
+        final Thread audioThread = new Thread(() -> {
+            audio.play("bad.wav");
+        });
+        audioThread.start();
         Optional<ButtonType> btnPressed = alert.showAndWait();
         if (btnPressed.get() == alert.getButtonTypes().get(0)) {
             chosen = true;

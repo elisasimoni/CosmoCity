@@ -21,7 +21,7 @@ import javax.sound.sampled.LineUnavailableException;
 /*
  * 
  * AudioManager class
- * Inspiated by https://www.baeldung.com/java-play-sound
+ * Inspired by https://www.baeldung.com/java-play-sound
  */
 
 public class AudioManager implements LineListener {
@@ -32,66 +32,29 @@ public class AudioManager implements LineListener {
    * @param path
    */
 
-  /*
-   * public void play(String path) {
-   * try {
-   * System.out.println("File Passato : " + path);
-   * final InputStream inputStream =
-   * AudioManager.class.getResourceAsStream("/it/unibo/asset/audio/" + path);
-   * AudioInputStream audioStream = AudioSystem.getAudioInputStream(inputStream);
-   * if (inputStream == null) {
-   * throw new RuntimeException("Can't find audio file");
-   * }
-   * AudioFormat audioFormat = audioStream.getFormat();
-   * DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-   * Clip audioClip = (Clip) AudioSystem.getLine(info);
-   * audioClip.addLineListener(this);
-   * audioClip.open(audioStream);
-   * audioClip.start();
-   * audioClip.close();
-   * audioStream.close();
-   * } catch (final Exception e) {
-   * e.printStackTrace();
-   * }
-   * }
-   */
-
   public void play(String path) {
     try {
-      System.out.println("File Passato: " + path);
+
       final InputStream inputStream = AudioManager.class.getResourceAsStream("/it/unibo/asset/audio/" + path);
+      AudioInputStream audioStream = AudioSystem.getAudioInputStream(inputStream);
       if (inputStream == null) {
         throw new RuntimeException("Can't find audio file");
       }
-
-      AudioInputStream audioStream = AudioSystem.getAudioInputStream(inputStream);
       AudioFormat audioFormat = audioStream.getFormat();
-      DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
-
-      try (SourceDataLine audioLine = (SourceDataLine) AudioSystem.getLine(info)) {
-        audioLine.open(audioFormat);
-        audioLine.start();
-
-        byte[] buffer = new byte[4096];
-        int bytesRead;
-
-        while ((bytesRead = audioStream.read(buffer, 0, buffer.length)) != -1) {
-          audioLine.write(buffer, 0, bytesRead);
-        }
-
-        audioLine.drain();
-      }
-
-      audioStream.close();
-    } catch (IOException | UnsupportedAudioFileException | LineUnavailableException e) {
+      DataLine.Info info = new DataLine.Info(Clip.class, audioFormat);
+      Clip audioClip = (Clip) AudioSystem.getLine(info);
+      audioClip.addLineListener(this);
+      audioClip.open(audioStream);
+      audioClip.start();
+     
+    } catch (final Exception e) {
       e.printStackTrace();
     }
   }
 
+
   @Override
   public void update(LineEvent event) {
-    if (event.getType() == LineEvent.Type.STOP) {
-      event.getLine().close();
-    }
+    LineEvent.Type type = event.getType();
   }
 }

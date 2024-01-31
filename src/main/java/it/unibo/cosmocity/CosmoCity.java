@@ -17,7 +17,7 @@ public class CosmoCity extends Application {
 
     private static final int WIDTH = 900;
     private static final int HEIGHT = 700;
-    AudioManager audio = new AudioManager();;
+    private final AudioManager audio = new AudioManager();
 
     /**
      * Main method
@@ -40,9 +40,7 @@ public class CosmoCity extends Application {
         final SimulationController simulationController = new SimulationController(simulation);
         final LandingPage landingPage = new LandingPage(stage, WIDTH, HEIGHT, simulationController);
         landingPage.show();
-        Thread audioThread = new Thread(() -> {
-            audio.play("test_audio.wav");
-        });
-        audioThread.start();
+        
+
     }
 }
