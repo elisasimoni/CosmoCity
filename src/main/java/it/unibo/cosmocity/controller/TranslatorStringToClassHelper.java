@@ -307,12 +307,8 @@ public class TranslatorStringToClassHelper {
                     return GUNSMITH;
                 case CHEMIST:
                     return CHEMIST;
-                case HOSPITAL:
-                    return HOSPITAL;
-                case MILITARY_BASE:
-                    return MILITARY_BASE;
-                case WORKSHOP:
-                    return WORKSHOP;
+                case BLACKSMITH:
+                    return BLACKSMITH;
                 default:
                     throw new IllegalArgumentException("Invalid settler name");
             }

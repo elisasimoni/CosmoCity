@@ -49,6 +49,7 @@ public class DashboardController {
     private final TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
     private final EventManager eventManager = new EventManager();
     private int goodPlayer = 0;
+    
 
     public DashboardController(final DashboardView dashboardView, final Simulation simulation) {
         this.dashboardView = dashboardView;
@@ -82,6 +83,7 @@ public class DashboardController {
 
     public void updateResourceLabel() {
         dashboardView.updateResourceLabel(translator.translateResourceToMap(this.simulation.getResources()));
+        dashboardView.settlerToSectorUpdate();
     }
 
     public void updateSimulationInfo() {
@@ -123,6 +125,7 @@ public class DashboardController {
             Collections.shuffle(settlers);
             if (goodPlayer == GOOD_EVENT) {
                 final GoodEvent event = eventManager.generateGoodEvent(settlers.get(0));
+                
                 dashboardView.createGoodEvent(event);
                 simulationController.addSettler(event.getSettler());
 
@@ -182,6 +185,12 @@ public class DashboardController {
         if (time % TIME_MANDATORY_SETTLER == 0) {
             resourceHandler.incrementWithProduction(resM);
         }
+
+    }
+
+    public void pauseSimulation() {
+        
+        simulationController.pauseSimulation();
 
     }
 

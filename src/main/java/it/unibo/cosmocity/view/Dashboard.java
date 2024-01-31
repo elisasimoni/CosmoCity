@@ -79,7 +79,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
     private static final int INFO_VBOX_PADDING_LEFT = 50;
     private static final int INFO_VBOX_PADDING_RIGHT = 50;
-    private static final int MENU_BTN_BOX_PADDING_TOP = 50;
+    private static final int MENU_BTN_BOX_PADDING_TOP = 10;
     private static final int MENU_BTN_BOX_PADDING_BOTTOM = 0;
 
     private static final int MENU_BTN_BOX_PADDING_LEFT = 50;
@@ -92,7 +92,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
     private static final int BACKGROUND_SECTOR_TITLE_HEIGHT = 30;
 
-    private static final int CIRCLE_STATUS_RADIUS = 20;
+    private static final int CIRCLE_STATUS_RADIUS = 15;
 
     private GridPane gridPane;
     private Label foodVal;
@@ -109,6 +109,10 @@ public class Dashboard extends ViewImpl implements DashboardView {
     private Circle statusCircleHospital;
     private Circle statusCircleManufactory;
     private Circle statusCircleMilitaryBase;
+    private HBox settlerHospital;
+    private HBox settlerManufactory;
+    private HBox settlerMilitaryBase;
+    private HBox settlerFarm;
 
     public Dashboard(final Stage stage, final double width, final double height,
             final SimulationController simulationController) {
@@ -125,9 +129,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
         final Button pauseButton = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.PAUSE.toString().toLowerCase())));
-        pauseButton.setOnAction(e -> {
-            new PauseDialog().show();
-        });
+        pauseButton.setOnAction(e -> pauseSimulation());
 
         Button saveButton = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.SAVE.toString().toLowerCase())));
@@ -149,6 +151,9 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
         final Button exitButton = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.EXIT.toString().toLowerCase())));
+        exitButton.setOnAction(e -> {
+            new SceneController().nextSceneNavigator(new LandingPage(stage, 900, 700, simulationController));
+        });
 
         final VBox menuBtnBox = new VBox(SPACING_20);
         menuBtnBox.getChildren().addAll(pauseButton, saveButton, resources, exitButton);
@@ -257,6 +262,45 @@ public class Dashboard extends ViewImpl implements DashboardView {
         infoVBox.setAlignment(Pos.CENTER_RIGHT);
         infoVBox.setPadding(new Insets(INFO_VBOX_PADDING_TOP, INFO_VBOX_PADDING_RIGHT, INFO_VBOX_PADDING_BOTTOM,
                 INFO_VBOX_PADDING_LEFT));
+        final HBox circleFarm = new HBox(SPACING_10);
+        statusCircleFarm = new Circle(CIRCLE_STATUS_RADIUS);
+        statusCircleFarm.setFill(Color.GREEN);
+        statusCircleFarm.setStroke(Color.BLACK);
+        Text textFarm = new Text("Farm: ");
+        textFarm.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
+        textFarm.setFill(Color.WHITE);
+        circleFarm.getChildren().addAll(textFarm, statusCircleFarm);
+
+        final HBox circleHospital = new HBox(SPACING_10);
+        statusCircleHospital = new Circle(CIRCLE_STATUS_RADIUS);
+        statusCircleHospital.setFill(Color.GREEN);
+        statusCircleHospital.setStroke(Color.BLACK);
+        Text textHospital = new Text("Hospital: ");
+        textHospital.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
+        textHospital.setFill(Color.WHITE);
+        circleHospital.getChildren().addAll(textHospital, statusCircleHospital);
+        final HBox circleManufactory = new HBox(SPACING_10);
+        statusCircleManufactory = new Circle(CIRCLE_STATUS_RADIUS);
+        statusCircleManufactory.setFill(Color.GREEN);
+        statusCircleManufactory.setStroke(Color.BLACK);
+        Text textManufactory = new Text("Manufactory: ");
+        textManufactory.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
+        textManufactory.setFill(Color.WHITE);
+        circleManufactory.getChildren().addAll(textManufactory, statusCircleManufactory);
+        final HBox circleMilitaryBase = new HBox(SPACING_10);
+        statusCircleMilitaryBase = new Circle(CIRCLE_STATUS_RADIUS);
+        statusCircleMilitaryBase.setFill(Color.GREEN);
+        statusCircleMilitaryBase.setStroke(Color.BLACK);
+        Text textMilitaryBase = new Text("Military Base: ");
+        textMilitaryBase.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
+        textMilitaryBase.setFill(Color.WHITE);
+        circleMilitaryBase.getChildren().addAll(textMilitaryBase, statusCircleMilitaryBase);
+        settlerHospital = new HBox(SPACING_10);
+        settlerManufactory = new HBox(SPACING_10);
+        settlerMilitaryBase = new HBox(SPACING_10);
+        settlerFarm = new HBox(SPACING_10);
+        infoVBox.getChildren().addAll(circleFarm, settlerFarm, circleHospital, settlerHospital, circleManufactory,
+                settlerManufactory, circleMilitaryBase, settlerMilitaryBase);
 
         StackPane.setAlignment(infoVBox, Pos.CENTER_RIGHT);
 
@@ -273,28 +317,50 @@ public class Dashboard extends ViewImpl implements DashboardView {
         // Create Farm Sector
         createSector("dashbord_image/corn_field.jpeg", gridPane, 0, 0,
                 String.valueOf(WordUtils.capitalizeFully(SectorName.FARM.toString().toLowerCase())));
-        statusCircleFarm = new Circle(CIRCLE_STATUS_RADIUS);
 
         // Create Hospital Sector
         createSector("dashbord_image/hospital.jpeg", gridPane, 1, 0,
                 String.valueOf(WordUtils.capitalizeFully(SectorName.HOSPITAL.toString().toLowerCase())));
-        statusCircleHospital = new Circle(CIRCLE_STATUS_RADIUS);
 
         // Create Manufactory Sector
         createSector("dashbord_image/manufactory.jpg", gridPane, 0, 1,
                 String.valueOf(WordUtils.capitalizeFully(SectorName.MANUFACTORY.toString().toLowerCase())));
-        statusCircleManufactory = new Circle(CIRCLE_STATUS_RADIUS);
 
         // Create Military Base Sector
         createSector("dashbord_image/security.jpeg", gridPane, 1, 1, String
                 .valueOf(WordUtils
                         .capitalizeFully(SectorName.MILITARY_BASE.toString().replace("_", " ").toLowerCase())));
-        statusCircleMilitaryBase = new Circle(CIRCLE_STATUS_RADIUS);
-        statusCircleMilitaryBase.setFill(Color.RED);
 
         root.setCenter(gridPane);
 
         return root;
+    }
+
+    public void settlerToSectorUpdate() {
+        Platform.runLater(() -> {
+
+            settlerFarm.getChildren().clear();
+            settlerHospital.getChildren().clear();
+            settlerManufactory.getChildren().clear();
+            settlerMilitaryBase.getChildren().clear();
+
+            settlerSectorMap = simulationController.getSettlerSectorMap();
+            settlerSectorMap.forEach((k, v) -> {
+                Text text = new Text(k);
+                text.setFont(Font.font(FONT_FAMILY, 15));
+                text.setFill(Color.WHITE);
+                if (v.equals("Farm")) {
+                    settlerFarm.getChildren().add(text);
+                } else if (v.equals("Hospital")) {
+                    settlerHospital.getChildren().add(text);
+                } else if (v.equals("Manufactory")) {
+                    settlerManufactory.getChildren().add(text);
+                } else if (v.equals("MilitaryBase")) {
+                    settlerMilitaryBase.getChildren().add(text);
+                }
+            });
+        });
+
     }
 
     public void updateTimeLabel(final long time) {
@@ -363,8 +429,6 @@ public class Dashboard extends ViewImpl implements DashboardView {
             final int rowIndex,
             final String sectorName) {
 
-        final Circle[][] statusCircles = new Circle[2][2];
-
         final ImageManagerImpl imageManager = new ImageManagerImpl();
 
         final Image backgroundImage = imageManager.loadImage(backgroundImagePath);
@@ -378,29 +442,13 @@ public class Dashboard extends ViewImpl implements DashboardView {
         backgroundImageView.setFitWidth(SECTOR_WIDTH);
         backgroundImageView.setFitHeight(SECTOR_HEIGHT);
 
-        statusCircles[colIndex][rowIndex] = new Circle(CIRCLE_STATUS_RADIUS);
-        statusCircles[colIndex][rowIndex].setFill(Color.GREEN);
-        statusCircles[colIndex][rowIndex].radiusProperty()
-                .bind(Bindings.min(gridPane.widthProperty(), gridPane.heightProperty()).divide(SPACING_20));
-        statusCircles[colIndex][rowIndex].setStroke(Color.BLACK);
-
         final StackPane sectorPane = new StackPane();
         StackPane.setAlignment(textNameSector, Pos.TOP_CENTER);
         StackPane.setAlignment(textBackground, Pos.TOP_CENTER);
-        sectorPane.getChildren().addAll(backgroundImageView, statusCircles[colIndex][rowIndex], textBackground,
+        sectorPane.getChildren().addAll(backgroundImageView, textBackground,
                 textNameSector);
 
         gridPane.add(sectorPane, colIndex, rowIndex);
-
-        if (colIndex == 0 && rowIndex == 0) {
-            statusCircleFarm = statusCircles[colIndex][rowIndex];
-        } else if (colIndex == 1 && rowIndex == 0) {
-            statusCircleHospital = statusCircles[colIndex][rowIndex];
-        } else if (colIndex == 0 && rowIndex == 1) {
-            statusCircleManufactory = statusCircles[colIndex][rowIndex];
-        } else if (colIndex == 1 && rowIndex == 1) {
-            statusCircleMilitaryBase = statusCircles[colIndex][rowIndex];
-        }
 
     }
 
@@ -441,6 +489,16 @@ public class Dashboard extends ViewImpl implements DashboardView {
         Platform.runLater(() -> {
             new SceneController().nextSceneNavigator(new LandingPage(stage, 900, 700, simulationController));
             new GameOverDialog().show();
+
+        });
+    }
+
+    @Override
+    public void pauseSimulation() {
+
+        Platform.runLater(() -> {
+            PauseDialog pauseDialog = new PauseDialog();
+            pauseDialog.show();
 
         });
     }

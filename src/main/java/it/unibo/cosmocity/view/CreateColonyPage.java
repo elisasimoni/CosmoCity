@@ -337,4 +337,10 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
         return comboBox;
     }
 
+    @Override
+    public void displayWarning(String warningMessage) {
+        warningText.setText(warningMessage);
+        warningText.setFill(Color.RED);
+    }
+
 }

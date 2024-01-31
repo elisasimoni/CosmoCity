@@ -16,6 +16,7 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 public class SimulationController {
     private Simulation simulation;
@@ -149,7 +150,7 @@ public class SimulationController {
 
     public void pauseSimulation() {
 
-        Thread.onSpinWait();
+        Thread.currentThread().interrupt();
 
     }
 
@@ -173,5 +174,10 @@ public class SimulationController {
 
     public void addSettler(BaseSettler settler) {
         this.simulation.getSettlers().add(settler);
+    }
+
+    public Map<String, String> getSettlerSectorMap() {
+        return this.simulation.getSettlers().stream()
+                .collect(Collectors.toMap(s -> s.getClass().getSimpleName(), s -> s.getSectorAssigned()));
     }
 }

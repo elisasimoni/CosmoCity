@@ -50,4 +50,8 @@ public interface DashboardView {
      */
     void showGameOver();
 
+    void pauseSimulation();
+
+    void settlerToSectorUpdate();
+
 }

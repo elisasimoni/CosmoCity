@@ -29,6 +29,6 @@ public class EventObserver {
         dashBoardController.zeroResource();
         dashBoardController.populationDoThing(time);
         dashBoardController.createGoodEvent();
-
+        dashBoardController.pauseSimulation();
     }
 }
