@@ -110,6 +110,7 @@ public class MoveResource {
         final Text settlerText = new Text(settlerName);
         settlerText.setFont(Font.font(FONT_FAMILY, FontWeight.NORMAL, FONT_SIZE_20));
         settlerText.setTextAlignment(TextAlignment.CENTER);
+        settlerText.setFill(Color.WHITE);
         hbox.getChildren().add(settlerText);
 
         final ObservableList<String> sectorsOption = FXCollections

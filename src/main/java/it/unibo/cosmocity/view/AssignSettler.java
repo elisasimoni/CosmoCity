@@ -110,6 +110,7 @@ public class AssignSettler extends ViewPreLoadImpl {
 
         startColonyButton.setOnAction(e -> {
             sendSimulation();
+            
         });
         root.setCenter(vbox);
 
@@ -117,9 +118,8 @@ public class AssignSettler extends ViewPreLoadImpl {
     }
 
     private void sendSimulation() {
-        this.assignSettlerController.sendSimulation(this.settlerAssigned);
-
         this.stage.close();
+        simulatorController.modifyOptionalSettler(settlerAssigned);
     }
 
     private Button createButton(String text) {

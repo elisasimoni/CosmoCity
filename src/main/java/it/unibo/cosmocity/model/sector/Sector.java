@@ -13,7 +13,7 @@ public class Sector {
     public enum SectorName {
         FARM,
         HOSPITAL,
-        MANUFACTORY,
+        WORKSHOP,
         MILITARY_BASE
     }
 

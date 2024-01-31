@@ -264,8 +264,8 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
     }
 
     private boolean checkForm() {
-        if (colonyNameText.getText().isEmpty() || selectedSettlers.isEmpty()
-                || difficultyComboBox.getValue().isEmpty() || selectedSettlers.size() < MAXIMUM_SETTLER_NUMBER) {
+        if (colonyNameText.getText().isEmpty()
+                && difficultyComboBox.getValue().isEmpty() && selectedSettlers.size() < MAXIMUM_SETTLER_NUMBER) {
             if (selectedSettlers.size() > MAXIMUM_SETTLER_NUMBER) {
                 displayWarning(WARNING_TEXT_LIMIT_SETTLER_NUMBER);
                 return false;

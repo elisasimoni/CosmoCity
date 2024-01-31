@@ -2,6 +2,7 @@ package it.unibo.cosmocity.view;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.text.WordUtils;
 
@@ -11,20 +12,15 @@ import it.unibo.cosmocity.model.event.GoodEvent;
 import it.unibo.cosmocity.model.event.RandomEvent;
 import it.unibo.cosmocity.model.sector.Sector.SectorName;
 import it.unibo.cosmocity.model.sector.Sector.Status;
-import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import it.unibo.cosmocity.view.dialog.GameOverDialog;
 import it.unibo.cosmocity.view.dialog.NewEventDialog;
 import it.unibo.cosmocity.view.dialog.NewSettlerDialog;
-import it.unibo.cosmocity.view.dialog.PauseDialog;
 import it.unibo.cosmocity.view.dialog.SaveGameDialog;
 import javafx.application.Platform;
-import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -109,10 +105,10 @@ public class Dashboard extends ViewImpl implements DashboardView {
     private final SceneController sceneController = new SceneController();
     private Circle statusCircleFarm;
     private Circle statusCircleHospital;
-    private Circle statusCircleManufactory;
+    private Circle statusCircleWorkshop;
     private Circle statusCircleMilitaryBase;
     private HBox settlerHospital;
-    private HBox settlerManufactory;
+    private HBox settlerWorkshop;
     private HBox settlerMilitaryBase;
     private HBox settlerFarm;
     private boolean isPause = false;
@@ -286,14 +282,14 @@ public class Dashboard extends ViewImpl implements DashboardView {
         textHospital.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         textHospital.setFill(Color.WHITE);
         circleHospital.getChildren().addAll(textHospital, statusCircleHospital);
-        final HBox circleManufactory = new HBox(SPACING_10);
-        statusCircleManufactory = new Circle(CIRCLE_STATUS_RADIUS);
-        statusCircleManufactory.setFill(Color.GREEN);
-        statusCircleManufactory.setStroke(Color.BLACK);
-        Text textManufactory = new Text("Manufactory: ");
-        textManufactory.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
-        textManufactory.setFill(Color.WHITE);
-        circleManufactory.getChildren().addAll(textManufactory, statusCircleManufactory);
+        final HBox circleWorkshop = new HBox(SPACING_10);
+        statusCircleWorkshop = new Circle(CIRCLE_STATUS_RADIUS);
+        statusCircleWorkshop.setFill(Color.GREEN);
+        statusCircleWorkshop.setStroke(Color.BLACK);
+        Text textWorkshop = new Text("Workshop: ");
+        textWorkshop.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
+        textWorkshop.setFill(Color.WHITE);
+        circleWorkshop.getChildren().addAll(textWorkshop, statusCircleWorkshop);
         final HBox circleMilitaryBase = new HBox(SPACING_10);
         statusCircleMilitaryBase = new Circle(CIRCLE_STATUS_RADIUS);
         statusCircleMilitaryBase.setFill(Color.GREEN);
@@ -303,11 +299,11 @@ public class Dashboard extends ViewImpl implements DashboardView {
         textMilitaryBase.setFill(Color.WHITE);
         circleMilitaryBase.getChildren().addAll(textMilitaryBase, statusCircleMilitaryBase);
         settlerHospital = new HBox(SPACING_10);
-        settlerManufactory = new HBox(SPACING_10);
+        settlerWorkshop = new HBox(SPACING_10);
         settlerMilitaryBase = new HBox(SPACING_10);
         settlerFarm = new HBox(SPACING_10);
-        infoVBox.getChildren().addAll(circleFarm, settlerFarm, circleHospital, settlerHospital, circleManufactory,
-                settlerManufactory, circleMilitaryBase, settlerMilitaryBase);
+        infoVBox.getChildren().addAll(circleFarm, settlerFarm, circleHospital, settlerHospital, circleWorkshop,
+                settlerWorkshop, circleMilitaryBase, settlerMilitaryBase);
 
         StackPane.setAlignment(infoVBox, Pos.CENTER_RIGHT);
 
@@ -329,9 +325,9 @@ public class Dashboard extends ViewImpl implements DashboardView {
         createSector("dashbord_image/hospital.jpeg", gridPane, 1, 0,
                 String.valueOf(WordUtils.capitalizeFully(SectorName.HOSPITAL.toString().toLowerCase())));
 
-        // Create Manufactory Sector
+        // Create Workshop Sector
         createSector("dashbord_image/manufactory.jpg", gridPane, 0, 1,
-                String.valueOf(WordUtils.capitalizeFully(SectorName.MANUFACTORY.toString().toLowerCase())));
+                String.valueOf(WordUtils.capitalizeFully(SectorName.WORKSHOP.toString().toLowerCase())));
 
         // Create Military Base Sector
         createSector("dashbord_image/security.jpeg", gridPane, 1, 1, String
@@ -344,25 +340,26 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     public void settlerToSectorUpdate() {
+        settlerSectorMap = this.simulationController.getSimulation().getSettlers().stream().filter(settler ->
+            settler.getSectorAssigned() != null).collect(Collectors.toMap(s -> s.getClass().getSimpleName(),
+                    s -> s.getSectorAssigned()));
+        
         Platform.runLater(() -> {
-
             settlerFarm.getChildren().clear();
             settlerHospital.getChildren().clear();
-            settlerManufactory.getChildren().clear();
+            settlerWorkshop.getChildren().clear();
             settlerMilitaryBase.getChildren().clear();
-
-            settlerSectorMap = simulationController.getSettlerSectorMap();
             settlerSectorMap.forEach((k, v) -> {
                 Text text = new Text(k);
                 text.setFont(Font.font(FONT_FAMILY, 15));
-                text.setFill(Color.WHITE);
+                text.setFill(Color.YELLOW);
                 if (v.equals("Farm")) {
                     settlerFarm.getChildren().add(text);
                 } else if (v.equals("Hospital")) {
                     settlerHospital.getChildren().add(text);
-                } else if (v.equals("Manufactory")) {
-                    settlerManufactory.getChildren().add(text);
-                } else if (v.equals("MilitaryBase")) {
+                } else if (v.equals("Workshop")) {
+                    settlerWorkshop.getChildren().add(text);
+                } else if (v.equals("Military Base")) {
                     settlerMilitaryBase.getChildren().add(text);
                 }
             });
@@ -392,7 +389,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
         statusCircleFarm.setFill(statusColor(statuses.get(1)));
         statusCircleHospital.setFill(statusColor(statuses.get(2)));
-        statusCircleManufactory.setFill(statusColor(statuses.get(3)));
+        statusCircleWorkshop.setFill(statusColor(statuses.get(3)));
         statusCircleMilitaryBase.setFill(statusColor(statuses.get(4)));
     }
 

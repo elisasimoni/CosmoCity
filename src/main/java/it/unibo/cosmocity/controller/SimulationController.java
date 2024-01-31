@@ -37,33 +37,29 @@ public class SimulationController {
         this.resourceHandler = new ResourceHandlerImpl(simulation);
     }
 
-    public void startSimulation(String colonyName, List<String> settlers, Map<String, Integer> resources,
-            DifficultiesType difficulty) {
+    public void startSimulation() {
         Dashboard dashboard = new Dashboard(new Stage(), WIDTH, HEIGHT, this);
-
         sceneController.nextSceneNavigator(dashboard);
         this.dashBoardController = new DashboardController(dashboard, simulation);
 
     }
 
     /**
-     * The function loads simulation information from a JSON file and starts the simulation with the
+     * The function loads simulation information from a JSON file and starts the
+     * simulation with the
      * loaded data.
      * 
-     * @param settlers A list of strings representing the settlers in the simulation.
-     * @param colonyName The name of the colony that will be loaded from the save file.
+     * @param settlers   A list of strings representing the settlers in the
+     *                   simulation.
+     * @param colonyName The name of the colony that will be loaded from the save
+     *                   file.
      */
     public void loadSimulationInfo(List<String> settlers, String colonyName) {
         try {
             var simulationFromJson = serializationSimulation.deserialize();
             if (simulationFromJson instanceof Simulation) {
                 this.simulation = (Simulation) simulationFromJson;
-                this.startSimulation(
-                        this.simulation.getColonyName(),
-                        translator.translateSettlerToString(this.simulation.getSettlers()),
-                        translator.translateResourceToMap(this.simulation.getResources()),
-
-                        this.simulation.getDifficulty());
+                this.startSimulation();
 
             } else {
 
@@ -94,18 +90,21 @@ public class SimulationController {
 
     public void modifyOptionalSettler(Map<String, String> settlers) {
         List<BaseSettler> settlerListTotal = this.simulation.getSettlers();
-        for (var settler : settlerListTotal) {
-            if (settler instanceof SimpleSettler) {
-                SimpleSettler simpleSettler = (SimpleSettler) settler;
-                if (simpleSettler.getClass().getSimpleName().equals(settlers.get("name"))) {
-                    simpleSettler.setSectorAssigned(settlers.get("sector"));
+        settlers.forEach((name, sector) -> {
+            for (var settler : settlerListTotal) {
+                if (settler instanceof SimpleSettler) {
+                    SimpleSettler simpleSettler = (SimpleSettler) settler;
+                    if (simpleSettler.getClass().getSimpleName().equals(name)) {
+                        simpleSettler.setSectorAssigned(sector);
+                    }
                 }
             }
-        }
-        startSimulation(this.simulation.getColonyName(),
-                translator.translateSettlerToString(this.simulation.getSettlers()),
-                translator.translateResourceToMap(this.simulation.getResources()), this.simulation.getDifficulty());
-        //LOOK AT THIS
+        });
+
+        this.simulation = new Simulation(this.simulation.getColonyName(), settlerListTotal,
+                this.simulation.getResources(), this.simulation.getDifficulty());
+        startSimulation();
+
     }
 
     public void modifyOptionalSettlerDuringSim(Map<String, String> settlers) {
@@ -129,34 +128,21 @@ public class SimulationController {
     }
 
     public void loadSimulation() {
-    try {
-        var objectDeserialization = serializationSimulation.deserialize();
-        System.out.println(objectDeserialization);
-        
-        if (objectDeserialization instanceof Simulation) {
-            this.simulation = (Simulation) objectDeserialization;
-           
-            this.startSimulation(
-                    this.simulation.getColonyName(),
-                    translator.translateSettlerToString(this.simulation.getSettlers()),
-                    translator.translateResourceToMap(this.simulation.getResources()),
-                    this.simulation.getDifficulty()
-            );
-        } else {
-            System.out.println("Invalid save file");
+        try {
+            var objectDeserialization = serializationSimulation.deserialize();
+            System.out.println(objectDeserialization);
+
+            if (objectDeserialization instanceof Simulation) {
+                this.simulation = (Simulation) objectDeserialization;
+
+                this.startSimulation();
+            } else {
+                System.out.println("Invalid save file");
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
         }
-    } catch (Exception e) {
-        e.printStackTrace(); 
-
-
-    }
-}
-
-
-    public void pauseSimulation() {
-
-        
-
     }
 
     public void saveSimulation() {
