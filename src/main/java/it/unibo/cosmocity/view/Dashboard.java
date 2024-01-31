@@ -131,7 +131,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         pauseButton.setOnAction(e -> {
             isPause = true;
             pauseSimulation();
-            
+
         });
 
         Button saveButton = createButton(
@@ -186,6 +186,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         timeLabel.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         timeLabel.setTextFill(Color.YELLOW);
 
+        // Population
         final Text populationLabel = new Text(
                 String.valueOf(WordUtils.capitalizeFully(TextResources.POPULATION.toString().toLowerCase())));
         populationLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
@@ -340,10 +341,11 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     public void settlerToSectorUpdate() {
-        settlerSectorMap = this.simulationController.getSimulation().getSettlers().stream().filter(settler ->
-            settler.getSectorAssigned() != null).collect(Collectors.toMap(s -> s.getClass().getSimpleName(),
-                    s -> s.getSectorAssigned()));
-        
+        settlerSectorMap = this.simulationController.getSimulation().getSettlers().stream()
+                .filter(settler -> settler.getSectorAssigned() != null)
+                .collect(Collectors.toMap(s -> s.getClass().getSimpleName(),
+                        s -> s.getSectorAssigned()));
+
         Platform.runLater(() -> {
             settlerFarm.getChildren().clear();
             settlerHospital.getChildren().clear();
