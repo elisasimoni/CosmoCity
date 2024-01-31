@@ -1,5 +1,7 @@
 package it.unibo.cosmocity.controller.serialization;
 
+import java.io.File;
+import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.Writer;
@@ -13,6 +15,7 @@ import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
+import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
 import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.resources.BaseResource;
@@ -33,8 +36,9 @@ import it.unibo.cosmocity.model.settlers.Military;
 import it.unibo.cosmocity.model.settlers.Technician;
 
 public class SimulationSerialization implements Serialization {
-  private static final String SAVE_FILE = "/it/unibo/asset/saves/Colony.json";
+
   private final ObjectMapper mapper = new ObjectMapper();
+  TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
 
   /*
    * Serialization of a save
@@ -42,7 +46,7 @@ public class SimulationSerialization implements Serialization {
    * 
    */
   @Override
-  public void serialize(final Object object) {
+  public void serialize(final Object object, File file) {
     final Simulation simulation = (Simulation) object;
     final List<Map<String, Object>> settlersToJson = new ArrayList<>();
     final List<Map<String, Object>> resourcesToJson = new ArrayList<>();
@@ -69,11 +73,10 @@ public class SimulationSerialization implements Serialization {
 
     try (
         Writer writer = Files.newBufferedWriter(
-            Path.of(SAVE_FILE))) 
-            {
+            Path.of(file.getAbsolutePath()))) {
       writer.write(mapper.writeValueAsString(jsonMap));
     } catch (final IOException e) {
-     
+
       e.printStackTrace();
     }
   }
@@ -82,10 +85,9 @@ public class SimulationSerialization implements Serialization {
    * Deserialize a save file and return a simulation
    */
   @Override
-  public Simulation deserialize() {
+  public Simulation deserializeFromExtern(File file) {
     try {
-      final InputStream inputStream = SimulationSerialization.class.getResourceAsStream(
-          SAVE_FILE);
+      final InputStream inputStream = new FileInputStream(file);
       if (inputStream != null) {
         final String jsonContent = new String(inputStream.readAllBytes());
 
@@ -93,13 +95,11 @@ public class SimulationSerialization implements Serialization {
             jsonContent,
             new TypeReference<>() {
             });
-
         final String colonyName = (String) jsonMap.get("colonyName");
         final List<Map<String, Object>> settlersJsonList = mapper.readValue(
             mapper.writeValueAsString(jsonMap.get("settlers")),
             new TypeReference<>() {
             });
-
         final List<Map<String, Object>> resourcesJsonList = mapper.readValue(
             mapper.writeValueAsString(jsonMap.get("resources")),
             new TypeReference<List<Map<String, Object>>>() {
@@ -112,7 +112,7 @@ public class SimulationSerialization implements Serialization {
         for (final Map<String, Object> settlerJson : settlersJsonList) {
           final String settlerName = (String) settlerJson.get("settlerName");
           final String sector = (String) settlerJson.get("sector");
-          final BaseSettler settler = createSettler(settlerName, sector);
+          final BaseSettler settler = translator.createSettler(settlerName, sector);
           settlers.add(settler);
         }
 
@@ -120,7 +120,7 @@ public class SimulationSerialization implements Serialization {
         for (final Map<String, Object> resourceJson : resourcesJsonList) {
           final String resourceName = (String) resourceJson.get("resourceName");
           final int quantity = (int) resourceJson.get("quantity");
-          final StackedResource resource = createResource(resourceName, quantity);
+          final StackedResource resource = translator.createResource(resourceName, quantity);
 
           resources.add(resource);
         }
@@ -138,59 +138,8 @@ public class SimulationSerialization implements Serialization {
     return null;
   }
 
-  /**
-   * @param resourceName
-   * @param quantity
-   * @return the resource created from the name and quantity
-   */
-  private StackedResource createResource(final String resourceName, final int quantity) {
-    switch (resourceName) {
-      case "Population":
-        return new Population(quantity);
-      case "ScrewStacked":
-        return new ScrewStacked(quantity);
-      case "WeaponsStacked":
-        return new WeaponsStacked(quantity);
-      case "MedicineStacked":
-        return new MedicineStacked(quantity);
-      case "FoodStacked":
-        return new FoodStacked(quantity);
-      default:
-        return null;
-    }
-  }
-
-  /**
-   * @param settlerName
-   * @param sector
-   * @return the settler created from the name and sector
-   */
-  private BaseSettler createSettler(final String settlerName, final String sector) {
-    switch (settlerName) {
-      case "Chemist":
-        final Chemist chemist = new Chemist();
-        chemist.setSectorAssigned(sector);
-        return chemist;
-      case "Doctor":
-        return new Doctor();
-      case "Farmer":
-        return new Farmer();
-      case "Military":
-        return new Military();
-      case "Gunsmith":
-        return new Gunsmith();
-      case "Technician":
-        final Technician technician = new Technician();
-        technician.setSectorAssigned(sector);
-        return technician;
-      case "Blacksmith":
-        return new Blacksmith();
-      case "Cook":
-        final Cook cook = new Cook();
-        cook.setSectorAssigned(sector);
-        return cook;
-      default:
-        return null;
-    }
+  @Override
+  public Object deserialize() {
+    return null;
   }
 }

@@ -1,5 +1,6 @@
 package it.unibo.cosmocity.view;
 
+import java.io.File;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -36,7 +37,9 @@ import javafx.scene.shape.Rectangle;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 public class Dashboard extends ViewImpl implements DashboardView {
 
@@ -138,12 +141,12 @@ public class Dashboard extends ViewImpl implements DashboardView {
                 String.valueOf(WordUtils.capitalizeFully(TextButton.SAVE.toString().toLowerCase())));
         saveButton.setOnAction(e -> {
             final SaveGameDialog saveGameDialog = new SaveGameDialog();
-            saveGameDialog.show();
-            if (saveGameDialog.isSaved()) {
-                simulationController.saveSimulation();
-            } else {
-                sceneController.nextSceneNavigator(this);
-            }
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Save Game");
+            fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON Files", "*.json"));
+            File file = fileChooser.showSaveDialog(stage);
+            simulationController.saveSimulation(file);
+            
         });
 
         final Button resources = createButton(

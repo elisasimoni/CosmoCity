@@ -461,4 +461,61 @@ public class TranslatorStringToClassHelper {
                 .map(settler -> (MandatorySettler) settler)
                 .collect(Collectors.toList());
     }
+
+    /**
+   * @param resourceName
+   * @param quantity
+   * @return the resource created from the name and quantity
+   */
+  public StackedResource createResource(final String resourceName, final int quantity) {
+    switch (resourceName) {
+      case "Population":
+        return new Population(quantity);
+      case "ScrewStacked":
+        return new ScrewStacked(quantity);
+      case "WeaponsStacked":
+        return new WeaponsStacked(quantity);
+      case "MedicineStacked":
+        return new MedicineStacked(quantity);
+      case "FoodStacked":
+        return new FoodStacked(quantity);
+      default:
+        return null;
+    }
+  }
+
+  /**
+   * @param settlerName
+   * @param sector
+   * @return the settler created from the name and sector
+   */
+  public BaseSettler createSettler(final String settlerName, final String sector) {
+    switch (settlerName) {
+      case "Chemist":
+        final Chemist chemist = new Chemist();
+        chemist.setSectorAssigned(sector);
+        return chemist;
+      case "Doctor":
+        return new Doctor();
+      case "Farmer":
+        return new Farmer();
+      case "Military":
+        return new Military();
+      case "Gunsmith":
+        return new Gunsmith();
+      case "Technician":
+        final Technician technician = new Technician();
+        technician.setSectorAssigned(sector);
+        return technician;
+      case "Blacksmith":
+        return new Blacksmith();
+      case "Cook":
+        final Cook cook = new Cook();
+        cook.setSectorAssigned(sector);
+        return cook;
+      default:
+        return null;
+    }
+  }
+
 }

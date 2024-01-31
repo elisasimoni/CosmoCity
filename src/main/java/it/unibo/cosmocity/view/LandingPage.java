@@ -1,9 +1,13 @@
 package it.unibo.cosmocity.view;
 
+import java.io.File;
+
 import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
+import it.unibo.cosmocity.model.utility.AudioManager;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import it.unibo.cosmocity.view.dialog.LoadGameDialog;
+import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -19,6 +23,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
+import javafx.stage.FileChooser;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -28,16 +33,25 @@ public class LandingPage extends ViewImpl implements LandingPageView {
     private final double screenWidth = screen.getBounds().getWidth();
     private final double screenHeight = screen.getBounds().getHeight();
     private final SimulationController simulationController;
+    private final AudioManager audio = new AudioManager();
+
 
     public LandingPage(final Stage stage, final double width, final double height,
             final SimulationController simulationController) {
         super(stage, width, height);
         this.simulationController = simulationController;
+        final Thread audioThread = new Thread(() -> {
+            audio.play("menu_audio.wav");
+        });
+        audioThread.start();
+        
 
     }
 
     @Override
     public Pane createGUI() {
+        
+        
         final BorderPane root = new BorderPane();
         final ImageManagerImpl imageManager = new ImageManagerImpl();
         final Pane backgroundPane = new Pane();
@@ -92,11 +106,21 @@ public class LandingPage extends ViewImpl implements LandingPageView {
 
     @Override
     public void loadSimulation() {
-        this.stage.close();
         try {
-            simulationController.loadSimulation();
+        
+            FileChooser fileChooser = new FileChooser();
+            fileChooser.setTitle("Open save File");
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("JSON files (*.json)", "*.json");
+            File file = fileChooser.showOpenDialog(stage);
+            fileChooser.setInitialDirectory(file.getParentFile());
+            simulationController.loadSimulation(file);
+
         } catch (final Exception e) {
-            new LoadGameDialog().show();
+            Platform.runLater(() -> {
+                final LoadGameDialog loadGameDialog = new LoadGameDialog();
+                loadGameDialog.show();
+            });
+           
         }
     }
 

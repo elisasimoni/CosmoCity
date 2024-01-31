@@ -7,7 +7,7 @@ import javafx.scene.control.ButtonType;
 
 public class NewSettlerDialog implements PopUpDialog {
     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-    AudioManager audioManager = new AudioManager();
+    AudioManager audio = new AudioManager();
 
     public NewSettlerDialog(final GoodEvent event) {
         alert.setTitle(event.getName());
@@ -22,6 +22,10 @@ public class NewSettlerDialog implements PopUpDialog {
     }
 
     public Alert createPopUpGUI() {
+        final Thread audioThread = new Thread(() -> {
+            audio.play("good.wav");
+        });
+        audioThread.start();
 
         alert.setContentText("Recive this kind blessing");
         final ButtonType yesBtn = new ButtonType("HURRAY!");

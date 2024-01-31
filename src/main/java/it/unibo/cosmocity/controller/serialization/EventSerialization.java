@@ -6,6 +6,7 @@ import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
 import it.unibo.cosmocity.model.event.Event;
 import it.unibo.cosmocity.model.resources.StackedResource;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
@@ -22,7 +23,7 @@ public class EventSerialization implements Serialization {
    * Not need to implement now
    */
   @Override
-  public void serialize(final Object object) {
+  public void serialize(final Object object, File file) {
     // not need to implemet now
   }
 
@@ -78,5 +79,11 @@ public class EventSerialization implements Serialization {
     }
 
     return Collections.emptyList();
+  }
+
+  @Override
+  public Object deserializeFromExtern(File file) {
+    // not need to implemet now
+    return null;
   }
 }
