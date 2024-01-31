@@ -13,6 +13,10 @@ public class LoadGameDialog implements PopUpDialog{
         
     }
 
+    
+    /** 
+     * @return Alert
+     */
     @Override
     public Alert createPopUpGUI() {
         alert.setTitle("Error");

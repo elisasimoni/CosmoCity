@@ -22,6 +22,10 @@ public class SaveGameDialog implements PopUpDialog {
         }
     }
 
+    
+    /** 
+     * @return Alert
+     */
     @Override
     public Alert createPopUpGUI() {
         alert.setContentText("Do you want to save and exit?");

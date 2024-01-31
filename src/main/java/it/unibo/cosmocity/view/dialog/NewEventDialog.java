@@ -36,6 +36,10 @@ public class NewEventDialog implements PopUpDialog {
         }
     }
 
+    
+    /** 
+     * @return Alert
+     */
     public Alert createPopUpGUI() {
 
         alert.setContentText("Do you want to fix or get dameged?");

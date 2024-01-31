@@ -13,6 +13,10 @@ public class GameOverDialog implements PopUpDialog{
         
     }
 
+    
+    /** 
+     * @return Alert
+     */
     @Override
     public Alert createPopUpGUI() {
         alert.setTitle("Game Over :(");

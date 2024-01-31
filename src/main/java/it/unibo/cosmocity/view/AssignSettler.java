@@ -1,5 +1,13 @@
 package it.unibo.cosmocity.view;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import it.unibo.cosmocity.controller.SimulationController;
+import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
+import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
 import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,14 +26,10 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import it.unibo.cosmocity.controller.SimulationController;
-import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
-import it.unibo.cosmocity.controller.view_controller.AssignSettlerController;
 
+/**
+ * The AssignSettler class is a Java class that represents a view for assigning settlers to sectors
+ */
 public class AssignSettler extends ViewPreLoadImpl {
 
     private static final String GAME_TITLE = "CosmoCity - Assign Settler";
@@ -59,12 +63,12 @@ public class AssignSettler extends ViewPreLoadImpl {
 
     AssignSettlerController assignSettlerController;
     List<String> settlers = new ArrayList<>();
-    private Map<String, String> settlerAssigned = new HashMap<>();
+    private final Map<String, String> settlerAssigned = new HashMap<>();
     private ComboBox<String> sectorDropdownMenu;
-    private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+    private final TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
     SimulationController simulatorController;
 
-    public AssignSettler(Stage stage, double width, double height, SimulationController simulatorController) {
+    public AssignSettler(final Stage stage, final double width, final double height, final SimulationController simulatorController) {
         super(stage, width, height);
         this.simulatorController = simulatorController;
         this.settlers = this.simulatorController.getSettlers();
@@ -78,29 +82,31 @@ public class AssignSettler extends ViewPreLoadImpl {
         createGUI();
     }
 
+    
+   
     @Override
     public Pane createGUI() {
 
         stage.setTitle(GAME_TITLE);
-        BorderPane root = new BorderPane();
+        final BorderPane root = new BorderPane();
         root.setStyle(BACKGROUND_COLOR_DARK_BLUE);
 
-        VBox vbox = new VBox();
+        final VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(SPACING_30);
 
-        Text newGameText = new Text(NEW_GAME_TEXT);
+        final Text newGameText = new Text(NEW_GAME_TEXT);
         newGameText.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, NEW_GAME_TEXT_FONT_SIZE));
         newGameText.setTextAlignment(TextAlignment.CENTER);
         newGameText.setFill(Color.WHITE);
         newGameText.styleProperty().bind(Bindings.concat(STRING_CONCAT, stage.widthProperty().divide(DIVIDE_20)));
         vbox.getChildren().add(newGameText);
         ;
-        for (String settlerName : translator.translateListToOptionalSettlerList(simulatorController.getSettlers())) {
+        for (final String settlerName : translator.translateListToOptionalSettlerList(simulatorController.getSettlers())) {
             vbox.getChildren().add(createSettlerAssignBox(settlerName));
         }
 
-        Button startColonyButton = createButton(START_COLONY_BTN_TEXT);
+        final Button startColonyButton = createButton(START_COLONY_BTN_TEXT);
         startColonyButton.maxHeightProperty().bind(scene.heightProperty());
         startColonyButton.prefWidthProperty().bind(scene.widthProperty().divide(DIVIDE_HALF));
         vbox.getChildren().add(startColonyButton);
@@ -122,8 +128,8 @@ public class AssignSettler extends ViewPreLoadImpl {
         simulatorController.modifyOptionalSettler(settlerAssigned);
     }
 
-    private Button createButton(String text) {
-        Button button = new Button(text);
+    private Button createButton(final String text) {
+        final Button button = new Button(text);
         button.setPrefWidth(BTN_WIDTH);
         button.setPrefHeight(BTN_HEIGHT);
         button.setStyle(BACKGROUND_COLOR_WHITE);
@@ -131,18 +137,18 @@ public class AssignSettler extends ViewPreLoadImpl {
         return button;
     }
 
-    private HBox createSettlerAssignBox(String settlerName) {
-        HBox hbox = new HBox();
+    private HBox createSettlerAssignBox(final String settlerName) {
+        final HBox hbox = new HBox();
         hbox.setAlignment(Pos.CENTER);
         hbox.setSpacing(SPACING_10);
-        Text settlerText = new Text(settlerName);
+        final Text settlerText = new Text(settlerName);
         settlerText.setFont(Font.font(FONT_FAMILY, FontWeight.NORMAL, FONT_SIZE_20));
         settlerText.styleProperty().bind(Bindings.concat(STRING_CONCAT, stage.widthProperty().divide(DIVIDE_40)));
         settlerText.setFill(Color.WHITE);
         settlerText.setTextAlignment(TextAlignment.CENTER);
         hbox.getChildren().add(settlerText);
 
-        ObservableList<String> sectorsOption = FXCollections
+        final ObservableList<String> sectorsOption = FXCollections
                 .observableArrayList(assignSettlerController.getSectorOptions());
 
         sectorDropdownMenu = new ComboBox<>(sectorsOption);

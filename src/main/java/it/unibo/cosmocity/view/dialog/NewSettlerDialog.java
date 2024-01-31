@@ -21,6 +21,10 @@ public class NewSettlerDialog implements PopUpDialog {
 
     }
 
+    
+    /** 
+     * @return Alert
+     */
     public Alert createPopUpGUI() {
         final Thread audioThread = new Thread(() -> {
             audio.play("good.wav");

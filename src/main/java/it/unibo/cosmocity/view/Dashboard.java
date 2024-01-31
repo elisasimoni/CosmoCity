@@ -134,19 +134,19 @@ public class Dashboard extends ViewImpl implements DashboardView {
         pauseButton.setOnAction(e -> {
             isPause = true;
             pauseSimulation();
-            
+
         });
 
-        Button saveButton = createButton(
+        final Button saveButton = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.SAVE.toString().toLowerCase())));
         saveButton.setOnAction(e -> {
             final SaveGameDialog saveGameDialog = new SaveGameDialog();
-            FileChooser fileChooser = new FileChooser();
+            final FileChooser fileChooser = new FileChooser();
             fileChooser.setTitle("Save Game");
             fileChooser.getExtensionFilters().addAll(new ExtensionFilter("JSON Files", "*.json"));
-            File file = fileChooser.showSaveDialog(stage);
+            final File file = fileChooser.showSaveDialog(stage);
             simulationController.saveSimulation(file);
-            
+
         });
 
         final Button resources = createButton(
@@ -272,7 +272,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         statusCircleFarm = new Circle(CIRCLE_STATUS_RADIUS);
         statusCircleFarm.setFill(Color.GREEN);
         statusCircleFarm.setStroke(Color.BLACK);
-        Text textFarm = new Text("Farm: ");
+        final Text textFarm = new Text("Farm: ");
         textFarm.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         textFarm.setFill(Color.WHITE);
         circleFarm.getChildren().addAll(textFarm, statusCircleFarm);
@@ -281,7 +281,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         statusCircleHospital = new Circle(CIRCLE_STATUS_RADIUS);
         statusCircleHospital.setFill(Color.GREEN);
         statusCircleHospital.setStroke(Color.BLACK);
-        Text textHospital = new Text("Hospital: ");
+        final Text textHospital = new Text("Hospital: ");
         textHospital.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         textHospital.setFill(Color.WHITE);
         circleHospital.getChildren().addAll(textHospital, statusCircleHospital);
@@ -289,7 +289,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         statusCircleWorkshop = new Circle(CIRCLE_STATUS_RADIUS);
         statusCircleWorkshop.setFill(Color.GREEN);
         statusCircleWorkshop.setStroke(Color.BLACK);
-        Text textWorkshop = new Text("Workshop: ");
+        final Text textWorkshop = new Text("Workshop: ");
         textWorkshop.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         textWorkshop.setFill(Color.WHITE);
         circleWorkshop.getChildren().addAll(textWorkshop, statusCircleWorkshop);
@@ -297,7 +297,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         statusCircleMilitaryBase = new Circle(CIRCLE_STATUS_RADIUS);
         statusCircleMilitaryBase.setFill(Color.GREEN);
         statusCircleMilitaryBase.setStroke(Color.BLACK);
-        Text textMilitaryBase = new Text("Military Base: ");
+        final Text textMilitaryBase = new Text("Military Base: ");
         textMilitaryBase.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
         textMilitaryBase.setFill(Color.WHITE);
         circleMilitaryBase.getChildren().addAll(textMilitaryBase, statusCircleMilitaryBase);
@@ -343,17 +343,18 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     public void settlerToSectorUpdate() {
-        settlerSectorMap = this.simulationController.getSimulation().getSettlers().stream().filter(settler ->
-            settler.getSectorAssigned() != null).collect(Collectors.toMap(s -> s.getClass().getSimpleName(),
-                    s -> s.getSectorAssigned()));
-        
+        settlerSectorMap = this.simulationController.getSimulation().getSettlers().stream()
+                .filter(settler -> settler.getSectorAssigned() != null)
+                .collect(Collectors.toMap(s -> s.getClass().getSimpleName(),
+                        s -> s.getSectorAssigned()));
+
         Platform.runLater(() -> {
             settlerFarm.getChildren().clear();
             settlerHospital.getChildren().clear();
             settlerWorkshop.getChildren().clear();
             settlerMilitaryBase.getChildren().clear();
             settlerSectorMap.forEach((k, v) -> {
-                Text text = new Text(k);
+                final Text text = new Text(k);
                 text.setFont(Font.font(FONT_FAMILY, 15));
                 text.setFill(Color.YELLOW);
                 if (v.equals("Farm")) {
@@ -404,7 +405,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
     @Override
     public boolean createRandomEvent(final RandomEvent randomEvent) {
-        NewEventDialog eventDiag = new NewEventDialog(randomEvent, false);
+        final NewEventDialog eventDiag = new NewEventDialog(randomEvent, false);
         eventDiag.show();
         return eventDiag.getChosen();
 
@@ -494,8 +495,8 @@ public class Dashboard extends ViewImpl implements DashboardView {
     @Override
     public void showGameOver() {
         Platform.runLater(() -> {
-            new SceneController().nextSceneNavigator(new LandingPage(stage, 900, 700, simulationController));
             new GameOverDialog().show();
+            System.exit(0);
 
         });
     }
@@ -505,7 +506,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         return this.isPause;
     }
 
-    public void setPause(boolean isPause) {
+    public void setPause(final boolean isPause) {
         this.isPause = isPause;
     }
 

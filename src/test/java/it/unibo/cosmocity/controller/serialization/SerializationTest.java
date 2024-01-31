@@ -1,9 +1,12 @@
-package it.unibo.cosmocity.controller;
+package it.unibo.cosmocity.controller.serialization;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 import org.junit.jupiter.api.BeforeAll;
@@ -26,15 +29,18 @@ class SerializationTest {
     private static StackedResource resourceStacked = new FoodStacked(10);
     private static StackedResource resourceBase = new FoodStacked(0);
     private static BaseSettler settler = new Cook();
-    private static File file = new File("it/unibo/asset/saves/Colony.json");
     private static Simulation simulation = new Simulation("test", List.of(settler), List.of(resourceStacked),
             DifficultiesType.EASY);
     private static Event event = new Event("test", "description", List.of(resourceStacked), List.of(resourceBase));
+    private static File file = new File("Colony.json");
 
     @BeforeAll
     static void setUp() {
         simulationSerialization = new SimulationSerialization();
         eventSerialization = new EventSerialization();
+       
+        
+
     }
 
     @Test
