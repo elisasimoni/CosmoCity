@@ -9,19 +9,12 @@ public abstract class MandatorySettler implements BaseSettler {
      */
     private int appetite;
 
-
     /**
      * @return the appetite of the settler
      */
     public int getAppetite() {
         return this.appetite;
     }
-
-    /**
-     * @return the sector assigned to the settler
-     */
-    public abstract String getSectorAssigned();
-
 
 
     /**

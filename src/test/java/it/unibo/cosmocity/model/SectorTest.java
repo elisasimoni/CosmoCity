@@ -5,7 +5,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
-import it.unibo.cosmocity.model.Sector.Status;
+import it.unibo.cosmocity.model.sector.Sector;
+import it.unibo.cosmocity.model.sector.Sector.Status;
 
 
 class SectorTest {

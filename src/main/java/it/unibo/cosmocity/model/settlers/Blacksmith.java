@@ -3,8 +3,7 @@ package it.unibo.cosmocity.model.settlers;
 import it.unibo.cosmocity.model.resources.BaseResource;
 import it.unibo.cosmocity.model.resources.Screw;
 
-public class Blacksmith extends MandatorySettler{
-    
+public class Blacksmith extends MandatorySettler {
 
     @Override
     public String getSectorAssigned() {
@@ -13,8 +12,7 @@ public class Blacksmith extends MandatorySettler{
 
     @Override
     public BaseResource getProductedResource() {
-       return new Screw(1);
+        return new Screw(1);
     }
 
-    
 }

@@ -25,16 +25,16 @@ public abstract class SimpleSettler implements BaseSettler {
     /**
      * @return the sector assigned to the settler
      */
-    public String getSectorAssigned (){
+    public String getSectorAssigned() {
         return this.sectorAssigned;
     }
 
     /**
      * 
-     * @param sectorAssigned 
-     * the sector assigned to the settler
+     * @param sectorAssigned
+     *                       the sector assigned to the settler
      */
-    public void setSectorAssigned(String getSectorAssigned){
+    public void setSectorAssigned(String getSectorAssigned) {
         this.sectorAssigned = getSectorAssigned;
     }
 
@@ -44,7 +44,7 @@ public abstract class SimpleSettler implements BaseSettler {
      * @return the resource produced by the settler
      */
     public BaseResource setProductedResource(int qtaWorkshop, int qtaMilitaryBase, int qtaHospital, int qtaFarm) {
-        switch(this.sectorAssigned){
+        switch (this.sectorAssigned) {
             case "Workshop":
                 return new Screw(qtaWorkshop);
             case "Military Base":
@@ -54,10 +54,9 @@ public abstract class SimpleSettler implements BaseSettler {
             case "Farm":
                 return new Food(qtaFarm);
             default:
-                return null;
-                
+                return new Food(1);
+
         }
     }
-
 
 }

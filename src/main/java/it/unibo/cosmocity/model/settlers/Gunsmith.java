@@ -6,7 +6,7 @@ import it.unibo.cosmocity.model.resources.Weapons;
 public class Gunsmith extends MandatorySettler {
 
     @Override
-    public BaseResource getProductedResource(){
+    public BaseResource getProductedResource() {
         return new Weapons(1);
     };
 

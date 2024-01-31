@@ -1,4 +1,4 @@
- package it.unibo.cosmocity.view;
+package it.unibo.cosmocity.view;
 
 import java.util.List;
 import java.util.Map;
@@ -7,10 +7,10 @@ import org.apache.commons.lang3.text.WordUtils;
 
 import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
-import it.unibo.cosmocity.model.Sector.SectorName;
-import it.unibo.cosmocity.model.Sector.Status;
 import it.unibo.cosmocity.model.event.GoodEvent;
 import it.unibo.cosmocity.model.event.RandomEvent;
+import it.unibo.cosmocity.model.sector.Sector.SectorName;
+import it.unibo.cosmocity.model.sector.Sector.Status;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import it.unibo.cosmocity.view.dialog.GameOverDialog;
@@ -117,11 +117,6 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     @Override
-    public void refresh() {
-        createGUI();
-    }
-
-    @Override
     public Pane createGUI() {
 
         stage.setTitle(GAME_TITLE);
@@ -134,7 +129,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
             new PauseDialog().show();
         });
 
-        final Button saveButton = createButton(
+        Button saveButton = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.SAVE.toString().toLowerCase())));
         saveButton.setOnAction(e -> {
             final SaveGameDialog saveGameDialog = new SaveGameDialog();
@@ -146,9 +141,9 @@ public class Dashboard extends ViewImpl implements DashboardView {
             }
         });
 
-        final Button Resources = createButton(
+        final Button resources = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.RESOURCES.toString().toLowerCase())));
-        Resources.setOnAction(e -> {
+        resources.setOnAction(e -> {
             new MoveResource(simulationController);
         });
 
@@ -156,7 +151,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
                 String.valueOf(WordUtils.capitalizeFully(TextButton.EXIT.toString().toLowerCase())));
 
         final VBox menuBtnBox = new VBox(SPACING_20);
-        menuBtnBox.getChildren().addAll(pauseButton, saveButton, Resources, exitButton);
+        menuBtnBox.getChildren().addAll(pauseButton, saveButton, resources, exitButton);
         menuBtnBox.setPadding(new Insets(MENU_BTN_BOX_PADDING_TOP, MENU_BTN_BOX_PADDING_RIGHT,
                 MENU_BTN_BOX_PADDING_BOTTOM, MENU_BTN_BOX_PADDING_LEFT));
 
@@ -174,7 +169,6 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
         root.setTop(titlePane);
 
-        // Timer
         final Text timerLabel = new Text(
                 String.valueOf(WordUtils.capitalizeFully(TextResources.TIME.toString().toLowerCase())));
         timerLabel.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
@@ -184,7 +178,6 @@ public class Dashboard extends ViewImpl implements DashboardView {
         timeLabel.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         timeLabel.setTextFill(Color.YELLOW);
 
-        // Population
         final Text populationLabel = new Text(
                 String.valueOf(WordUtils.capitalizeFully(TextResources.POPULATION.toString().toLowerCase())));
         populationLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));
@@ -323,11 +316,11 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     public void updateCirle(final List<Status> statuses) {
-        
-            statusCircleFarm.setFill(statusColor(statuses.get(1)));
-            statusCircleHospital.setFill(statusColor(statuses.get(2)));
-            statusCircleManufactory.setFill(statusColor(statuses.get(3)));
-            statusCircleMilitaryBase.setFill(statusColor(statuses.get(4)));
+
+        statusCircleFarm.setFill(statusColor(statuses.get(1)));
+        statusCircleHospital.setFill(statusColor(statuses.get(2)));
+        statusCircleManufactory.setFill(statusColor(statuses.get(3)));
+        statusCircleMilitaryBase.setFill(statusColor(statuses.get(4)));
     }
 
     public void updateSimulationInfo(final String colonyName) {
@@ -339,8 +332,8 @@ public class Dashboard extends ViewImpl implements DashboardView {
     @Override
     public boolean createRandomEvent(final RandomEvent randomEvent) {
         NewEventDialog eventDiag = new NewEventDialog(randomEvent, false);
-         eventDiag.show();
-         return eventDiag.getChosen();
+        eventDiag.show();
+        return eventDiag.getChosen();
 
     }
 
@@ -357,6 +350,15 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
     }
 
+    /**
+     * @param backgroundImagePath
+     * @param gridPane
+     * @param colIndex
+     * @param rowIndex
+     * @param sectorName
+     *                            Create a sector with the name and the background
+     *                            image and circle status
+     */
     private void createSector(final String backgroundImagePath, final GridPane gridPane, final int colIndex,
             final int rowIndex,
             final String sectorName) {
@@ -402,16 +404,17 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
     }
 
+    /**
+     * @param status
+     * @return the color of the circle
+     */
     private Color statusColor(final Status status) {
-        
+
         if (status == Status.GREEN) {
-            System.out.println("GREEN");
             return Color.GREEN;
         } else if (status == Status.YELLOW) {
-            System.out.println("YELLOW");
             return Color.YELLOW;
         } else {
-            System.out.println("RED");
             return Color.RED;
         }
     }
@@ -429,18 +432,17 @@ public class Dashboard extends ViewImpl implements DashboardView {
         return button;
     }
 
+    /*
+     * Game Over
+     * recall the GameOverDialog
+     */
     @Override
     public void showGameOver() {
         Platform.runLater(() -> {
             new SceneController().nextSceneNavigator(new LandingPage(stage, 900, 700, simulationController));
             new GameOverDialog().show();
-            
-        });
-    }
 
-    @Override
-    public void updateSettlerInfo(List<String> settlers) {
-        
+        });
     }
 
 }

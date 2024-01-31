@@ -2,17 +2,19 @@ package it.unibo.cosmocity.view;
 
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 import javafx.scene.Scene;
-import javafx.scene.image.Image;
-import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-
+/*
+ * This interface is used to create the GUI of the view
+ * different implementation to create a pre loaded view
+ */
+ 
 public abstract class ViewPreLoadImpl implements View {
 
     protected final Stage stage;
     protected Scene scene;
 
     /** {@inheritDoc} */
-    public ViewPreLoadImpl(Stage stage, double width, double height) {
+    protected ViewPreLoadImpl(final Stage stage, final double width, final double height) {
         this.stage = stage;
        
     }

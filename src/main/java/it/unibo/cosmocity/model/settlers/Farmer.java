@@ -3,7 +3,7 @@ package it.unibo.cosmocity.model.settlers;
 import it.unibo.cosmocity.model.resources.BaseResource;
 import it.unibo.cosmocity.model.resources.Food;
 
-public class Farmer extends MandatorySettler{
+public class Farmer extends MandatorySettler {
 
     @Override
     public BaseResource getProductedResource() {
@@ -15,5 +15,4 @@ public class Farmer extends MandatorySettler{
         return "Farm";
     }
 
-    
 }

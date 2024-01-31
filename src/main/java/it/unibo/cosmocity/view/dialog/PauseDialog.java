@@ -1,6 +1,5 @@
 package it.unibo.cosmocity.view.dialog;
 
-import it.unibo.cosmocity.model.utility.AudioManager;
 import javafx.scene.control.Alert;
 
 public class PauseDialog implements PopUpDialog {

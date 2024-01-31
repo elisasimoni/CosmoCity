@@ -11,21 +11,9 @@ public abstract class ViewImpl implements View {
     protected Scene scene;
 
     /** {@inheritDoc} */
-    public ViewImpl(Stage stage, double width, double height) {
+    protected ViewImpl(final Stage stage, final double width, final double height) {
         this.stage = stage;
         initScene(width, height);
-    }
-
-    /**
-     * Initializes the scene with dimensions.
-     * Create the first layout
-     *
-     * @param width  width of the scene.
-     * @param height height of the scene.
-     */
-    private void initScene(double width, double height) {
-        this.scene = new Scene(new Pane(), width, height);
-        this.scene.setRoot(this.createGUI());
     }
 
     /**
@@ -35,5 +23,17 @@ public abstract class ViewImpl implements View {
         stage.setScene(this.scene);
         stage.getIcons().add(new ImageManagerImpl().loadImage("cosmocity_icon.png"));
         stage.show();
+    }
+
+    /**
+     * Initializes the scene with dimensions.
+     * Create the first layout
+     *
+     * @param width  width of the scene.
+     * @param height height of the scene.
+     */
+    private void initScene(final double width, final double height) {
+        this.scene = new Scene(new Pane(), width, height);
+        this.scene.setRoot(this.createGUI());
     }
 }

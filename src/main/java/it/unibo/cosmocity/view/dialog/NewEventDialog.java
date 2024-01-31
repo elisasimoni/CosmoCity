@@ -23,6 +23,7 @@ public class NewEventDialog implements PopUpDialog {
     @Override
     public void show() {
         createPopUpGUI();
+        audioManager.play("bad_event_sound.mp3");
         Optional<ButtonType> btnPressed = alert.showAndWait();
         if (btnPressed.get() == alert.getButtonTypes().get(0)) {
             chosen = true;

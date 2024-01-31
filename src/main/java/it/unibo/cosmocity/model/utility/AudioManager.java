@@ -1,50 +1,54 @@
 package it.unibo.cosmocity.model.utility;
 
-import java.io.FileNotFoundException;
-import java.net.URL;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.SourceDataLine;
+import javax.sound.sampled.DataLine;
+import javax.sound.sampled.AudioFormat;
 import java.io.InputStream;
-import java.net.URI;
-import java.nio.file.Paths;
+import javax.sound.sampled.LineEvent;
+import javax.sound.sampled.LineListener;
 
 /*
- * This class is used to play audio files
- *
+ * 
+ * AudioManager class
+ * Inspiated by https://www.baeldung.com/java-play-sound
  */
-public class AudioManager {
 
-  private MediaPlayer mediaPlayer;
+public class AudioManager implements LineListener {
 
   /**
    * Play audio file from path
    *
    * @param path
-   * @throws FileNotFoundException
    */
   public void play(final String path) {
-
     try {
-      InputStream inputStream = AudioManager.class
-          .getResourceAsStream("/it/unibo/asset/audio/" + path);
-        System.out.println("Input stream: " + inputStream);
+      final InputStream inputStream = AudioManager.class.getResourceAsStream("/it/unibo/asset/audio/" + path);
+      AudioInputStream audioStream = AudioSystem.getAudioInputStream(inputStream);
       if (inputStream == null) {
-        throw new FileNotFoundException("Can't find audio file");
+        throw new RuntimeException("Can't find audio file");
       }
-      final Media sound = new Media(inputStream.toString());
-      mediaPlayer = new MediaPlayer(sound);
-      mediaPlayer.setVolume(25);
-      mediaPlayer.play();
+      AudioFormat audioFormat = audioStream.getFormat();
+      DataLine.Info info = new DataLine.Info(SourceDataLine.class, audioFormat);
+      Clip audioClip = (Clip) AudioSystem.getLine(info);
+      audioClip.addLineListener(this);
+      audioClip.open(audioStream);
+      audioClip.start();
+      audioClip.close();
+      audioStream.close();
     } catch (final Exception e) {
       e.printStackTrace();
     }
   }
 
-  /**
-   * Stop audio file
-   */
-  public void stop() {
-
-    mediaPlayer.stop();
+  @Override
+  public void update(LineEvent event) {
+    if (event.getType() == LineEvent.Type.STOP) {
+      event.getLine().close();
+    }
   }
 }
