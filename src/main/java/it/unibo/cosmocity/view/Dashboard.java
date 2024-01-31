@@ -189,6 +189,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
         timeLabel.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, FONT_SIZE_LABEL));
         timeLabel.setTextFill(Color.YELLOW);
 
+        // Population
         final Text populationLabel = new Text(
                 String.valueOf(WordUtils.capitalizeFully(TextResources.POPULATION.toString().toLowerCase())));
         populationLabel.setFont(Font.font(FONT_FAMILY, FONT_SIZE_LABEL));

@@ -28,27 +28,6 @@ import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.view_controller.CreateColonyController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-import javafx.geometry.Insets;
-import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
-import javafx.scene.text.Text;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
 
 public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
@@ -91,7 +70,7 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
     private static final String MANDATORY_SETTLER_LABEL = "Mandatory Settlers";
     private static final String COLONY_NAME_LABEL = "Colony name";
-    private static final String DIFFICULY_LABEL = "Colony name";
+    private static final String DIFFICULY_LABEL = "Difficulty";
     private static final String NEXT_BUTTON_TEXT = "Next";
     private static final String PLUS_LABEL = "+";
     private static final String MINUS_LABEL = "-";
