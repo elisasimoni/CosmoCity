@@ -4,7 +4,6 @@ import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
 import it.unibo.cosmocity.model.event.Event;
-import it.unibo.cosmocity.model.resources.BaseResource;
 import it.unibo.cosmocity.model.resources.StackedResource;
 
 import java.io.IOException;

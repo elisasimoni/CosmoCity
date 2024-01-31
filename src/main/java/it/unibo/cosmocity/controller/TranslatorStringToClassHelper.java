@@ -1,21 +1,17 @@
 package it.unibo.cosmocity.controller;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
 import it.unibo.cosmocity.model.DifficultiesType;
-import it.unibo.cosmocity.model.resources.BaseResource;
-import it.unibo.cosmocity.model.resources.Food;
 import it.unibo.cosmocity.model.resources.FoodStacked;
-import it.unibo.cosmocity.model.resources.Medicine;
 import it.unibo.cosmocity.model.resources.MedicineStacked;
 import it.unibo.cosmocity.model.resources.Population;
-import it.unibo.cosmocity.model.resources.Screw;
 import it.unibo.cosmocity.model.resources.ScrewStacked;
 import it.unibo.cosmocity.model.resources.StackedResource;
-import it.unibo.cosmocity.model.resources.Weapons;
 import it.unibo.cosmocity.model.resources.WeaponsStacked;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.Blacksmith;
@@ -28,53 +24,81 @@ import it.unibo.cosmocity.model.settlers.MandatorySettler;
 import it.unibo.cosmocity.model.settlers.Military;
 import it.unibo.cosmocity.model.settlers.SimpleSettler;
 import it.unibo.cosmocity.model.settlers.Technician;
-import java.util.ArrayList;
 
+/**
+ * The TranslatorStringToClassHelper class is a helper class used to translate a
+ * string format to a
+ * class format and vice versa.
+ */
 public class TranslatorStringToClassHelper {
 
-    private static Enum SettlerType;
-
-    public TranslatorStringToClassHelper() {
-
-    }
+    private static final String FARM = "Farm";
+    private static final String HOSPITAL = "Hospital";
+    private static final String MILITARY_BASE = "Military base";
+    private static final String WORKSHOP = "Workshop";
+    private static final String DOCTOR = "Doctor";
+    private static final String FARMER = "Farmer";
+    private static final String TECHNICIAN = "Technician";
+    private static final String MILITARY = "Military";
+    private static final String COOK = "Cook";
+    private static final String GUNSMITH = "Gunsmith";
+    private static final String CHEMIST = "Chemist";
+    private static final String BLACKSMITH = "Blacksmith";
+    private static final String POPULATION = "Population";
+    private static final String FOOD_STACKED = "FoodStacked";
+    private static final String MEDICINE_STACKED = "MedicineStacked";
+    private static final String SCREW_STACKED = "ScrewStacked";
+    private static final String WEAPONS_STACKED = "WeaponsStacked";
 
     /**
-     * @param settlers
-     * @return a list of settlers
+     * The function translates a list of settler names into a list of corresponding
+     * settler objects.
+     * 
+     * @param settlers A list of strings representing the names of settlers.
+     * @return The method is returning a List of BaseSettler objects.
      */
-    public List<BaseSettler> translateSettler(List<String> settlers) {
+    public List<BaseSettler> translateSettler(final List<String> settlers) {
         return settlers.stream().map(settler -> switch (settler) {
-            case "Doctor" -> new Doctor();
-            case "Farmer" -> new Farmer();
-            case "Technician" -> new Technician();
-            case "Military" -> new Military();
-            case "Cook" -> new Cook();
-            case "Gunsmith" -> new Gunsmith();
-            case "Chemist" -> new Chemist();
-            case "Blacksmith" -> new Blacksmith();
+            case DOCTOR -> new Doctor();
+            case FARMER -> new Farmer();
+            case TECHNICIAN -> new Technician();
+            case MILITARY -> new Military();
+            case COOK -> new Cook();
+            case GUNSMITH -> new Gunsmith();
+            case CHEMIST -> new Chemist();
+            case BLACKSMITH -> new Blacksmith();
             default -> throw new IllegalArgumentException("Invalid settler name");
         }).collect(Collectors.toList());
     }
 
     /**
-     * @param resources
-     * @return a list of stacked resources
+     * The function takes a map of resource names and their corresponding values,
+     * and returns a list of
+     * StackedResource objects based on the resource names and values.
+     * 
+     * @param resources The `resources` parameter is a `Map` that maps `String` keys
+     *                  to `Integer`
+     *                  values. Each key represents the name of a resource, and each
+     *                  value represents the quantity of
+     *                  that resource.
+     * @return The method `translateResources` returns a `List` of `StackedResource`
+     *         objects.
      */
-    public List<StackedResource> translateResources(Map<String, Integer> resources) {
+    public List<StackedResource> translateResources(final Map<String, Integer> resources) {
         return resources.entrySet().stream().map(entry -> {
-            String resourceName = entry.getKey();
+            final String resourceName = entry.getKey();
             System.out.println("Resource name: " + resourceName);
-            int resourceValue = entry.getValue();
+            final int resourceValue = entry.getValue();
             switch (resourceName) {
-                case "Population":
+                case POPULATION:
                     return new Population(resourceValue);
-                case "FoodStacked":
+                case FOOD_STACKED:
                     return new FoodStacked(resourceValue);
-                case "MedicineStacked":
+                case MEDICINE_STACKED:
                     return new MedicineStacked(resourceValue);
-                case "ScrewStacked":
+                case SCREW_STACKED:
                     return new ScrewStacked(resourceValue);
-                case "WeaponsStacked":
+                case WEAPONS_STACKED:
                     return new WeaponsStacked(resourceValue);
                 default:
                     throw new IllegalArgumentException("Invalid resource name");
@@ -84,12 +108,20 @@ public class TranslatorStringToClassHelper {
     }
 
     /**
-     * @param settlersM
-     * @param settlersS
-     * @return a map of settlers with sector assigned
+     * The function takes in two lists of settlers, one of type MandatorySettler and
+     * one of type
+     * SimpleSettler, and returns a map where the keys are the class names of the
+     * settlers and the
+     * values are the sectors assigned to them.
+     * 
+     * @param settlersM A list of MandatorySettler objects.
+     * @param settlersS The parameter "settlersS" is a List of objects of type
+     *                  SimpleSettler.
+     * @return The method is returning a Map<String, String> object.
      */
-    public Map<String, String> translateSettlerToMap(List<MandatorySettler> settlersM, List<SimpleSettler> settlersS) {
-        Map<String, String> settlerMap = new HashMap<>();
+    public Map<String, String> translateSettlerToMap(final List<MandatorySettler> settlersM,
+            final List<SimpleSettler> settlersS) {
+        final Map<String, String> settlerMap = new HashMap<>();
         settlersM.stream()
                 .forEach(settler -> settlerMap.put(settler.getClass().getSimpleName(), settler.getSectorAssigned()));
         settlersS.stream()
@@ -98,29 +130,49 @@ public class TranslatorStringToClassHelper {
 
     }
 
-    public List<BaseSettler> translateSettlerToListFromMapMO(List<MandatorySettler> settlersM,
-            List<SimpleSettler> settlersS) {
-        List<BaseSettler> settlerNew = new ArrayList();
+    /**
+     * The function takes two lists of settlers (one of type MandatorySettler and
+     * one of type
+     * SimpleSettler), combines them into a single list of type BaseSettler, and
+     * returns the combined
+     * list.
+     * 
+     * @param settlersM A list of objects of type MandatorySettler.
+     * @param settlersS A list of objects of type SimpleSettler.
+     * @return The method is returning a List of BaseSettler objects.
+     */
+    public List<BaseSettler> translateSettlerToListFromMapMO(final List<MandatorySettler> settlersM,
+            final List<SimpleSettler> settlersS) {
+        final List<BaseSettler> settlerNew = new ArrayList<>();
         settlersM.stream().forEach(settlerNew::add);
         settlersS.stream().forEach(settlerNew::add);
         return settlerNew;
 
     }
 
-    public List<MandatorySettler> translateSettlerToMapMandatory(Map<String, String> settlerAndSector) {
+    /**
+     * The function translates a map of settler names to their corresponding sectors
+     * into a list of
+     * MandatorySettler objects.
+     * 
+     * @param settlerAndSector A map that contains the settler name as the key and
+     *                         the sector name as
+     *                         the value.
+     * @return The method is returning a List of MandatorySettler objects.
+     */
+    public List<MandatorySettler> translateSettlerToMapMandatory(final Map<String, String> settlerAndSector) {
         return settlerAndSector.entrySet().stream().map(entry -> {
-            String settlerName = entry.getKey();
-            String settlerSector = entry.getValue();
+            final String settlerName = entry.getKey();
             switch (settlerName) {
-                case "Doctor":
+                case DOCTOR:
                     return new Doctor();
-                case "Farmer":
+                case FARMER:
                     return new Farmer();
-                case "Gunsmith":
+                case GUNSMITH:
                     return new Gunsmith();
-                case "Military":
+                case MILITARY:
                     return new Military();
-                case "Blacksmith":
+                case BLACKSMITH:
                     return new Blacksmith();
                 default:
                     throw new IllegalArgumentException("Invalid settler name");
@@ -129,16 +181,24 @@ public class TranslatorStringToClassHelper {
 
     }
 
-    public List<SimpleSettler> translateSettlerToMapOptional(Map<String, String> settlerAndSector) {
+    /**
+     * The function translates a map of settler names and sectors into a list of
+     * corresponding settler
+     * objects.
+     * 
+     * @param settlerAndSector A map that contains settler names as keys and sector
+     *                         names as values.
+     * @return The method is returning a List of SimpleSettler objects.
+     */
+    public List<SimpleSettler> translateSettlerToMapOptional(final Map<String, String> settlerAndSector) {
         return settlerAndSector.entrySet().stream().map(entry -> {
-            String settlerName = entry.getKey();
-            String settlerSector = entry.getValue();
+            final String settlerName = entry.getKey();
             switch (settlerName) {
-                case "Cook":
+                case COOK:
                     return new Cook();
-                case "Technician":
+                case TECHNICIAN:
                     return new Technician();
-                case "Chemist":
+                case CHEMIST:
                     return new Chemist();
                 default:
                     throw new IllegalArgumentException("Invalid settler name");
@@ -147,31 +207,49 @@ public class TranslatorStringToClassHelper {
 
     }
 
-    public List<MandatorySettler> translateMandatorySettler(List<String> settlers) {
+    /**
+     * The function translates a list of settler names into a list of corresponding
+     * settler objects.
+     * 
+     * @param settlers A list of strings representing the names of settlers.
+     * @return The method is returning a list of MandatorySettler objects.
+     */
+    public List<MandatorySettler> translateMandatorySettler(final List<String> settlers) {
         return settlers.stream().map(settler -> switch (settler) {
-            case "Doctor" -> new Doctor();
-            case "Farmer" -> new Farmer();
-            case "Gunsmith" -> new Gunsmith();
-            case "Military" -> new Military();
-            case "Blacksmith" -> new Blacksmith();
-            default -> throw new IllegalArgumentException("Invalid settler name");
-        }).collect(Collectors.toList());
-    }
-
-    public List<SimpleSettler> translateSimpleSettler(List<String> settlers) {
-        return settlers.stream().map(settler -> switch (settler) {
-            case "Cook" -> new Cook();
-            case "Technician" -> new Technician();
-            case "Chemist" -> new Chemist();
+            case DOCTOR -> new Doctor();
+            case FARMER -> new Farmer();
+            case GUNSMITH -> new Gunsmith();
+            case MILITARY -> new Military();
+            case BLACKSMITH -> new Blacksmith();
             default -> throw new IllegalArgumentException("Invalid settler name");
         }).collect(Collectors.toList());
     }
 
     /**
-     * @param difficulty
-     * @return
+     * The function translates a list of settler names into a list of corresponding
+     * settler objects.
+     * 
+     * @param settlers A list of strings representing the names of settlers.
+     * @return The method is returning a List of SimpleSettler objects.
      */
-    public String translateDifficultyToString(DifficultiesType difficulty) {
+    public List<SimpleSettler> translateSimpleSettler(final List<String> settlers) {
+        return settlers.stream().map(settler -> switch (settler) {
+            case COOK -> new Cook();
+            case TECHNICIAN -> new Technician();
+            case CHEMIST -> new Chemist();
+            default -> throw new IllegalArgumentException("Invalid settler name");
+        }).collect(Collectors.toList());
+    }
+
+    /**
+     * The function translates a DifficultyType enum value into a corresponding
+     * string representation.
+     * 
+     * @param difficulty The parameter "difficulty" is of type DifficultiesType.
+     * @return The method is returning a string representation of the difficulty
+     *         level.
+     */
+    public String translateDifficultyToString(final DifficultiesType difficulty) {
         return switch (difficulty) {
             case EASY -> "EASY";
             case MEDIUM -> "MEDIUM";
@@ -180,72 +258,91 @@ public class TranslatorStringToClassHelper {
     }
 
     /**
-     * @param settlers
-     * @return a list of settlers
+     * The function takes a list of BaseSettler objects and returns a list of their
+     * corresponding
+     * string names.
+     * 
+     * @param settlers A list of objects of type BaseSettler.
+     * @return The method is returning a List of Strings.
      */
-    public List<String> translateSettlerToString(List<BaseSettler> settlers) {
+    public List<String> translateSettlerToString(final List<BaseSettler> settlers) {
         return settlers.stream().map(settler -> switch (settler.getClass().getSimpleName()) {
-            case "Doctor" -> "Doctor";
-            case "Farmer" -> "Farmer";
-            case "Technician" -> "Technician";
-            case "Military" -> "Military";
-            case "Cook" -> "Cook";
-            case "Gunsmith" -> "Gunsmith";
-            case "Chemist" -> "Chemist";
-            case "Blacksmith" -> "Blacksmith";
+            case DOCTOR -> DOCTOR;
+            case FARMER -> FARMER;
+            case TECHNICIAN -> TECHNICIAN;
+            case MILITARY -> MILITARY;
+            case COOK -> COOK;
+            case GUNSMITH -> GUNSMITH;
+            case CHEMIST -> CHEMIST;
+            case BLACKSMITH -> BLACKSMITH;
             default -> throw new IllegalArgumentException("Invalid settler name");
         }).collect(Collectors.toList());
     }
 
-    public List<String> translateSettlerToListFromMap(Map<String, Integer> settlers) {
-
+    /**
+     * The function takes a map of settlers and their corresponding counts, and
+     * returns a list of the
+     * settlers' names.
+     * 
+     * @param settlers The parameter "settlers" is a Map<String, Integer> where the
+     *                 keys are the names
+     *                 of settlers and the values are their corresponding values.
+     * @return The method is returning a List of Strings.
+     */
+    public List<String> translateSettlerToListFromMap(final Map<String, Integer> settlers) {
         return settlers.entrySet().stream().map(entry -> {
-            String settlerName = entry.getKey();
-            int settlerValue = entry.getValue();
+            final String settlerName = entry.getKey();
             switch (settlerName) {
-                case "Doctor":
-                    return "Doctor";
-                case "Farmer":
-                    return "Farmer";
-                case "Technician":
-                    return "Technician";
-                case "Military":
-                    return "Military";
-                case "Cook":
-                    return "Cook";
-                case "Gunsmith":
-                    return "Gunsmith";
-                case "Chemist":
-                    return "Chemist";
-                case "Blacksmith":
-                    return "Blacksmith";
+                case DOCTOR:
+                    return DOCTOR;
+                case FARMER:
+                    return FARMER;
+                case TECHNICIAN:
+                    return TECHNICIAN;
+                case MILITARY:
+                    return MILITARY;
+                case COOK:
+                    return COOK;
+                case GUNSMITH:
+                    return GUNSMITH;
+                case CHEMIST:
+                    return CHEMIST;
+                case HOSPITAL:
+                    return HOSPITAL;
+                case MILITARY_BASE:
+                    return MILITARY_BASE;
+                case WORKSHOP:
+                    return WORKSHOP;
                 default:
                     throw new IllegalArgumentException("Invalid settler name");
             }
         }).collect(Collectors.toList());
-
     }
 
     /**
-     * @param resources
-     * @return a list of stacked resources
+     * The function translates a list of StackedResource objects into a map of
+     * resource names and their
+     * corresponding quantities.
+     * 
+     * @param resources A list of StackedResource objects.
+     * @return The method is returning a `Map<String, Integer>`.
      */
-    public Map<String, Integer> translateResourceToMap(List<StackedResource> resources) {
+    public Map<String, Integer> translateResourceToMap(final List<StackedResource> resources) {
 
         return resources.stream().map(resource -> {
-            String resourceName = resource.getClass().getSimpleName();
-            int resourceValue = resource.getQta();
+            final String resourceName = resource.getClass().getSimpleName();
+            final int resourceValue = resource.getQta();
             switch (resourceName) {
-                case "Population":
-                    return Map.entry("Population", resourceValue);
-                case "FoodStacked":
-                    return Map.entry("FoodStacked", resourceValue);
-                case "MedicineStacked":
-                    return Map.entry("MedicineStacked", resourceValue);
-                case "ScrewStacked":
-                    return Map.entry("ScrewStacked", resourceValue);
-                case "WeaponsStacked":
-                    return Map.entry("WeaponsStacked", resourceValue);
+                case POPULATION:
+                    return Map.entry(POPULATION, resourceValue);
+                case FOOD_STACKED:
+                    return Map.entry(FOOD_STACKED, resourceValue);
+                case MEDICINE_STACKED:
+                    return Map.entry(MEDICINE_STACKED, resourceValue);
+                case SCREW_STACKED:
+                    return Map.entry(SCREW_STACKED, resourceValue);
+                case WEAPONS_STACKED:
+                    return Map.entry(WEAPONS_STACKED, resourceValue);
                 default:
                     throw new IllegalArgumentException("Invalid resource name");
             }
@@ -254,10 +351,15 @@ public class TranslatorStringToClassHelper {
     }
 
     /**
-     * @param difficulty
-     * @return
+     * The function translates a difficulty name into a corresponding
+     * DifficultiesType enum value.
+     * 
+     * @param difficulty The parameter "difficulty" is a String that represents the
+     *                   difficulty level of
+     *                   a task or a game.
+     * @return The method is returning a DifficultiesType enum value.
      */
-    public DifficultiesType translateDifficulty(String difficulty) {
+    public DifficultiesType translateDifficulty(final String difficulty) {
         return switch (difficulty) {
             case "EASY" -> DifficultiesType.EASY;
             case "MEDIUM" -> DifficultiesType.MEDIUM;
@@ -266,22 +368,40 @@ public class TranslatorStringToClassHelper {
         };
     }
 
-    public String fromResourceToSector(List<StackedResource> stackedResources) {
+    /**
+     * The function takes a list of stacked resources and returns the corresponding
+     * sector based on the
+     * type of resource.
+     * 
+     * @param stackedResources A list of StackedResource objects.
+     * @return The method is returning a string representation of the sectors
+     *         corresponding to the
+     *         given list of stacked resources.
+     */
+    public String fromResourceToSector(final List<StackedResource> stackedResources) {
         return stackedResources.stream().map(resource -> switch (resource.getClass().getSimpleName()) {
-            case "MedicineStacked" -> "Hospital";
-            case "FoodStacked" -> "Farm";
-            case "WeaponsStacked" -> "Military base";
-            case "ScrewStacked" -> "Workshop";
+            case MEDICINE_STACKED -> HOSPITAL;
+            case FOOD_STACKED -> FARM;
+            case WEAPONS_STACKED -> MILITARY_BASE;
+            case SCREW_STACKED -> WORKSHOP;
             default -> throw new IllegalArgumentException("Invalid resource name");
         }).toString();
     }
 
-    public List<String> translateListToOptionalSettlerList(List<String> settler) {
-        List<String> settlerOpt = new ArrayList();
+    /**
+     * The function translates a list of settler names into a list of optional
+     * settler names.
+     * 
+     * @param settler The parameter "settler" is a List of Strings that represents a
+     *                list of settlers.
+     * @return The method is returning a List of Strings.
+     */
+    public List<String> translateListToOptionalSettlerList(final List<String> settler) {
+        final List<String> settlerOpt = new ArrayList();
         settler.stream().map(settlerName -> switch (settlerName) {
-            case "Cook" -> settlerOpt.add("Cook");
-            case "Technician" -> settlerOpt.add("Technician");
-            case "Chemist" -> settlerOpt.add("Chemist");
+            case COOK -> settlerOpt.add(COOK);
+            case TECHNICIAN -> settlerOpt.add(TECHNICIAN);
+            case CHEMIST -> settlerOpt.add(CHEMIST);
             default -> "do nothing";
         }).collect(Collectors.toList());
         return settlerOpt;
@@ -289,21 +409,22 @@ public class TranslatorStringToClassHelper {
 
     /**
      * Support function to create a resource
+     * 
      * @param resourceName
      * @param quantity
      * @return
      */
-    public StackedResource createResourceFromNameAndQta(String resourceName, int quantity) {
+    public StackedResource createResourceFromNameAndQta(final String resourceName, final int quantity) {
         switch (resourceName) {
-            case "ScrewStacked":
+            case SCREW_STACKED:
                 return new ScrewStacked(quantity);
-            case "WeaponsStacked":
+            case WEAPONS_STACKED:
                 return new WeaponsStacked(quantity);
-            case "MedicineStacked":
+            case MEDICINE_STACKED:
                 return new MedicineStacked(quantity);
-            case "FoodStacked":
+            case FOOD_STACKED:
                 return new FoodStacked(quantity);
-            case "Population":
+            case POPULATION:
                 return new Population(quantity);
             default:
                 return null;
@@ -311,15 +432,31 @@ public class TranslatorStringToClassHelper {
 
     }
 
-
-    public List<SimpleSettler> getOptionalSettlerFromAMixedList(List<BaseSettler> settlers) {
+    /**
+     * The function filters a list of settlers to only include instances of
+     * SimpleSettler and returns a
+     * new list containing those instances.
+     * 
+     * @param settlers The "settlers" parameter is a List of BaseSettler objects.
+     * @return The method is returning a list of SimpleSettler objects.
+     */
+    public List<SimpleSettler> getOptionalSettlerFromAMixedList(final List<BaseSettler> settlers) {
         return settlers.stream()
                 .filter(settler -> settler instanceof SimpleSettler)
                 .map(settler -> (SimpleSettler) settler)
                 .collect(Collectors.toList());
     }
 
-    public List<MandatorySettler> getMandatorySettlerFromAMixedList(List<BaseSettler> settlers) {
+    /**
+     * The function filters a list of settlers to only include instances of the
+     * MandatorySettler class
+     * and returns a new list containing only those instances.
+     * 
+     * @param settlers The "settlers" parameter is a List of objects of type
+     *                 BaseSettler.
+     * @return The method is returning a list of MandatorySettler objects.
+     */
+    public List<MandatorySettler> getMandatorySettlerFromAMixedList(final List<BaseSettler> settlers) {
         return settlers.stream()
                 .filter(settler -> settler instanceof MandatorySettler)
                 .map(settler -> (MandatorySettler) settler)

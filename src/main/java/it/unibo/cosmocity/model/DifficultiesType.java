@@ -22,6 +22,10 @@ public enum DifficultiesType {
         return difficulty;
     }
 
+    /**
+     * @param difficulty
+     * @return the difficulty
+     */
     public DifficultiesType setDifficulty(String difficulty) {
         switch (difficulty) {
             case "EASY":

@@ -40,6 +40,13 @@ public class SimulationController {
 
     }
 
+    /**
+     * The function loads simulation information from a JSON file and starts the simulation with the
+     * loaded data.
+     * 
+     * @param settlers A list of strings representing the settlers in the simulation.
+     * @param colonyName The name of the colony that will be loaded from the save file.
+     */
     public void loadSimulationInfo(List<String> settlers, String colonyName) {
         try {
             var simulationFromJson = serializationSimulation.deserialize();
@@ -133,10 +140,9 @@ public class SimulationController {
             System.out.println("Invalid save file");
         }
     } catch (Exception e) {
-        e.printStackTrace(); // Stampa la traccia dell'eccezione per diagnosticare il problema.
-        System.out.println("Error loading simulation: " + e.getMessage());
-        // Eventualmente gestisci l'errore in base alle tue esigenze, ad esempio, mostri un messaggio all'utente.
-        // new LoadGameDialog().show();
+        e.printStackTrace(); 
+
+
     }
 }
 

@@ -2,15 +2,24 @@ package it.unibo.cosmocity.controller.timer_controller;
 
 import it.unibo.cosmocity.controller.view_controller.DashboardController;
 
-
+/*
+ * Event obsever of the ticking timer 
+ */
 public class EventObserver {
-    private DashboardController dashBoardController;
+    private final DashboardController dashBoardController;
 
-    public EventObserver(DashboardController dashBoardController) {
+    /**
+     * @param dashBoardController
+     */
+    public EventObserver(final DashboardController dashBoardController) {
         this.dashBoardController = dashBoardController;
     }
 
-    public void update(long time) {
+    /**
+     * @param time
+     * Check if the time is equal to the time of the event
+     */
+    public void update(final long time) {
         dashBoardController.updateTimeLabel(time);
         dashBoardController.settlerAppetite(time);
         dashBoardController.getProductedResource(time);
@@ -19,7 +28,7 @@ public class EventObserver {
         dashBoardController.changeStatus();
         dashBoardController.zeroResource();
         dashBoardController.populationDoThing(time);
-        dashBoardController.createGoodEvent(time);
+        dashBoardController.createGoodEvent();
 
     }
 }

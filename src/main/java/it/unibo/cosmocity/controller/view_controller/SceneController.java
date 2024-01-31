@@ -17,6 +17,4 @@ public class SceneController {
         nextView.show();
     }
 
-
-
 }

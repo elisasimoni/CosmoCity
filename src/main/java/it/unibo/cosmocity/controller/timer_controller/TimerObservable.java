@@ -4,31 +4,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.TimerTask;
 
+/*
+ * Timer observable 
+ */
 public class TimerObservable extends TimerTask {
 
     private static final int DELAY = 2;
     private static final int MILLIS = 1000;
 
-    private List<EventObserver> observers = new ArrayList<>();
+    private final List<EventObserver> observers = new ArrayList<>();
     private boolean isPaused = false;
     private long pauseTime;
     private long pauseDuration;
     private long totalPauseTime = 0;
 
-    private final Object lock = new Object(); // Object to manage synchronization
-    
-    private long startTime = System.currentTimeMillis();
+    private final Object lockTimer = new Object(); // Object to manage synchronization
 
-    // Add Event Observer
-    public void addObserver(EventObserver observer) {
+    private final long startTime = System.currentTimeMillis();
+
+    /**
+     * @param observer
+     *                 Add an observer to the list
+     */
+    public void addObserver(final EventObserver observer) {
         observers.add(observer);
     }
 
-    // Remove Event Observer
-    public void removeObserver(EventObserver observer) {
+    /**
+     * @param observer
+     *                 Remove an observer from the list
+     */
+    public void removeObserver(final EventObserver observer) {
         observers.remove(observer);
     }
 
+    /**
+     * @return true if the timer is paused
+     */
     public boolean isPaused() {
         return this.isPaused;
     }
@@ -40,7 +52,7 @@ public class TimerObservable extends TimerTask {
 
         while (true) {
 
-            synchronized (lock) {
+            synchronized (lockTimer) {
 
                 if (isPaused) {
 
@@ -50,11 +62,11 @@ public class TimerObservable extends TimerTask {
 
                         if (waitTime > 0) {
 
-                            lock.wait(waitTime);
+                            lockTimer.wait(waitTime);
 
                         }
 
-                    } catch (InterruptedException e) {
+                    } catch (final InterruptedException e) {
 
                         e.printStackTrace();
 
@@ -67,9 +79,9 @@ public class TimerObservable extends TimerTask {
                 }
             }
 
-            long timeMillis = System.currentTimeMillis() / MILLIS;
+            final long timeMillis = System.currentTimeMillis() / MILLIS;
 
-            long timeElapsedSeconds = ((timeMillis) - startTime / MILLIS);
+            final long timeElapsedSeconds = ((timeMillis) - startTime / MILLIS);
 
             notifyObservers(
                     timeElapsedSeconds - waitTime / MILLIS + pauseDuration / MILLIS - totalPauseTime / MILLIS + DELAY);
@@ -78,7 +90,7 @@ public class TimerObservable extends TimerTask {
 
                 Thread.sleep(MILLIS); // Sleep for 1 second
 
-            } catch (InterruptedException e) {
+            } catch (final InterruptedException e) {
 
                 e.printStackTrace();
 
@@ -87,25 +99,36 @@ public class TimerObservable extends TimerTask {
         }
     }
 
-    public void pause(long howMuchPause) {
-        synchronized (lock) {
+    /**
+     * @param howMuchPause
+     *                     Do a pause of the timer
+     */
+    public void pause(final long howMuchPause) {
+        synchronized (lockTimer) {
             this.isPaused = true;
             this.pauseTime = System.currentTimeMillis();
             this.pauseDuration = howMuchPause;
         }
     }
 
-    private void notifyObservers(long time) {
-        for (EventObserver observer : observers) {
-            observer.update(time);
+    /*
+     * Resume the timer
+     */
+    public void resume() {
+        synchronized (lockTimer) {
+            this.isPaused = false;
+            totalPauseTime += System.currentTimeMillis() - pauseTime;
+            lockTimer.notifyAll();
         }
     }
 
-    public void resume() {
-        synchronized (lock) {
-            this.isPaused = false;
-            totalPauseTime += System.currentTimeMillis() - pauseTime;
-            lock.notifyAll();
+    /**
+     * @param time
+     *             Notify the observers
+     */
+    private void notifyObservers(final long time) {
+        for (final EventObserver observer : observers) {
+            observer.update(time);
         }
     }
 }

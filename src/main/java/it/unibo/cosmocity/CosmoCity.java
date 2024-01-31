@@ -1,12 +1,13 @@
 package it.unibo.cosmocity;
 
-import javafx.application.Application;
-import javafx.stage.Stage;
+import java.util.ArrayList;
+
 import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.view.LandingPage;
-import java.util.*;
+import javafx.application.Application;
+import javafx.stage.Stage;
 
 /**
  * Main class
@@ -22,10 +23,10 @@ public class CosmoCity extends Application {
         launch(args);
     }
 
-    public void start(Stage stage) {
-        Simulation simulation = new Simulation("", new ArrayList<>(), new ArrayList<>(),  DifficultiesType.EASY,0);
-        SimulationController simulationController = new SimulationController(simulation);
-        LandingPage landingPage = new LandingPage(stage, 900, 700, simulationController);
+    public void start(final Stage stage) {
+        final Simulation simulation = new Simulation("", new ArrayList<>(), new ArrayList<>(),  DifficultiesType.EASY,0);
+        final SimulationController simulationController = new SimulationController(simulation);
+        final LandingPage landingPage = new LandingPage(stage, 900, 700, simulationController);
         landingPage.show();
     }
 }

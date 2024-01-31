@@ -1,7 +1,18 @@
 package it.unibo.cosmocity.controller.serialization;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.Writer;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
 import it.unibo.cosmocity.model.DifficultiesType;
 import it.unibo.cosmocity.model.Simulation;
 import it.unibo.cosmocity.model.resources.BaseResource;
@@ -20,119 +31,127 @@ import it.unibo.cosmocity.model.settlers.Farmer;
 import it.unibo.cosmocity.model.settlers.Gunsmith;
 import it.unibo.cosmocity.model.settlers.Military;
 import it.unibo.cosmocity.model.settlers.Technician;
-import java.nio.file.Path;
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.jar.*;
 
 public class SimulationSerialization implements Serialization {
 
-  private ObjectMapper mapper = new ObjectMapper();
-
+  private final ObjectMapper mapper = new ObjectMapper();
+  /*
+   * Serialization of a save
+   * simulation 
+   * 
+   */
   @Override
-  public void serialize(Object object) {
-    try {
-      Simulation simulation = (Simulation) object;
-      List<Map<String, Object>> settlersToJson = new ArrayList<>();
-      List<Map<String, Object>> resourcesToJson = new ArrayList<>();
+  public void serialize(final Object object) {
+    final Simulation simulation = (Simulation) object;
+    final List<Map<String, Object>> settlersToJson = new ArrayList<>();
+    final List<Map<String, Object>> resourcesToJson = new ArrayList<>();
 
-      for (BaseSettler settler : simulation.getSettlers()) {
-        Map<String, Object> settlerJson = new HashMap<>();
-        settlerJson.put("settlerName", settler.getClass().getSimpleName());
-        settlerJson.put("sector", settler.getSectorAssigned());
-        settlersToJson.add(settlerJson);
-      }
+    for (final BaseSettler settler : simulation.getSettlers()) {
+      final Map<String, Object> settlerJson = new HashMap<>();
+      settlerJson.put("settlerName", settler.getClass().getSimpleName());
+      settlerJson.put("sector", settler.getSectorAssigned());
+      settlersToJson.add(settlerJson);
+    }
 
-      for (BaseResource resource : simulation.getResources()) {
-        Map<String, Object> resourceJson = new HashMap<>();
-        resourceJson.put("resourceName", resource.getClass().getSimpleName());
-        resourceJson.put("quantity", resource.getQta());
-        resourcesToJson.add(resourceJson);
-      }
+    for (final BaseResource resource : simulation.getResources()) {
+      final Map<String, Object> resourceJson = new HashMap<>();
+      resourceJson.put("resourceName", resource.getClass().getSimpleName());
+      resourceJson.put("quantity", resource.getQta());
+      resourcesToJson.add(resourceJson);
+    }
 
-      Map<String, Object> jsonMap = new HashMap<>();
-      jsonMap.put("colonyName", simulation.getColonyName());
-      jsonMap.put("settlers", settlersToJson);
-      jsonMap.put("resources", resourcesToJson);
-      jsonMap.put("difficulty", simulation.getDifficulty());
-      jsonMap.put("startTime", simulation.getStartTime());
+    final Map<String, Object> jsonMap = new HashMap<>();
+    jsonMap.put("colonyName", simulation.getColonyName());
+    jsonMap.put("settlers", settlersToJson);
+    jsonMap.put("resources", resourcesToJson);
+    jsonMap.put("difficulty", simulation.getDifficulty());
+    jsonMap.put("startTime", simulation.getStartTime());
 
-      System.out.println(mapper.writeValueAsString(jsonMap));
-      try (Writer writer = Files.newBufferedWriter(Path.of("/it/unibo/asset/saves/Colony.json"))) {
-        writer.write(mapper.writeValueAsString(jsonMap));
-      } catch (IOException e) {
-        e.printStackTrace();
-      }
-
-    } catch (IOException e) {
+    try (
+      Writer writer = Files.newBufferedWriter(
+        Path.of("/it/unibo/asset/saves/Colony.json")
+      )
+    ) {
+      writer.write(mapper.writeValueAsString(jsonMap));
+    } catch (final IOException e) {
       e.printStackTrace();
     }
   }
 
+
+  /*
+   * Deserialize a save file and return a simulation
+   */
   @Override
   public Simulation deserialize() {
     try {
-      InputStream inputStream = SimulationSerialization.class
-          .getResourceAsStream("/it/unibo/asset/saves/Colony.json");
-      System.out.println(inputStream);
+      final InputStream inputStream =
+        SimulationSerialization.class.getResourceAsStream(
+            "/it/unibo/asset/saves/Colony.json"
+          );
       if (inputStream != null) {
+        final String jsonContent = new String(inputStream.readAllBytes());
 
-        String jsonContent = new String(inputStream.readAllBytes());
-        System.out.println(jsonContent);
-        Map<String, Object> jsonMap = mapper.readValue(
-            jsonContent,
-            new TypeReference<>() {
-            });
+        final Map<String, Object> jsonMap = mapper.readValue(
+          jsonContent,
+          new TypeReference<>() {}
+        );
 
-        String colonyName = (String) jsonMap.get("colonyName");
-        List<Map<String, Object>> settlersJsonList = (List<Map<String, Object>>) jsonMap.get(
-            "settlers");
-        List<Map<String, Object>> resourcesJsonList = (List<Map<String, Object>>) jsonMap.get(
-            "resources");
-        String difficultyString = (String) jsonMap.get("difficulty");
-        DifficultiesType difficulty = DifficultiesType.valueOf(
-            difficultyString);
-        Number startTimeNumber = (Number) jsonMap.get("startTime");
-        long startTime = startTimeNumber.longValue();
+        final String colonyName = (String) jsonMap.get("colonyName");
+        final List<Map<String, Object>> settlersJsonList = mapper.readValue(
+          mapper.writeValueAsString(jsonMap.get("settlers")),
+          new TypeReference<>() {}
+        );
 
-        List<BaseSettler> settlers = new ArrayList<>();
-        for (Map<String, Object> settlerJson : settlersJsonList) {
-          String settlerName = (String) settlerJson.get("settlerName");
-          String sector = (String) settlerJson.get("sector");
-          BaseSettler settler = createSettler(settlerName, sector);
+        final List<Map<String, Object>> resourcesJsonList = mapper.readValue(
+          mapper.writeValueAsString(jsonMap.get("resources")),
+          new TypeReference<List<Map<String, Object>>>() {}
+        );
+        final String difficultyString = (String) jsonMap.get("difficulty");
+        final DifficultiesType difficulty = DifficultiesType.valueOf(
+          difficultyString
+        );
+        final Number startTimeNumber = (Number) jsonMap.get("startTime");
+        final long startTime = startTimeNumber.longValue();
+
+        final List<BaseSettler> settlers = new ArrayList<>();
+        for (final Map<String, Object> settlerJson : settlersJsonList) {
+          final String settlerName = (String) settlerJson.get("settlerName");
+          final String sector = (String) settlerJson.get("sector");
+          final BaseSettler settler = createSettler(settlerName, sector);
           settlers.add(settler);
         }
 
-        List<StackedResource> resources = new ArrayList<>();
-        for (Map<String, Object> resourceJson : resourcesJsonList) {
-          String resourceName = (String) resourceJson.get("resourceName");
-          int quantity = (int) resourceJson.get("quantity");
-          StackedResource resource = createResource(resourceName, quantity);
+        final List<StackedResource> resources = new ArrayList<>();
+        for (final Map<String, Object> resourceJson : resourcesJsonList) {
+          final String resourceName = (String) resourceJson.get("resourceName");
+          final int quantity = (int) resourceJson.get("quantity");
+          final StackedResource resource = createResource(resourceName, quantity);
 
           resources.add(resource);
         }
 
         return new Simulation(
-            colonyName,
-            settlers,
-            resources,
-            difficulty,
-            startTime);
+          colonyName,
+          settlers,
+          resources,
+          difficulty,
+          startTime
+        );
       }
-    } catch (IOException e) {
-      System.out.println("Error while loading the game");
+    } catch (final IOException e) {
       e.printStackTrace();
     }
 
     return null;
   }
 
-  private StackedResource createResource(String resourceName, int quantity) {
+  /**
+   * @param resourceName
+   * @param quantity
+   * @return the resource created from the name and quantity
+   */
+  private StackedResource createResource(final String resourceName, final int quantity) {
     switch (resourceName) {
       case "Population":
         return new Population(quantity);
@@ -149,10 +168,15 @@ public class SimulationSerialization implements Serialization {
     }
   }
 
-  private BaseSettler createSettler(String settlerName, String sector) {
+  /**
+   * @param settlerName
+   * @param sector
+   * @return the settler created from the name and sector
+   */
+  private BaseSettler createSettler(final String settlerName, final String sector) {
     switch (settlerName) {
       case "Chemist":
-        Chemist chemist = new Chemist();
+        final Chemist chemist = new Chemist();
         chemist.setSectorAssigned(sector);
         return chemist;
       case "Doctor":
@@ -164,13 +188,13 @@ public class SimulationSerialization implements Serialization {
       case "Gunsmith":
         return new Gunsmith();
       case "Technician":
-        Technician technician = new Technician();
+        final Technician technician = new Technician();
         technician.setSectorAssigned(sector);
         return technician;
       case "Blacksmith":
         return new Blacksmith();
       case "Cook":
-        Cook cook = new Cook();
+        final Cook cook = new Cook();
         cook.setSectorAssigned(sector);
         return cook;
       default:

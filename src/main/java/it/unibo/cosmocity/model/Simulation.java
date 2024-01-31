@@ -5,20 +5,30 @@ import java.util.List;
 import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 
+/*
+ * This class is used to store the simulation data
+ */
 public class Simulation {
 
-    private String colonyName;
+    private final String colonyName;
 
-    private List<BaseSettler> settlers;
+    private final List<BaseSettler> settlers;
 
-    private List<StackedResource> resources;
+    private final List<StackedResource> resources;
 
-    private DifficultiesType difficulty;
+    private final DifficultiesType difficulty;
 
-    private long startTime;
+    private final long startTime;
 
-    public Simulation(String colonyName, List<BaseSettler> settlers, List<StackedResource> resources,
-            DifficultiesType difficulty, long startTime) {
+    /**
+     * @param colonyName
+     * @param settlers
+     * @param resources
+     * @param difficulty
+     * @param startTime
+     */
+    public Simulation(final String colonyName, final List<BaseSettler> settlers, final List<StackedResource> resources,
+            final DifficultiesType difficulty, final long startTime) {
         this.colonyName = colonyName;
         this.settlers = settlers;
         this.resources = resources;
@@ -27,22 +37,37 @@ public class Simulation {
 
     }
 
+    /**
+     * @return the settlers
+     */
     public List<BaseSettler> getSettlers() {
         return settlers;
     }
 
+    /**
+     * @return the resources
+     */
     public List<StackedResource> getResources() {
         return resources;
     }
 
+    /**
+     * @return the difficulty
+     */
     public DifficultiesType getDifficulty() {
         return difficulty;
     }
 
+    /**
+     * @return the colonyName
+     */
     public String getColonyName() {
         return colonyName;
     }
 
+    /**
+     * @return the startTime
+     */
     public long getStartTime() {
         return startTime;
     }
