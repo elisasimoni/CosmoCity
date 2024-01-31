@@ -1,17 +1,16 @@
 package it.unibo.cosmocity.view;
 
-import javafx.beans.binding.Bindings;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
@@ -19,8 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.text.TextAlignment;
-import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.geometry.Insets;
 
@@ -32,12 +29,55 @@ import it.unibo.cosmocity.controller.view_controller.CreateColonyController;
 import it.unibo.cosmocity.controller.view_controller.SceneController;
 import it.unibo.cosmocity.model.utility.ImageManagerImpl;
 
-public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
+public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
-    private static final String FONT = "Elephant";
-    private final Screen screen = Screen.getPrimary();
-    private final double screenWidth = screen.getBounds().getWidth();
-    private final double screenHeight = screen.getBounds().getHeight();
+    private static final int PADDING_PANE_TOP = 20;
+    private static final int PADDING_PANE_BOTTOM = 20;
+    private static final int PADDING_PANE_LEFT = 20;
+    private static final int PADDING_PANE_RIGHT = 20;
+
+    private static final int BUTTON_WIDTH = 200;
+    private static final int BUTTON_HEIGHT = 50;
+
+    private static final int IMAGE_WIDTH = 100;
+    private static final int IMAGE_HEIGHT = 100;
+
+    private static final int FONT_SIZE_20 = 20;
+    private static final int FONT_SIZE_15 = 15;
+
+    private static final int SPACING_SMALL = 10;
+    private static final int SPACING_MEDIUM = 30;
+
+    private static final int COLONY_NAME_FILE_WIDTH = 200;
+    private static final int COLONY_NAME_FILED_TOP = 20;
+    private static final int COLONY_NAME_FILED_BOTTOM = 20;
+    private static final int COLONY_NAME_FILED_LEFT = 20;
+    private static final int COLONY_NAME_FILED_RIGHT = 20;
+
+    private static final int VBOX_TOP = 10;
+    private static final int VBOX_BOTTOM = 30;
+    private static final int VBOX_LEFT = 30;
+    private static final int VBOX_RIGHT = 0;
+
+    private static final String FONT_TEXT = "Elephant";
+    private static final String BACKGROUND_COLOR_WHITE = "-fx-background-color: #ffffff";
+    private static final String BACKGROUND_COLOR_DARK_BLUE = "-fx-background-color: darkBlue";
+    private static final String BACKGROUND_COLOR_RED = "-fx-background-color: #FF0000";
+    private static final String BACKGROUND_COLOR_GREEN = "-fx-background-color: #008000";
+
+    private static final String WARNING_TEXT_LIMIT_SETTLER_NUMBER = "You can choose max 10 settlers";
+    private static final String WARNING_TEXT_CHECK_ALL_FIELDS = "Please fill all fields";
+
+    private static final String MANDATORY_SETTLER_LABEL = "Mandatory Settlers";
+    private static final String COLONY_NAME_LABEL = "Colony name";
+    private static final String DIFFICULY_LABEL = "Colony name";
+    private static final String NEXT_BUTTON_TEXT = "Next";
+    private static final String PLUS_LABEL = "+";
+    private static final String MINUS_LABEL = "-";
+    private static final String BASE_LABEL = "0";
+
+    private static final int MAXIMUM_SETTLER_NUMBER = 10;
+
     private final SceneController sceneController = new SceneController();
     private final CreateColonyController createColonyController;
     private SimulationController simulatorController;
@@ -56,122 +96,131 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
     @Override
     public Pane createGUI() {
         BorderPane root = new BorderPane();
-        root.setStyle("-fx-background-color: darkBlue;");
-        root.setPadding(new Insets(10, 0, 20, 50));
+        root.setStyle(BACKGROUND_COLOR_DARK_BLUE);
+        root.setPadding(new Insets(PADDING_PANE_TOP, PADDING_PANE_RIGHT, PADDING_PANE_BOTTOM, PADDING_PANE_LEFT));
 
-        // Creazione del contentPane
-        Pane contentPane = new Pane();
-        contentPane.setStyle("-fx-background-color: darkBlue;");
+        // Creazione della HBox per colonyNameText e colonyNameField
+        HBox colonyNameBox = new HBox();
+        colonyNameBox.setAlignment(Pos.CENTER);
+        colonyNameBox.setSpacing(SPACING_SMALL);
+
+        colonyNameText = new Text(COLONY_NAME_LABEL);
+        colonyNameText.setFont(Font.font(FONT_TEXT, FontWeight.NORMAL, FONT_SIZE_20));
+        colonyNameText.setFill(Color.WHITE);
+
+        TextField colonyNameField = new TextField();
+        colonyNameField.setPrefWidth(COLONY_NAME_FILE_WIDTH);
+        colonyNameField.setMaxWidth(COLONY_NAME_FILE_WIDTH);
+        colonyNameField.setPadding(new Insets(COLONY_NAME_FILED_TOP, COLONY_NAME_FILED_RIGHT, COLONY_NAME_FILED_BOTTOM,
+                COLONY_NAME_FILED_LEFT));
+        colonyNameField.prefWidthProperty().bind(colonyNameBox.widthProperty());
+
+        colonyNameBox.getChildren().addAll(colonyNameText, colonyNameField);
+
+        HBox difficultyBox = new HBox();
+        difficultyBox.setAlignment(Pos.CENTER);
+        difficultyBox.setSpacing(SPACING_SMALL);
+
+        Text difficultyText = new Text(DIFFICULY_LABEL);
+        difficultyText.setFont(Font.font(FONT_TEXT, FontWeight.NORMAL, FONT_SIZE_20));
+        difficultyText.setFill(Color.WHITE);
+
+        difficultyComboBox = difficultyChooser();
+
+        difficultyBox.getChildren().addAll(difficultyText, difficultyComboBox);
+
+        HBox hboxContainer = new HBox();
+        hboxContainer.getChildren().addAll(colonyNameBox, difficultyBox);
+        hboxContainer.setSpacing(SPACING_MEDIUM);
+        hboxContainer.setAlignment(Pos.CENTER);
+
+        root.setTop(hboxContainer);
+
+        // Grid Settler
+        HBox hboxSettlers = new HBox();
+        hboxSettlers.setAlignment(Pos.CENTER);
+        hboxSettlers.setSpacing(SPACING_SMALL);
+
+        GridPane settlerGrid = new GridPane();
+        settlerGrid.setAlignment(Pos.CENTER);
+        settlerGrid.setHgap(SPACING_SMALL);
+        settlerGrid.setVgap(SPACING_SMALL);
+
+        // HBox for Mandatory Settler
+        HBox hboxMandatorySettler = createHBoxSettler();
+        hboxMandatorySettler.setAlignment(Pos.CENTER);
+        hboxMandatorySettler.setSpacing(SPACING_SMALL);
+
+        Text mandatorySetText = new Text(MANDATORY_SETTLER_LABEL);
+        mandatorySetText.setFont(Font.font(FONT_TEXT, FontWeight.BOLD, FONT_SIZE_15));
+        mandatorySetText.setFill(Color.WHITE);
+
+        hboxMandatorySettler.getChildren().addAll(mandatorySetText,
+                createImageControl("settler_icon/Farmer_Icon.png", "Farmer"),
+                createImageControl("settler_icon/Gunsmith_Icon.png", "Blacksmith"),
+                createImageControl("settler_icon/Doctor_Icon.png", "Doctor"),
+                createImageControl("settler_icon/Military_Icon.png", "Military"),
+                createImageControl("settler_icon/Blacksmith_Icon.png", "Gunsmith"));
+
+        // HBox for Optional Settler
+        HBox hboxOptionalSettler = createHBoxSettler();
+        hboxOptionalSettler.setAlignment(Pos.CENTER);
+        hboxOptionalSettler.setSpacing(SPACING_SMALL);
+
+        Text optionalSetText = new Text("Optional Settlers");
+        optionalSetText.setFont(Font.font(FONT_TEXT, FontWeight.BOLD, FONT_SIZE_15));
+        optionalSetText.setFill(Color.WHITE);
+
+        hboxOptionalSettler.getChildren().addAll(optionalSetText,
+                createImageControl("settler_icon/Cook_Icon.png", "Cook"),
+                createImageControl("settler_icon/Technician_Icon.png", "Technician"),
+                createImageControl("settler_icon/Chemist_Icon.png", "Chemist"));
+
+        settlerGrid.add(hboxMandatorySettler, 0, 0);
+        settlerGrid.add(hboxOptionalSettler, 0, 1);
+
+        root.setCenter(settlerGrid);
 
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
-        vbox.setSpacing(30);
-        vbox.setPadding(new Insets(10, 0, 40, 30));
+        vbox.setSpacing(SPACING_MEDIUM);
+        vbox.setPadding(new Insets(VBOX_TOP, VBOX_RIGHT,VBOX_BOTTOM, VBOX_LEFT));
 
-        Text newGameText = new Text("NEW GAME");
-        newGameText.setFont(Font.font(FONT, FontWeight.BOLD, 150));
-        newGameText.setTextAlignment(TextAlignment.CENTER);
-        newGameText.setFill(Color.WHITE);
-        newGameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(12)));
-        vbox.getChildren().add(newGameText);
-
-        colonyNameText = new Text("Colony name");
-        colonyNameText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
-        colonyNameText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(20)));
-        colonyNameText.setFill(Color.WHITE);
-        colonyNameText.setTextAlignment(TextAlignment.CENTER);
-        vbox.getChildren().add(colonyNameText);
-
-        TextField colonyNameField = new TextField();
-        colonyNameField.setPrefWidth(200);
-        colonyNameField.setMaxWidth(200);
-        colonyNameField.setPadding(new Insets(10, 10, 10, 10));
-        colonyNameField.prefWidthProperty().bind(vbox.widthProperty());
-        vbox.getChildren().add(colonyNameField);
-
-        Text chooseSettlersText = new Text("Choose the settlers (max 10)");
-        chooseSettlersText.setFont(Font.font(FONT, FontWeight.NORMAL, 25));
-
-        chooseSettlersText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
-        chooseSettlersText.setFill(Color.WHITE);
-        chooseSettlersText.setTextAlignment(TextAlignment.CENTER);
-        vbox.getChildren().add(chooseSettlersText);
-
-        Text mandatorySettlerlText = new Text("Mandatory:");
-        mandatorySettlerlText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
-        mandatorySettlerlText.styleProperty()
-                .bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
-        mandatorySettlerlText.setFill(Color.WHITE);
-        mandatorySettlerlText.setTextAlignment(TextAlignment.CENTER);
-        vbox.getChildren().add(mandatorySettlerlText);
-
-        // Mandatory Settler
-        HBox hboxMandatorySettler = new HBox();
-        hboxMandatorySettler.setAlignment(Pos.CENTER);
-        hboxMandatorySettler.setSpacing(10);
-
-        hboxMandatorySettler.getChildren().add(createImageControl("settler_icon/Farmer_Icon.png", "Farmer"));
-        hboxMandatorySettler.getChildren()
-                .add(createImageControl("settler_icon/Gunsmith_Icon.png", "Blacksmith"));
-        hboxMandatorySettler.getChildren().add(createImageControl("settler_icon/Doctor_Icon.png", "Doctor"));
-        hboxMandatorySettler.getChildren().add(createImageControl("settler_icon/Military_Icon.png", "Military"));
-        hboxMandatorySettler.getChildren().add(createImageControl("settler_icon/Blacksmith_Icon.png", "Gunsmith"));
-       
-        vbox.getChildren().add(hboxMandatorySettler);
-
-        // Optional Settler
-        Text optionalText = new Text("Optional:");
-        optionalText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
-        optionalText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
-        optionalText.setFill(Color.WHITE);
-        optionalText.setTextAlignment(TextAlignment.CENTER);
-        vbox.getChildren().add(optionalText);
-        HBox hboxOptionalSettler = new HBox();
-        hboxOptionalSettler.setAlignment(Pos.CENTER);
-        hboxOptionalSettler.setSpacing(10);
-        hboxOptionalSettler.getChildren().add(createImageControl("settler_icon/Cook_Icon.png", "Cook"));
-        hboxOptionalSettler.getChildren()
-                .add(createImageControl("settler_icon/Technician_Icon.png", "Technician"));
-        hboxOptionalSettler.getChildren().add(createImageControl("settler_icon/Chemist_Icon.png", "Chemist"));
-
-        vbox.getChildren().add(hboxOptionalSettler);
-        Text difficultyText = new Text("Choose difficulty:");
-        difficultyText.setFont(Font.font(FONT, FontWeight.NORMAL, 20));
-        difficultyText.styleProperty().bind(Bindings.concat("-fx-font-size: ", stage.widthProperty().divide(40)));
-        difficultyText.setFill(Color.WHITE);
-        difficultyText.setTextAlignment(TextAlignment.CENTER);
-        vbox.getChildren().add(difficultyText);
-
-        difficultyComboBox = difficultyChooser();
-        vbox.getChildren().add(difficultyComboBox);
-
-        nextButton = createButton("Next");
+        nextButton = createButton(NEXT_BUTTON_TEXT);
         nextButton.maxHeightProperty().bind(scene.heightProperty());
         nextButton.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
-        warningText = new Text("");
-        warningText.setFont(Font.font(FONT, FontWeight.NORMAL, 25));
-        vbox.getChildren().add(warningText);
-        vbox.getChildren().add(nextButton);
-        vbox.maxHeightProperty().bind(scene.heightProperty());
-        vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
 
-        
+        warningText = new Text("");
+        warningText.setFont(Font.font(FONT_TEXT, FontWeight.NORMAL, FONT_SIZE_20));
+
+        vbox.getChildren().addAll(warningText, nextButton);
+
         nextButton.setOnAction(e -> {
             if (checkForm()) {
                 createColonyController.createColony(colonyNameField.getText(), this.selectedSettlers,
                         difficultyComboBox.getValue());
-                sceneController.nextSceneNavigator(new AssignSettler(stage, 900, 700,this.simulatorController));
+                sceneController.nextSceneNavigator(new AssignSettler(stage, 900, 700, this.simulatorController));
             }
-
         });
 
-        contentPane.getChildren().add(vbox);
-        ScrollPane scrollPane = new ScrollPane(contentPane);
-        scrollPane.setFitToWidth(true);
+        vbox.maxHeightProperty().bind(scene.heightProperty());
+        vbox.prefWidthProperty().bind(scene.widthProperty().divide(2.5));
 
-        root.setCenter(scrollPane);
+        root.setBottom(vbox);
 
         return root;
+    }
+
+    private HBox createHBoxSettler(String... settlerData) {
+        HBox hboxSettler = new HBox();
+        hboxSettler.setAlignment(Pos.CENTER);
+        hboxSettler.setSpacing(SPACING_SMALL);
+
+        for (int i = 0; i < settlerData.length; i += 2) {
+            hboxSettler.getChildren().add(createImageControl(settlerData[i], settlerData[i + 1]));
+        }
+
+        return hboxSettler;
     }
 
     /**
@@ -180,22 +229,22 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
      */
     private Button createButton(String text) {
         Button button = new Button(text);
-        button.setPrefWidth(300);
-        button.setPrefHeight(50);
-        button.setStyle("-fx-background-color: #ffffff");
-        button.setFont(Font.font(FONT, FontWeight.BOLD, 18));
+        button.setPrefWidth(BUTTON_WIDTH);
+        button.setPrefHeight(BUTTON_HEIGHT);
+        button.setStyle(BACKGROUND_COLOR_WHITE);
+        button.setFont(Font.font(FONT_TEXT, FontWeight.BOLD, FONT_SIZE_15));
         return button;
     }
 
     private boolean checkForm() {
         if (colonyNameText.getText().isEmpty() || selectedSettlers.isEmpty()
-                || difficultyComboBox.getValue().isEmpty() || selectedSettlers.size() == 10) {
-            if (selectedSettlers.size() >= 10) {
-                displayWarning("You can choose max 10 settlers");
+                || difficultyComboBox.getValue().isEmpty() || selectedSettlers.size() == MAXIMUM_SETTLER_NUMBER) {
+            if (selectedSettlers.size() >= MAXIMUM_SETTLER_NUMBER) {
+                displayWarning(WARNING_TEXT_LIMIT_SETTLER_NUMBER);
                 return false;
             }
-            displayWarning("Please fill all fields");
-            
+            displayWarning(WARNING_TEXT_CHECK_ALL_FIELDS);
+
             return false;
         } else {
             displayWarning("");
@@ -206,25 +255,25 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
 
     private VBox createImageControl(String imageURL, String nameSettler) {
         VBox vbox = new VBox();
-        vbox.setSpacing(10);
+        vbox.setSpacing(SPACING_SMALL);
         ImageManagerImpl imageManager = new ImageManagerImpl();
         Image settlerImage = imageManager.loadImage(imageURL);
         ImageView imageView = new ImageView(settlerImage);
-        imageView.setFitWidth(100);
-        imageView.setFitHeight(100);
+        imageView.setFitWidth(IMAGE_WIDTH);
+        imageView.setFitHeight(IMAGE_HEIGHT);
         Label nameSettlerText = new Label(nameSettler);
         nameSettlerText.setTextFill(Color.WHITE);
-        nameSettlerText.setFont(Font.font("Elephant", FontWeight.BOLD, 15));
+        nameSettlerText.setFont(Font.font(FONT_TEXT, FontWeight.BOLD, FONT_SIZE_15));
         vbox.getChildren().add(nameSettlerText);
         vbox.getChildren().add(imageView);
 
-        Button plusButton = new Button("+");
-        plusButton.setStyle("-fx-background-color: #008000");
+        Button plusButton = new Button(PLUS_LABEL);
+        plusButton.setStyle(BACKGROUND_COLOR_GREEN);
         plusButton.setTextFill(Color.WHITE);
-        Button minusButton = new Button("-");
-        minusButton.setStyle("-fx-background-color: #FF0000");
+        Button minusButton = new Button(MINUS_LABEL);
+        minusButton.setStyle(BACKGROUND_COLOR_RED);
         minusButton.setTextFill(Color.WHITE);
-        Label counterLabel = new Label("0");
+        Label counterLabel = new Label(BASE_LABEL);
         counterLabel.setTextFill(Color.WHITE);
 
         plusButton.setOnAction(event -> {
@@ -243,7 +292,7 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
 
         HBox controls = new HBox(minusButton, counterLabel, plusButton);
         controls.setAlignment(Pos.CENTER);
-        controls.setSpacing(10);
+        controls.setSpacing(SPACING_SMALL);
 
         vbox.getChildren().add(controls);
         vbox.setAlignment(Pos.CENTER);
@@ -259,7 +308,7 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView{
 
         ComboBox<String> comboBox = new ComboBox<>(difficultyOptions);
         comboBox.setValue("MEDIUM");
-        comboBox.setStyle("-fx-background-color: #ffffff");
+        comboBox.setStyle(BACKGROUND_COLOR_WHITE);
         comboBox.setPrefWidth(200);
         comboBox.setPrefHeight(30);
 
