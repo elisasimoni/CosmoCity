@@ -1,6 +1,7 @@
 package it.unibo.cosmocity.controller;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -87,7 +88,6 @@ public class TranslatorStringToClassHelper {
     public List<StackedResource> translateResources(final Map<String, Integer> resources) {
         return resources.entrySet().stream().map(entry -> {
             final String resourceName = entry.getKey();
-            System.out.println("Resource name: " + resourceName);
             final int resourceValue = entry.getValue();
             switch (resourceName) {
                 case POPULATION:
@@ -103,7 +103,10 @@ public class TranslatorStringToClassHelper {
                 default:
                     throw new IllegalArgumentException("Invalid resource name");
             }
-        }).collect(Collectors.toList());
+        }).collect(Collectors.toList()).stream()
+                .sorted(Comparator.comparing(Object::toString)) // Ordina in base al nome
+                .collect(Collectors.toList());
+        // alfabetical order
 
     }
 

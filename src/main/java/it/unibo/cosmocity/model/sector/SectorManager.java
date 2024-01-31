@@ -31,7 +31,7 @@ public class SectorManager {
     public List<Status> checkStatus() {
 
         List<Status> listOfStatus = new ArrayList<>();
-        int populationVal = resourcesList.get(0).getQta();
+        int populationVal = resourcesList.get(2).getQta();
 
         for (StackedResource stackedResource : resourcesList) {
             if (stackedResource.getQta() == 0) {

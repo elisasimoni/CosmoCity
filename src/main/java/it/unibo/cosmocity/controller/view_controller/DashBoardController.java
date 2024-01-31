@@ -53,8 +53,6 @@ public class DashboardController {
     private int goodPlayer = 0;
     private int isPause = 0;
     private boolean p = false;
-    private final CountDownLatch latch = new CountDownLatch(1);
-    private boolean resume = false;
 
     public DashboardController(final DashboardView dashboardView, final Simulation simulation) {
         this.dashboardView = dashboardView;

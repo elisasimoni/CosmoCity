@@ -387,8 +387,8 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
     public void updateCirle(final List<Status> statuses) {
 
-        statusCircleFarm.setFill(statusColor(statuses.get(1)));
-        statusCircleHospital.setFill(statusColor(statuses.get(2)));
+        statusCircleFarm.setFill(statusColor(statuses.get(0)));
+        statusCircleHospital.setFill(statusColor(statuses.get(1)));
         statusCircleWorkshop.setFill(statusColor(statuses.get(3)));
         statusCircleMilitaryBase.setFill(statusColor(statuses.get(4)));
     }

@@ -69,9 +69,11 @@ public class SimulationSerialization implements Serialization {
 
     try (
         Writer writer = Files.newBufferedWriter(
-            Path.of(SAVE_FILE))) {
+            Path.of(SAVE_FILE))) 
+            {
       writer.write(mapper.writeValueAsString(jsonMap));
     } catch (final IOException e) {
+     
       e.printStackTrace();
     }
   }
