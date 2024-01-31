@@ -12,39 +12,53 @@ import it.unibo.cosmocity.model.resources.Population;
 import it.unibo.cosmocity.model.resources.ScrewStacked;
 import it.unibo.cosmocity.model.resources.StackedResource;
 import it.unibo.cosmocity.model.resources.WeaponsStacked;
-import it.unibo.cosmocity.view.CreateColonyPageView;
 
 public class CreateColonyController {
-    private CreateColonyPageView createColonyPageView;
+
     private String colonyName;
     private Map<String, Integer> settlers;
     private List<StackedResource> resources;
     private DifficultiesType difficulty;
-    private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
-    private SimulationController simulationController;
+    private final TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
+    private final SimulationController simulationController;
 
-    public CreateColonyController(CreateColonyPageView createColonyPageView, SimulationController simulationController) {
-        this.createColonyPageView = createColonyPageView;
+    /**
+     * @param simulationController
+     */
+    public CreateColonyController(final SimulationController simulationController) {
         this.simulationController = simulationController;
     }
 
-    public void createColony(String colonyName, Map<String, Integer> settlers,
-            String difficulty) {
+    /**
+     * @param colonyName
+     * @param settlers
+     * @param difficulty
+     */
+    public void createColony(final String colonyName, final Map<String, Integer> settlers,
+            final String difficulty) {
         this.colonyName = colonyName;
         this.settlers = settlers;
         this.resources = saveDifficulty(difficulty);
         this.difficulty = DifficultiesType.valueOf(difficulty.toUpperCase());
-        this.simulationController.updateSimulation(this.colonyName,translator.translateSettlerToListFromMap(this.settlers),
-                translator.translateResourceToMap(this.resources),this.difficulty);
-        System.out.println(this.simulationController.getSettlers());
+        this.simulationController.updateSimulation(this.colonyName,
+                translator.translateSettlerToListFromMap(this.settlers),
+                translator.translateResourceToMap(this.resources), this.difficulty);
     }
 
-    public List<StackedResource> saveResources(Map<String, Integer> resources) {
+    /**
+     * @param resources
+     * @return resources saved in the simulation
+     */
+    public List<StackedResource> saveResources(final Map<String, Integer> resources) {
         this.resources = translator.translateResources(resources);
         return this.resources;
     }
 
-    public List<StackedResource> saveDifficulty(String difficulty) {
+    /**
+     * @param difficulty
+     * @return resources saved in the simulation
+     */
+    public List<StackedResource> saveDifficulty(final String difficulty) {
 
         switch (difficulty) {
             case "EASY":
@@ -75,14 +89,23 @@ public class CreateColonyController {
         return this.resources;
     }
 
+    /**
+     * @return the colony name
+     */
     public String getColonyName() {
         return colonyName;
     }
 
+    /**
+     * @return the settlers
+     */
     public Map<String, Integer> getSettlers() {
         return settlers;
     }
 
+    /**
+     * @return the resources
+     */
     public List<StackedResource> getResources() {
         return resources;
     }
