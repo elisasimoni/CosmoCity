@@ -19,6 +19,11 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class SimulationController {
+
+    private static final String SAVE_FILE = "save.json";
+    private static final int WIDTH = 1200;
+    private static final int HEIGHT = 800;
+
     private Simulation simulation;
     private TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
     private DashboardController dashBoardController;
@@ -34,7 +39,7 @@ public class SimulationController {
 
     public void startSimulation(String colonyName, List<String> settlers, Map<String, Integer> resources,
             DifficultiesType difficulty) {
-        Dashboard dashboard = new Dashboard(new Stage(), 1200, 800, this);
+        Dashboard dashboard = new Dashboard(new Stage(), WIDTH, HEIGHT, this);
 
         sceneController.nextSceneNavigator(dashboard);
         this.dashBoardController = new DashboardController(dashboard, simulation);
@@ -74,7 +79,7 @@ public class SimulationController {
     public void updateSimulation(String colonyName, List<String> settlers, Map<String, Integer> resources,
             DifficultiesType difficulty) {
         this.simulation = new Simulation(colonyName, translator.translateSettler(settlers),
-                translator.translateResources(resources), difficulty, 0);
+                translator.translateResources(resources), difficulty);
 
     }
 
@@ -83,7 +88,7 @@ public class SimulationController {
                 translator.translateSettlerToMapMandatory(settlers),
                 translator.translateSettlerToMapOptional(settlers));
         this.simulation = new Simulation(this.simulation.getColonyName(), settlerList,
-                this.simulation.getResources(), this.simulation.getDifficulty(), 0);
+                this.simulation.getResources(), this.simulation.getDifficulty());
 
     }
 
@@ -114,7 +119,7 @@ public class SimulationController {
             }
         }
         this.simulation = new Simulation(this.simulation.getColonyName(), settlerListTotal,
-                this.simulation.getResources(), this.simulation.getDifficulty(), 0);
+                this.simulation.getResources(), this.simulation.getDifficulty());
 
     }
 
@@ -150,7 +155,7 @@ public class SimulationController {
 
     public void pauseSimulation() {
 
-        Thread.currentThread().interrupt();
+        
 
     }
 

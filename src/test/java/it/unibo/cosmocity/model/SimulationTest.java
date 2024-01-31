@@ -8,11 +8,9 @@ import java.util.List;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 
+class SimulationTest {
 
-
-class SimulationTest{
-
-    private static Simulation simulation = new Simulation("test",List.of(), List.of(), DifficultiesType.EASY,0);
+    private static Simulation simulation = new Simulation("test", List.of(), List.of(), DifficultiesType.EASY);
 
     @BeforeAll
     static void setUp() {
@@ -21,13 +19,13 @@ class SimulationTest{
     @Test
     void testGetSettler() {
         var result = simulation.getSettlers();
-        assertEquals(List.of(),result);
+        assertEquals(List.of(), result);
     }
 
     @Test
     void testGetResources() {
         var result = simulation.getResources();
-        assertEquals(List.of(),result);
+        assertEquals(List.of(), result);
     }
 
     @Test
@@ -41,13 +39,5 @@ class SimulationTest{
         var result = simulation.getColonyName();
         assertEquals("", result);
     }
-
-    @Test
-    void testGetStart() {
-        var result = simulation.getStartTime();
-        assertEquals(0,result);
-    }
-
-
 
 }

@@ -28,7 +28,7 @@ class SerializationTest {
     private static StackedResource resourceBase = new FoodStacked(0);
     private static BaseSettler settler = new Cook();
     private static Simulation simulation = new Simulation("test", List.of(settler), List.of(resourceStacked),
-            DifficultiesType.EASY, 0);
+            DifficultiesType.EASY);
     private static Event event = new Event("test","description",List.of(resourceStacked),List.of(resourceBase));
 
     @BeforeAll
@@ -42,7 +42,6 @@ class SerializationTest {
         simulationSerialization.serialize(simulation);
         assertEquals(simulation.getColonyName(), simulationSerialization.deserialize().getColonyName());
         assertEquals(simulation.getDifficulty(), simulationSerialization.deserialize().getDifficulty());
-        assertEquals(simulation.getStartTime(), simulationSerialization.deserialize().getStartTime());
         assertEquals(simulation.getSettlers().get(0).getClass().getSimpleName(), simulationSerialization.deserialize().getSettlers().get(0).getClass().getSimpleName());
         assertEquals(simulation.getSettlers().get(0).getSectorAssigned(), simulationSerialization.deserialize().getSettlers().get(0).getSectorAssigned());
 

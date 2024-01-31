@@ -206,7 +206,7 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
         VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(SPACING_MEDIUM);
-        vbox.setPadding(new Insets(VBOX_TOP, VBOX_RIGHT,VBOX_BOTTOM, VBOX_LEFT));
+        vbox.setPadding(new Insets(VBOX_TOP, VBOX_RIGHT, VBOX_BOTTOM, VBOX_LEFT));
 
         nextButton = createButton(NEXT_BUTTON_TEXT);
         nextButton.maxHeightProperty().bind(scene.heightProperty());
@@ -233,6 +233,11 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
         return root;
     }
 
+    /**
+     * The function creates an HBox container with images and their corresponding data.
+     * 
+     * @return The method is returning an HBox object.
+     */
     private HBox createHBoxSettler(String... settlerData) {
         HBox hboxSettler = new HBox();
         hboxSettler.setAlignment(Pos.CENTER);
@@ -260,8 +265,8 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
     private boolean checkForm() {
         if (colonyNameText.getText().isEmpty() || selectedSettlers.isEmpty()
-                || difficultyComboBox.getValue().isEmpty() || selectedSettlers.size() == MAXIMUM_SETTLER_NUMBER) {
-            if (selectedSettlers.size() >= MAXIMUM_SETTLER_NUMBER) {
+                || difficultyComboBox.getValue().isEmpty() || selectedSettlers.size() < MAXIMUM_SETTLER_NUMBER) {
+            if (selectedSettlers.size() > MAXIMUM_SETTLER_NUMBER) {
                 displayWarning(WARNING_TEXT_LIMIT_SETTLER_NUMBER);
                 return false;
             }

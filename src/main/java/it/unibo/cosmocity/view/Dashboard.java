@@ -22,7 +22,9 @@ import javafx.application.Platform;
 import javafx.beans.binding.Bindings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -113,6 +115,7 @@ public class Dashboard extends ViewImpl implements DashboardView {
     private HBox settlerManufactory;
     private HBox settlerMilitaryBase;
     private HBox settlerFarm;
+    private boolean isPause = false;
 
     public Dashboard(final Stage stage, final double width, final double height,
             final SimulationController simulationController) {
@@ -129,7 +132,11 @@ public class Dashboard extends ViewImpl implements DashboardView {
 
         final Button pauseButton = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.PAUSE.toString().toLowerCase())));
-        pauseButton.setOnAction(e -> pauseSimulation());
+        pauseButton.setOnAction(e -> {
+            isPause = true;
+            pauseSimulation();
+            
+        });
 
         Button saveButton = createButton(
                 String.valueOf(WordUtils.capitalizeFully(TextButton.SAVE.toString().toLowerCase())));
@@ -494,13 +501,16 @@ public class Dashboard extends ViewImpl implements DashboardView {
     }
 
     @Override
-    public void pauseSimulation() {
+    public boolean pauseSimulation() {
+        return this.isPause;
+    }
 
-        Platform.runLater(() -> {
-            PauseDialog pauseDialog = new PauseDialog();
-            pauseDialog.show();
+    public void setPause(boolean isPause) {
+        this.isPause = isPause;
+    }
 
-        });
+    public boolean getPause() {
+        return this.isPause;
     }
 
 }

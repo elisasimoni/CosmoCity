@@ -14,6 +14,9 @@ import javafx.stage.Stage;
  */
 public class CosmoCity extends Application {
 
+    private static final int WIDTH = 900;
+    private static final int HEIGHT = 700;
+
     /**
      * Main method
      * 
@@ -23,10 +26,17 @@ public class CosmoCity extends Application {
         launch(args);
     }
 
+    /**
+     * The start function initializes a simulation, simulation controller, and
+     * landing page, and then
+     * displays the landing page.
+     * 
+     * @param stage
+     */
     public void start(final Stage stage) {
-        final Simulation simulation = new Simulation("", new ArrayList<>(), new ArrayList<>(),  DifficultiesType.EASY,0);
+        final Simulation simulation = new Simulation("", new ArrayList<>(), new ArrayList<>(), DifficultiesType.EASY);
         final SimulationController simulationController = new SimulationController(simulation);
-        final LandingPage landingPage = new LandingPage(stage, 900, 700, simulationController);
+        final LandingPage landingPage = new LandingPage(stage, WIDTH, HEIGHT, simulationController);
         landingPage.show();
     }
 }

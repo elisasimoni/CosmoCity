@@ -3,6 +3,7 @@ package it.unibo.cosmocity.controller.view_controller;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
+import java.util.concurrent.CountDownLatch;
 
 import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
@@ -21,6 +22,7 @@ import it.unibo.cosmocity.model.sector.Sector.Status;
 import it.unibo.cosmocity.model.settlers.BaseSettler;
 import it.unibo.cosmocity.model.settlers.MandatorySettler;
 import it.unibo.cosmocity.view.DashboardView;
+import it.unibo.cosmocity.view.dialog.PauseDialog;
 import javafx.application.Platform;
 
 public class DashboardController {
@@ -49,7 +51,10 @@ public class DashboardController {
     private final TranslatorStringToClassHelper translator = new TranslatorStringToClassHelper();
     private final EventManager eventManager = new EventManager();
     private int goodPlayer = 0;
-    
+    private int isPause = 0;
+    private boolean p = false;
+    private final CountDownLatch latch = new CountDownLatch(1);
+    private boolean resume = false;
 
     public DashboardController(final DashboardView dashboardView, final Simulation simulation) {
         this.dashboardView = dashboardView;
@@ -125,7 +130,7 @@ public class DashboardController {
             Collections.shuffle(settlers);
             if (goodPlayer == GOOD_EVENT) {
                 final GoodEvent event = eventManager.generateGoodEvent(settlers.get(0));
-                
+
                 dashboardView.createGoodEvent(event);
                 simulationController.addSettler(event.getSettler());
 
@@ -160,7 +165,7 @@ public class DashboardController {
 
     /**
      * @param time
-     *          the time of the simulation
+     *             the time of the simulation
      */
     public void populationDoThing(final long time) {
         if (time % TIME_POPULATION_APPETITE == 0) {
@@ -176,7 +181,7 @@ public class DashboardController {
 
     /**
      * @param time
-     *           the time of the simulation
+     *             the time of the simulation
      */
     public void getProductedResource(final long time) {
         final List<BaseSettler> settlers = simulation.getSettlers();
@@ -188,10 +193,40 @@ public class DashboardController {
 
     }
 
-    public void pauseSimulation() {
-        
-        simulationController.pauseSimulation();
+    /**
+     * The function "pauseSimulation" pauses the simulation and displays a pause
+     * dialog, allowing the
+     * user to resume or cancel the pause.
+     * 
+     * @return The method is returning a boolean value, which is stored in the
+     *         variable "p".
+     */
+    public boolean pauseSimulation() {
 
+        if (dashboardView.pauseSimulation()) {
+            isPause++;
+            if (isPause == 1) {
+
+                p = true;
+                timerObservable.pause(3000);
+                Platform.runLater(() -> {
+
+                    PauseDialog pausD = new PauseDialog();
+                    pausD.show();
+                    p = !pausD.getResume();
+
+                });
+
+            }
+
+        }
+        if (!p) {
+            isPause = 0;
+            dashboardView.setPause(false);
+        } else {
+
+        }
+        return p;
     }
 
     /**

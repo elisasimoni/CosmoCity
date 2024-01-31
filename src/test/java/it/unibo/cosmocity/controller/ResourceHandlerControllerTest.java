@@ -24,7 +24,7 @@ class ResourceHandlerControllerTest {
 
     private static ResourceHandlerImpl resourceHandlerController;
     private static StackedResource resource = new FoodStacked(10);
-    private static Simulation simulation = new Simulation("test",List.of(), List.of(resource), DifficultiesType.EASY,0);
+    private static Simulation simulation = new Simulation("test",List.of(), List.of(resource), DifficultiesType.EASY);
     
     @BeforeAll
     static void setUp() {

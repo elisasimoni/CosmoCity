@@ -65,7 +65,6 @@ public class SimulationSerialization implements Serialization {
     jsonMap.put("settlers", settlersToJson);
     jsonMap.put("resources", resourcesToJson);
     jsonMap.put("difficulty", simulation.getDifficulty());
-    jsonMap.put("startTime", simulation.getStartTime());
 
     try (
       Writer writer = Files.newBufferedWriter(
@@ -111,8 +110,6 @@ public class SimulationSerialization implements Serialization {
         final DifficultiesType difficulty = DifficultiesType.valueOf(
           difficultyString
         );
-        final Number startTimeNumber = (Number) jsonMap.get("startTime");
-        final long startTime = startTimeNumber.longValue();
 
         final List<BaseSettler> settlers = new ArrayList<>();
         for (final Map<String, Object> settlerJson : settlersJsonList) {
@@ -135,8 +132,7 @@ public class SimulationSerialization implements Serialization {
           colonyName,
           settlers,
           resources,
-          difficulty,
-          startTime
+          difficulty
         );
       }
     } catch (final IOException e) {

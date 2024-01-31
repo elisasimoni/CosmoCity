@@ -92,6 +92,7 @@ public class LandingPage extends ViewImpl implements LandingPageView {
 
     @Override
     public void loadSimulation() {
+        this.stage.close();
         try {
             simulationController.loadSimulation();
         } catch (final Exception e) {

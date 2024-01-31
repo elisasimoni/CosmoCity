@@ -18,21 +18,17 @@ public class Simulation {
 
     private final DifficultiesType difficulty;
 
-    private final long startTime;
-
     /**
      * @param colonyName
      * @param settlers
      * @param resources
      * @param difficulty
-     * @param startTime
      */
     public Simulation(final String colonyName, final List<BaseSettler> settlers, final List<StackedResource> resources,
-            final DifficultiesType difficulty, final long startTime) {
+            final DifficultiesType difficulty) {
         this.colonyName = colonyName;
         this.settlers = settlers;
         this.resources = resources;
-        this.startTime = startTime;
         this.difficulty = difficulty;
 
     }
@@ -63,13 +59,6 @@ public class Simulation {
      */
     public String getColonyName() {
         return colonyName;
-    }
-
-    /**
-     * @return the startTime
-     */
-    public long getStartTime() {
-        return startTime;
     }
 
 }
