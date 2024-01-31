@@ -33,11 +33,12 @@ import it.unibo.cosmocity.model.settlers.Military;
 import it.unibo.cosmocity.model.settlers.Technician;
 
 public class SimulationSerialization implements Serialization {
-
+  private static final String SAVE_FILE = "/it/unibo/asset/saves/Colony.json";
   private final ObjectMapper mapper = new ObjectMapper();
+
   /*
    * Serialization of a save
-   * simulation 
+   * simulation
    * 
    */
   @Override
@@ -67,16 +68,13 @@ public class SimulationSerialization implements Serialization {
     jsonMap.put("difficulty", simulation.getDifficulty());
 
     try (
-      Writer writer = Files.newBufferedWriter(
-        Path.of("/it/unibo/asset/saves/Colony.json")
-      )
-    ) {
+        Writer writer = Files.newBufferedWriter(
+            Path.of(SAVE_FILE))) {
       writer.write(mapper.writeValueAsString(jsonMap));
     } catch (final IOException e) {
       e.printStackTrace();
     }
   }
-
 
   /*
    * Deserialize a save file and return a simulation
@@ -84,32 +82,29 @@ public class SimulationSerialization implements Serialization {
   @Override
   public Simulation deserialize() {
     try {
-      final InputStream inputStream =
-        SimulationSerialization.class.getResourceAsStream(
-            "/it/unibo/asset/saves/Colony.json"
-          );
+      final InputStream inputStream = SimulationSerialization.class.getResourceAsStream(
+          SAVE_FILE);
       if (inputStream != null) {
         final String jsonContent = new String(inputStream.readAllBytes());
 
         final Map<String, Object> jsonMap = mapper.readValue(
-          jsonContent,
-          new TypeReference<>() {}
-        );
+            jsonContent,
+            new TypeReference<>() {
+            });
 
         final String colonyName = (String) jsonMap.get("colonyName");
         final List<Map<String, Object>> settlersJsonList = mapper.readValue(
-          mapper.writeValueAsString(jsonMap.get("settlers")),
-          new TypeReference<>() {}
-        );
+            mapper.writeValueAsString(jsonMap.get("settlers")),
+            new TypeReference<>() {
+            });
 
         final List<Map<String, Object>> resourcesJsonList = mapper.readValue(
-          mapper.writeValueAsString(jsonMap.get("resources")),
-          new TypeReference<List<Map<String, Object>>>() {}
-        );
+            mapper.writeValueAsString(jsonMap.get("resources")),
+            new TypeReference<List<Map<String, Object>>>() {
+            });
         final String difficultyString = (String) jsonMap.get("difficulty");
         final DifficultiesType difficulty = DifficultiesType.valueOf(
-          difficultyString
-        );
+            difficultyString);
 
         final List<BaseSettler> settlers = new ArrayList<>();
         for (final Map<String, Object> settlerJson : settlersJsonList) {
@@ -129,11 +124,10 @@ public class SimulationSerialization implements Serialization {
         }
 
         return new Simulation(
-          colonyName,
-          settlers,
-          resources,
-          difficulty
-        );
+            colonyName,
+            settlers,
+            resources,
+            difficulty);
       }
     } catch (final IOException e) {
       e.printStackTrace();

@@ -5,8 +5,6 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 import it.unibo.cosmocity.controller.SimulationController;
-import it.unibo.cosmocity.view.Dashboard;
-import javafx.stage.Stage;
 
 /*
  * Controller of the settler assignment
