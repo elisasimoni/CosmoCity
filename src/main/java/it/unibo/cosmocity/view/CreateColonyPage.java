@@ -1,5 +1,26 @@
 package it.unibo.cosmocity.view;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.geometry.Pos;
+import javafx.scene.control.Button;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
+import javafx.stage.Stage;
+import javafx.geometry.Insets;
+
 import java.util.HashMap;
 import java.util.Map;
 
@@ -78,10 +99,6 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
     private static final int MAXIMUM_SETTLER_NUMBER = 10;
 
-    private static final String FONT = "Elephant";
-    private final Screen screen = Screen.getPrimary();
-    private final double screenWidth = screen.getBounds().getWidth();
-    private final double screenHeight = screen.getBounds().getHeight();
     private final SceneController sceneController = new SceneController();
     private final CreateColonyController createColonyController;
     private Button nextButton;
@@ -100,12 +117,12 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
     @Override
     public Pane createGUI() {
-        final BorderPane root = new BorderPane();
+        BorderPane root = new BorderPane();
         root.setStyle(BACKGROUND_COLOR_DARK_BLUE);
         root.setPadding(new Insets(PADDING_PANE_TOP, PADDING_PANE_RIGHT, PADDING_PANE_BOTTOM, PADDING_PANE_LEFT));
 
         // Creazione della HBox per colonyNameText e colonyNameField
-        final HBox colonyNameBox = new HBox();
+        HBox colonyNameBox = new HBox();
         colonyNameBox.setAlignment(Pos.CENTER);
         colonyNameBox.setSpacing(SPACING_SMALL);
 
@@ -113,7 +130,7 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
         colonyNameText.setFont(Font.font(FONT_TEXT, FontWeight.NORMAL, FONT_SIZE_20));
         colonyNameText.setFill(Color.WHITE);
 
-        final TextField colonyNameField = new TextField();
+        TextField colonyNameField = new TextField();
         colonyNameField.setPrefWidth(COLONY_NAME_FILE_WIDTH);
         colonyNameField.setMaxWidth(COLONY_NAME_FILE_WIDTH);
         colonyNameField.setPadding(new Insets(COLONY_NAME_FILED_TOP, COLONY_NAME_FILED_RIGHT, COLONY_NAME_FILED_BOTTOM,
@@ -122,11 +139,11 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
         colonyNameBox.getChildren().addAll(colonyNameText, colonyNameField);
 
-        final HBox difficultyBox = new HBox();
+        HBox difficultyBox = new HBox();
         difficultyBox.setAlignment(Pos.CENTER);
         difficultyBox.setSpacing(SPACING_SMALL);
 
-        final Text difficultyText = new Text(DIFFICULY_LABEL);
+        Text difficultyText = new Text(DIFFICULY_LABEL);
         difficultyText.setFont(Font.font(FONT_TEXT, FontWeight.NORMAL, FONT_SIZE_20));
         difficultyText.setFill(Color.WHITE);
 
@@ -134,7 +151,7 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
         difficultyBox.getChildren().addAll(difficultyText, difficultyComboBox);
 
-        final HBox hboxContainer = new HBox();
+        HBox hboxContainer = new HBox();
         hboxContainer.getChildren().addAll(colonyNameBox, difficultyBox);
         hboxContainer.setSpacing(SPACING_MEDIUM);
         hboxContainer.setAlignment(Pos.CENTER);
@@ -142,21 +159,21 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
         root.setTop(hboxContainer);
 
         // Grid Settler
-        final HBox hboxSettlers = new HBox();
+        HBox hboxSettlers = new HBox();
         hboxSettlers.setAlignment(Pos.CENTER);
         hboxSettlers.setSpacing(SPACING_SMALL);
 
-        final GridPane settlerGrid = new GridPane();
+        GridPane settlerGrid = new GridPane();
         settlerGrid.setAlignment(Pos.CENTER);
         settlerGrid.setHgap(SPACING_SMALL);
         settlerGrid.setVgap(SPACING_SMALL);
 
         // HBox for Mandatory Settler
-        final HBox hboxMandatorySettler = createHBoxSettler();
+        HBox hboxMandatorySettler = createHBoxSettler();
         hboxMandatorySettler.setAlignment(Pos.CENTER);
         hboxMandatorySettler.setSpacing(SPACING_SMALL);
 
-        final Text mandatorySetText = new Text(MANDATORY_SETTLER_LABEL);
+        Text mandatorySetText = new Text(MANDATORY_SETTLER_LABEL);
         mandatorySetText.setFont(Font.font(FONT_TEXT, FontWeight.BOLD, FONT_SIZE_15));
         mandatorySetText.setFill(Color.WHITE);
 
@@ -168,11 +185,11 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
                 createImageControl("settler_icon/Blacksmith_Icon.png", "Gunsmith"));
 
         // HBox for Optional Settler
-        final HBox hboxOptionalSettler = createHBoxSettler();
+        HBox hboxOptionalSettler = createHBoxSettler();
         hboxOptionalSettler.setAlignment(Pos.CENTER);
         hboxOptionalSettler.setSpacing(SPACING_SMALL);
 
-        final Text optionalSetText = new Text("Optional Settlers");
+        Text optionalSetText = new Text("Optional Settlers");
         optionalSetText.setFont(Font.font(FONT_TEXT, FontWeight.BOLD, FONT_SIZE_15));
         optionalSetText.setFill(Color.WHITE);
 
@@ -186,10 +203,10 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
         root.setCenter(settlerGrid);
 
-        final VBox vbox = new VBox();
+        VBox vbox = new VBox();
         vbox.setAlignment(Pos.CENTER);
         vbox.setSpacing(SPACING_MEDIUM);
-        vbox.setPadding(new Insets(VBOX_TOP, VBOX_RIGHT, VBOX_BOTTOM, VBOX_LEFT));
+        vbox.setPadding(new Insets(VBOX_TOP, VBOX_RIGHT,VBOX_BOTTOM, VBOX_LEFT));
 
         nextButton = createButton(NEXT_BUTTON_TEXT);
         nextButton.maxHeightProperty().bind(scene.heightProperty());
@@ -216,13 +233,8 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
         return root;
     }
 
-    @Override
-    public void displayWarning(final String warningMessage) {
-        warningText.setText(warningMessage);
-    }
-
-    private HBox createHBoxSettler(final String... settlerData) {
-        final HBox hboxSettler = new HBox();
+    private HBox createHBoxSettler(String... settlerData) {
+        HBox hboxSettler = new HBox();
         hboxSettler.setAlignment(Pos.CENTER);
         hboxSettler.setSpacing(SPACING_SMALL);
 
@@ -237,8 +249,8 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
      * @param text
      * @return a button with text
      */
-    private Button createButton(final String text) {
-        final Button button = new Button(text);
+    private Button createButton(String text) {
+        Button button = new Button(text);
         button.setPrefWidth(BUTTON_WIDTH);
         button.setPrefHeight(BUTTON_HEIGHT);
         button.setStyle(BACKGROUND_COLOR_WHITE);
@@ -263,32 +275,27 @@ public class CreateColonyPage extends ViewImpl implements CreateColonyPageView {
 
     }
 
-    /**
-     * @param imageURL
-     * @param nameSettler
-     * @return a VBox with settler image, name and controls
-     */
-    private VBox createImageControl(final String imageURL, final String nameSettler) {
-        final VBox vbox = new VBox();
+    private VBox createImageControl(String imageURL, String nameSettler) {
+        VBox vbox = new VBox();
         vbox.setSpacing(SPACING_SMALL);
-        final ImageManagerImpl imageManager = new ImageManagerImpl();
-        final Image settlerImage = imageManager.loadImage(imageURL);
-        final ImageView imageView = new ImageView(settlerImage);
+        ImageManagerImpl imageManager = new ImageManagerImpl();
+        Image settlerImage = imageManager.loadImage(imageURL);
+        ImageView imageView = new ImageView(settlerImage);
         imageView.setFitWidth(IMAGE_WIDTH);
         imageView.setFitHeight(IMAGE_HEIGHT);
-        final Label nameSettlerText = new Label(nameSettler);
+        Label nameSettlerText = new Label(nameSettler);
         nameSettlerText.setTextFill(Color.WHITE);
         nameSettlerText.setFont(Font.font(FONT_TEXT, FontWeight.BOLD, FONT_SIZE_15));
         vbox.getChildren().add(nameSettlerText);
         vbox.getChildren().add(imageView);
 
-        final Button plusButton = new Button(PLUS_LABEL);
+        Button plusButton = new Button(PLUS_LABEL);
         plusButton.setStyle(BACKGROUND_COLOR_GREEN);
         plusButton.setTextFill(Color.WHITE);
-        final Button minusButton = new Button(MINUS_LABEL);
+        Button minusButton = new Button(MINUS_LABEL);
         minusButton.setStyle(BACKGROUND_COLOR_RED);
         minusButton.setTextFill(Color.WHITE);
-        final Label counterLabel = new Label(BASE_LABEL);
+        Label counterLabel = new Label(BASE_LABEL);
         counterLabel.setTextFill(Color.WHITE);
 
         plusButton.setOnAction(event -> {

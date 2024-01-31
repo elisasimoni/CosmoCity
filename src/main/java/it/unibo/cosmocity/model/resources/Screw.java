@@ -6,5 +6,5 @@ public class Screw extends BaseResource {
         super(qta);
 
     }
-    
+
 }
