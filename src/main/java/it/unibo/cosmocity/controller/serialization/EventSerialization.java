@@ -29,8 +29,8 @@ public class EventSerialization implements Serialization {
 
   /*
    * Deserialize jsonEvent file and return a list of event
-   *  
-  */
+   * 
+   */
   @Override
   public List<Event> deserialize() {
     try {
@@ -38,8 +38,7 @@ public class EventSerialization implements Serialization {
 
       if (inputStream != null) {
         final String jsonContent = new String(
-          Objects.requireNonNull(inputStream).readAllBytes()
-        );
+            Objects.requireNonNull(inputStream).readAllBytes());
 
         final JsonNode jsonNode = mapper.readTree(jsonContent);
 
@@ -49,26 +48,23 @@ public class EventSerialization implements Serialization {
           final List<StackedResource> fixDamageList = new ArrayList<>();
           for (final JsonNode fixDamageNode : eventNode.get("fixDamage")) {
             final StackedResource fixDamage = translator.createResourceFromNameAndQta(
-              fixDamageNode.get("name").asText(),
-              fixDamageNode.get("qta").asInt()
-            );
+                fixDamageNode.get("name").asText(),
+                fixDamageNode.get("qta").asInt());
             fixDamageList.add(fixDamage);
           }
 
           final List<StackedResource> damageList = new ArrayList<>();
           for (final JsonNode damageNode : eventNode.get("damage")) {
             final StackedResource damage = translator.createResourceFromNameAndQta(
-              damageNode.get("name").asText(),
-              damageNode.get("qta").asInt()
-            );
+                damageNode.get("name").asText(),
+                damageNode.get("qta").asInt());
             damageList.add(damage);
           }
           final Event event = new Event(
-            eventNode.get("name").asText(),
-            eventNode.get("description").asText(),
-            fixDamageList,
-            damageList
-          );
+              eventNode.get("name").asText(),
+              eventNode.get("description").asText(),
+              fixDamageList,
+              damageList);
           events.add(event);
         }
 

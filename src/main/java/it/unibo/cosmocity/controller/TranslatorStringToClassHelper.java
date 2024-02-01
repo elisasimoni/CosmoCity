@@ -469,15 +469,15 @@ public class TranslatorStringToClassHelper {
    */
   public StackedResource createResource(final String resourceName, final int quantity) {
     switch (resourceName) {
-      case "Population":
+      case POPULATION:
         return new Population(quantity);
-      case "ScrewStacked":
+      case SCREW_STACKED:
         return new ScrewStacked(quantity);
-      case "WeaponsStacked":
+      case WEAPONS_STACKED:
         return new WeaponsStacked(quantity);
-      case "MedicineStacked":
+      case MEDICINE_STACKED:
         return new MedicineStacked(quantity);
-      case "FoodStacked":
+      case FOOD_STACKED:
         return new FoodStacked(quantity);
       default:
         return null;
@@ -491,25 +491,25 @@ public class TranslatorStringToClassHelper {
    */
   public BaseSettler createSettler(final String settlerName, final String sector) {
     switch (settlerName) {
-      case "Chemist":
+      case CHEMIST:
         final Chemist chemist = new Chemist();
         chemist.setSectorAssigned(sector);
         return chemist;
-      case "Doctor":
+      case DOCTOR:
         return new Doctor();
-      case "Farmer":
+      case FARMER:
         return new Farmer();
-      case "Military":
+      case MILITARY:
         return new Military();
-      case "Gunsmith":
+      case GUNSMITH:
         return new Gunsmith();
-      case "Technician":
+      case TECHNICIAN:
         final Technician technician = new Technician();
         technician.setSectorAssigned(sector);
         return technician;
-      case "Blacksmith":
+      case BLACKSMITH:
         return new Blacksmith();
-      case "Cook":
+      case COOK:
         final Cook cook = new Cook();
         cook.setSectorAssigned(sector);
         return cook;
