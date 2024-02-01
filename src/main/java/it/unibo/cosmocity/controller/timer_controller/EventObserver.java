@@ -1,13 +1,11 @@
 package it.unibo.cosmocity.controller.timer_controller;
 
 import it.unibo.cosmocity.controller.view_controller.DashboardController;
-import it.unibo.cosmocity.view.dialog.PauseDialog;
-import javafx.application.Platform;
 
 /*
  * Event obsever of the ticking timer 
  */
-public class EventObserver {
+public class EventObserver implements Observer{
     private final DashboardController dashBoardController;
 
     /**

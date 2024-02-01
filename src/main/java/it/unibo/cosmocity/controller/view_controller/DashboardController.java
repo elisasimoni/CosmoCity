@@ -3,7 +3,6 @@ package it.unibo.cosmocity.controller.view_controller;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
-import java.util.concurrent.CountDownLatch;
 
 import it.unibo.cosmocity.controller.SimulationController;
 import it.unibo.cosmocity.controller.TranslatorStringToClassHelper;
